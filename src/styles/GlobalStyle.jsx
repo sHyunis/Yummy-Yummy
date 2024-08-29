@@ -103,6 +103,7 @@ a{
     max-width: calc(var(--container-width) + var(--gutter) * 2);
     padding: 0 var(--gutter);
     margin: 0 auto;
+    
 }
 
 `;
