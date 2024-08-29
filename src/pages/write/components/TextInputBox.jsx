@@ -5,8 +5,12 @@ import Box from "./Box";
 import styled from "styled-components";
 
 const Width = styled.div`
-  width: 480px;
+  width: 600px;
   display: flex;
+  min-height: 30px;
+  height: ${(props) => {
+    return props.height * 1.5 + "px";
+  }};
 `;
 
 const TextInputBox = (props) => {
@@ -14,7 +18,7 @@ const TextInputBox = (props) => {
     <>
       <Box>
         <Label>{props.label}</Label>
-        <Width>
+        <Width height={props.place.length}>
           <Input place={props.place} />
         </Width>
       </Box>

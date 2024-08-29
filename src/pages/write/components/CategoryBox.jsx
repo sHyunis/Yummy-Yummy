@@ -8,7 +8,7 @@ const CtgSelect = styled.select`
   border-radius: var(--border-radius);
   border: none;
   box-shadow: inset 0 0 3px rgb(0, 0, 0, 0.3);
-  width: 480px;
+  width: 600px;
   height: 40px;
   appearance: none; /* 기본 화살표 숨기기 */
   -webkit-appearance: none;

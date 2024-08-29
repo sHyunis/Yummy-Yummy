@@ -19,6 +19,7 @@ const ImagePreview = styled.img`
   height: 220px;
   object-fit: cover;
   border-radius: var(--border-radius);
+  box-shadow: 0 0 5px rgb(0, 0, 0, 0.3);
 `;
 
 const UploadButton = styled.div`
@@ -66,7 +67,7 @@ const MainImage = () => {
           style={{ display: "none" }}
           onChange={handleImageUpload}
         />
-        <MinText>정사각형 비율의 사진이 예쁘게 나와요❤️</MinText>
+        <MinText>1:1 비율의 사진이 예쁘게 나와요❤️</MinText>
       </ImageBox>
     </>
   );

@@ -31,8 +31,6 @@ const WritePage = () => {
       </Content>
       <Content>
         <Ingredients />
-      </Content>
-      <Content>
         <RecipeCont />
       </Content>
       <Content>

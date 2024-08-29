@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const ContentStyled = styled.div`
   height: fit-content;
-  padding: 20px 40px;
+  padding: 20px 60px;
   border-bottom: 10px solid var(--beige-color);
   display: flex;
   align-items: top;
