@@ -15,10 +15,11 @@ const SignInputStyled = styled.input`
   border: 1px solid var(--gray3-color);
   border-radius: var(--border-radius-sm);
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 500;
   font-family: var(--font-family);
+  text-indent: 20px;
   &::placeholder {
-    text-indent: 20px;
+    font-size: 10px;
   }
 `;
 

@@ -1,14 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import SignButton from "./SignButton";
-import SignInput from "./SignInput";
-
+import SignButton from "../SignButton";
+import SignInput from "../SignInput";
 const SignInPage = () => {
   return (
     <Container>
       <LoginWrap>
         <Logo>Yummy Yummy!</Logo>
-        <p>로그인</p>
+        <p>LOGIN</p>
         <InputBox>
           <SignInput type="id" placeholder="아이디" />
           <SignInput type="password" placeholder="비밀번호" />
@@ -21,14 +20,13 @@ const SignInPage = () => {
             회원가입
           </SignButton>
         </ButtonBox>
+        <p>SNS계정으로 간편로그인</p>
       </LoginWrap>
     </Container>
   );
 };
 
 const Container = styled.div`
-  width: var(--container-width);
-
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -36,7 +34,7 @@ const Container = styled.div`
 `;
 const LoginWrap = styled.div`
   width: 350px;
-  margin: 50px auto;
+  border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;
   gap: 20px;

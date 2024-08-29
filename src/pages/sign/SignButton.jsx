@@ -16,7 +16,7 @@ const SignButton = ({ onClick, children, backgroundColor, textColor }) => {
 
 const SignButtonStyled = styled.button`
   width: 350px;
-  height: 50px;
+  height: 40px;
 
   border-radius: var(--border-radius-sm);
   font-size: 1.5rem;

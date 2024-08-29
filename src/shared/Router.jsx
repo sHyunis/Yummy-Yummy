@@ -4,9 +4,8 @@ import HomePage from "../pages/home/HomePage";
 import DetailPage from "../pages/detail/DetailPage";
 import MyPage from "../pages/mypage/MyPage";
 import WritePage from "../pages/write/WritePage";
-import SignInPage from "../pages/signin/SignInPage";
-import SignUpPage from "../pages/signup/SignUpPage";
-import GlobalStyle from "../styles/GlobalStyle";
+import SignUpPage from "../pages/sign/signup/SignUpPage";
+import SignInPage from "../pages/sign/signin/SignInPage";
 
 const Router = () => {
   return (
