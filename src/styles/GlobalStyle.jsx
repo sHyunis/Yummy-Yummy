@@ -60,7 +60,7 @@ const GlobalStyle = createGlobalStyle`
 body {
     font-size: 1.6rem;
     line-height: 1.5;
-    /* color: var(--gray-darken2-color); */
+    color: var(--gray1-color);
 }
 ::-webkit-scrollbar {
     width: 16px;
@@ -73,7 +73,7 @@ body {
     border: 5px solid transparent;
 }
 ::-webkit-scrollbar-track {
-    /* background: var(--secondary-color); 스크롤바 뒷 배경 색상 */
+    background: transparent; /* 스크롤바 뒷 배경 색상 */
 }
 ::placeholder {
     color: rgba(0, 0, 0, 0.5);
@@ -90,7 +90,7 @@ a, button{
 }
 a{
     text-decoration: none;
-    /* color: var(--gray-darken2-color); */
+    color: var(--gray1-color);
 }
 #root {
     display: flex;
