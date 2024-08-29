@@ -37,7 +37,7 @@ const GlobalStyle = createGlobalStyle`
     src: local(NEXONLv1GothicBold), url("../assets/fonts/NEXONLv1GothicBold.woff2") format("font-woff2"), url("../assets/fonts/NEXONLv1GothicBold.woff") format("font-woff");
     font-weight: 700;
 }
-   html {
+html {
     font-size: 62.5% !important;
     font-family: var(--font-family); 
     overflow-x: hidden;
@@ -73,7 +73,7 @@ body {
     border: 5px solid transparent;
 }
 ::-webkit-scrollbar-track {
-    background: transparent; /* 스크롤바 뒷 배경 색상 */
+    background: var(--beige-color); /* 스크롤바 뒷 배경 색상 */
 }
 ::placeholder {
     color: rgba(0, 0, 0, 0.5);
@@ -103,6 +103,7 @@ a{
     max-width: calc(var(--container-width) + var(--gutter) * 2);
     padding: 0 var(--gutter);
     margin: 0 auto;
+    
 }
 
 `;

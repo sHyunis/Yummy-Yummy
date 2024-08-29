@@ -40,7 +40,7 @@ const NavLink = styled(Link)`
 const Contents = styled.main`
   position: relative;
   flex: 1 0 auto;
-  padding: 100px 0;
+  padding: 50px 0;
 `;
 
 const FooterStyled = styled.footer`
