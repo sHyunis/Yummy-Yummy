@@ -6,6 +6,7 @@ import MyPage from "../pages/mypage/MyPage";
 import WritePage from "../pages/write/WritePage";
 import SignInPage from "../pages/signin/SignInPage";
 import SignUpPage from "../pages/signup/SignUpPage";
+import GlobalStyle from "../styles/GlobalStyle";
 
 const Router = () => {
   return (
