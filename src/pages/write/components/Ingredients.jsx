@@ -10,6 +10,7 @@ const Ingredients = () => {
   const addIngGroup = () => {
     setIngredientGroups([...ingredientGroups, {}]);
   };
+
   return (
     <>
       <Container>

@@ -10,7 +10,7 @@ import SaveBox from "./components/SaveBox";
 const MainContainer = styled.div`
   height: fit-content;
   width: var(--container-width);
-  margin: 20px auto;
+  margin: 0 auto;
   border-radius: var(--border-radius);
 `;
 
@@ -18,14 +18,15 @@ const Title = styled.p`
   font-weight: 700;
   font-size: 2.4rem;
   color: var(--green-color);
+  padding-bottom: 30px;
+  padding-left: 60px;
+  border-bottom: 5px solid var(--yellow-color);
 `;
 
 const WritePage = () => {
   return (
     <MainContainer>
-      <Content>
-        <Title>나만의 레시피 등록하기</Title>
-      </Content>
+      <Title>나만의 레시피 등록하기</Title>
       <Content>
         <RecipeInfo />
       </Content>

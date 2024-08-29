@@ -41,10 +41,10 @@ const MainImage = () => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
+      reader.readAsDataURL(file);
       reader.onloadend = () => {
         setImageSrc(reader.result);
       };
-      reader.readAsDataURL(file);
     }
   };
 

@@ -4,6 +4,7 @@ import Button from "../../../components/Button";
 
 const Margin = styled.div`
   margin: 0 auto;
+  margin-top: 5px;
   height: fit-content;
   width: fit-content;
 `;
