@@ -1,13 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-const ContBox = styled.div`
+const ContentStyled = styled.div`
   height: fit-content;
-  padding: 20px;
-  border-bottom: 10px solid white;
+  padding: 20px 40px;
+  border-bottom: 10px solid var(--beige-color);
+  display: flex;
+  align-items: top;
+  justify-content: space-between;
 `;
 const Content = ({ children }) => {
-  return <ContBox>{children}</ContBox>;
+  return <ContentStyled>{children}</ContentStyled>;
 };
 
 export default Content;

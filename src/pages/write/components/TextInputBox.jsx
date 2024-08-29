@@ -1,21 +1,22 @@
 import React from "react";
 import Input from "./Input";
+import Label from "./Label";
+import Box from "./Box";
 import styled from "styled-components";
 
-const Box = styled.div`
-  width: 600px;
+const Width = styled.div`
+  width: 480px;
   display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  padding: 10px 0;
 `;
 
 const TextInputBox = (props) => {
   return (
     <>
       <Box>
-        <label>{props.label}</label>
-        <Input place={props.place} />
+        <Label>{props.label}</Label>
+        <Width>
+          <Input place={props.place} />
+        </Width>
       </Box>
     </>
   );

@@ -10,15 +10,13 @@ import SaveBox from "./components/SaveBox";
 const MainContainer = styled.div`
   height: fit-content;
   width: var(--container-width);
-  background-color: var(--beige-color);
   margin: 20px auto;
-  text-align: center;
   border-radius: var(--border-radius);
 `;
 
 const Title = styled.p`
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 2.4rem;
   color: var(--green-color);
 `;
 
