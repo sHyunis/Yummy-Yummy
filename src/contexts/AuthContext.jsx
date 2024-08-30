@@ -79,6 +79,7 @@ export const AuthProvider = ({ children }) => {
     } else {
       setError("");
       setSuccess("로그인 성공!");
+      await checkSignIn();
       navigate("/");
     }
   };

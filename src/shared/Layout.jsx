@@ -65,7 +65,7 @@ const FooterStyled = styled.footer`
 `;
 
 export const Header = () => {
-  const { handleLogout, SignIn } = useAuth();
+  const { handleLogout, signIn } = useAuth();
   const navigate = useNavigate();
   const LogoutSuccess = async () => {
     await handleLogout();
@@ -80,7 +80,7 @@ export const Header = () => {
           </LogoStyled>
         </HeaderLeft>
         <HeaderRight>
-          {SignIn ? (
+          {signIn ? (
             <>
               <LogoutButton onClick={LogoutSuccess}>로그아웃</LogoutButton>
               <NavLink to="/mypage">마이페이지</NavLink>
