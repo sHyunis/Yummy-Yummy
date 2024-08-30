@@ -7,9 +7,8 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      <AuthProvider>
-        <Router />
-      </AuthProvider>
+
+      <Router />
     </>
   );
 };

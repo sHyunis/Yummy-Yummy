@@ -5,6 +5,7 @@ import SignButton from "../SignButton";
 import Logo from "../../../components/Logo";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const SignUpPage = () => {
   const {
@@ -21,13 +22,6 @@ const SignUpPage = () => {
     handleSignUp,
   } = useAuth();
 
-  const navigate = useNavigate();
-
-  const signUpSuccess = async () => {
-    await handleSignUp();
-    // 회원가입 후 홈으로 이동
-    navigate("/");
-  };
   return (
     <>
       <Container>
@@ -70,13 +64,15 @@ const SignUpPage = () => {
             <SignButton
               backgroundColor="--green-color"
               textColor="white"
-              onClick={signUpSuccess}
+              onClick={handleSignUp}
             >
               가입완료
             </SignButton>
-            <SignButton backgroundColor="--beige-color" textColor="black">
-              취소
-            </SignButton>
+            <Link to="/">
+              <SignButton backgroundColor="--beige-color" textColor="black">
+                취소
+              </SignButton>
+            </Link>
           </ButtonBox>
           {error && <ErrorMessage>{error}</ErrorMessage>}
           {success && <SuccessMessage>{success}</SuccessMessage>}
