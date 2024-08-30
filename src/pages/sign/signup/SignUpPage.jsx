@@ -2,76 +2,98 @@ import React from "react";
 import styled from "styled-components";
 import SignInput from "../SignInput";
 import SignButton from "../SignButton";
-import { useState } from "react";
-import supabase from "../../../../base-camp/supabaseClient";
+import Logo from "../../../components/Logo";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
-  const [id, setId] = useState("");
-  const [pw, setPw] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    nickname,
+    setNickname,
+    error,
+    success,
+    handleSignUp,
+  } = useAuth();
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-    const { data, error } = await supabase.auth.signUp({
-      id,
-      pw,
-    });
+  const navigate = useNavigate();
 
-    if (error) {
-      setError(error.message);
-      setSuccess(null);
-    } else {
-      setSuccess("회원가입이 완료되었습니다.");
-      setError(null);
-    }
+  const signUpSuccess = async () => {
+    await handleSignUp();
+    // 회원가입 후 홈으로 이동
+    navigate("/");
   };
   return (
-    <Container>
-      <Logo>Yummy Yummy!</Logo>
-      <SignUp>
-        <p>간편가입</p>
-        <InputBox>
-          <InputLabel>아이디</InputLabel>
-          <SignInput
-            type="id"
-            placeholder="아이디 입력"
-            onChange={(e) => setId(e.target.value)}
-          />
-          <InputLabel>비밀번호</InputLabel>
-          <SignInput
-            type="password"
-            placeholder="비밀번호 입력"
-            onChange={(e) => setPw(e.target.value)}
-          />
-          <SignInput type="password" placeholder="비밀번호 재입력" />
-          <InputLabel>닉네임</InputLabel>
-          <SignInput type="text" placeholder="닉네임 입력" />
-        </InputBox>
-        <ButtonBox>
-          <SignButton
-            backgroundColor="--green-color"
-            textColor="white"
-            onClick={() => handleSignUp()}
-          >
-            가입완료
-          </SignButton>
-          <SignButton backgroundColor="--beige-color" textColor="black">
-            취소
-          </SignButton>
-        </ButtonBox>
-      </SignUp>
-    </Container>
+    <>
+      <Container>
+        <LogoBox>
+          <Logo />
+        </LogoBox>
+        <SignUp>
+          <SignP>간편가입</SignP>
+          <InputBox>
+            <InputLabel>이메일</InputLabel>
+            <SignInput
+              type="email"
+              placeholder="이메일 입력"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+            />
+            <InputLabel>비밀번호</InputLabel>
+            <SignInput
+              type="password"
+              placeholder="비밀번호 입력"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+            />
+            <InputLabel>비밀번호 재입력</InputLabel>
+            <SignInput
+              type="password"
+              placeholder="비밀번호 재입력"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={confirmPassword}
+            />
+            <InputLabel>닉네임</InputLabel>
+            <SignInput
+              type="text"
+              placeholder="닉네임 입력"
+              onChange={(e) => setNickname(e.target.value)}
+              value={nickname}
+            />
+          </InputBox>
+          <ButtonBox>
+            <SignButton
+              backgroundColor="--green-color"
+              textColor="white"
+              onClick={signUpSuccess}
+            >
+              가입완료
+            </SignButton>
+            <SignButton backgroundColor="--beige-color" textColor="black">
+              취소
+            </SignButton>
+          </ButtonBox>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          {success && <SuccessMessage>{success}</SuccessMessage>}
+        </SignUp>
+      </Container>
+    </>
   );
 };
 
 const Container = styled.div`
-  margin: 50px auto;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
+
 const SignUp = styled.div`
   width: 350px;
   background-color: var(--gray4-color);
@@ -82,23 +104,34 @@ const SignUp = styled.div`
   padding: 20px;
   border-radius: var(--border-radius);
 `;
-const Logo = styled.h2`
-  font-size: 3rem;
-  color: var(--yellow-color);
+
+const SignP = styled.p`
+  font-weight: 700;
+  font-size: 1.5rem;
 `;
+
+const LogoBox = styled.div`
+  width: 350px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+`;
+
 const InputLabel = styled.label`
   text-align: left;
   font-size: 15px;
   font-weight: 700;
 `;
+
 const InputBox = styled.div`
   width: 350px;
   margin: 0 auto;
-
   display: flex;
   flex-direction: column;
   gap: 10px;
 `;
+
 const ButtonBox = styled.div`
   font-family: var(--font-family);
   margin: 0 auto;
@@ -107,4 +140,15 @@ const ButtonBox = styled.div`
   flex-direction: column;
   gap: 1rem;
 `;
+
+const ErrorMessage = styled.p`
+  color: red;
+  font-size: 1rem;
+`;
+
+const SuccessMessage = styled.p`
+  color: green;
+  font-size: 1rem;
+`;
+
 export default SignUpPage;

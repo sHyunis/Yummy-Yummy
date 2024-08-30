@@ -6,8 +6,8 @@ const SignButton = ({ onClick, children, backgroundColor, textColor }) => {
     <SignButtonStyled
       type="button"
       onClick={onClick}
-      backgroundColor={backgroundColor}
-      textColor={textColor}
+      $backgroundColor={backgroundColor}
+      $textColor={textColor}
     >
       {children}
     </SignButtonStyled>
@@ -15,14 +15,15 @@ const SignButton = ({ onClick, children, backgroundColor, textColor }) => {
 };
 
 const SignButtonStyled = styled.button`
-  width: 350px;
+  width: 354px;
   height: 40px;
-
+  padding: 10px 20px;
   border-radius: var(--border-radius-sm);
   font-size: 1.5rem;
   font-weight: 700;
   font-family: var(--font-family);
-  background-color: ${({ backgroundColor }) => `var(${backgroundColor})`};
-  color: ${({ textColor }) => textColor};
+  background-color: var(${(props) => props.$backgroundColor});
+  color: ${(props) => props.$textColor};
 `;
+
 export default SignButton;
