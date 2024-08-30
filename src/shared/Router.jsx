@@ -4,8 +4,8 @@ import HomePage from "../pages/home/HomePage";
 import DetailPage from "../pages/detail/DetailPage";
 import MyPage from "../pages/mypage/MyPage";
 import WritePage from "../pages/write/WritePage";
-import SignInPage from "../pages/signin/SignInPage";
-import SignUpPage from "../pages/signup/SignUpPage";
+import SignUpPage from "../pages/sign/signup/SignUpPage";
+import SignInPage from "../pages/sign/signin/SignInPage";
 import Layout from "./Layout";
 
 const Router = () => {
