@@ -1,12 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../components/Logo";
 
 const HeaderStyled = styled.header`
   display: flex;
   align-items: center;
-  height: 100px;
+  height: 80px;
   background-color: var(--yellow-color);
 `;
 const HeaderContainer = styled.div`
@@ -20,7 +20,7 @@ const HeaderLeft = styled.div`
 `;
 const LogoStyled = styled(Link)`
   display: block;
-  height: 50px;
+  height: 40px;
 `;
 const HeaderRight = styled.div`
   display: block;
@@ -29,7 +29,7 @@ const HeaderRight = styled.div`
 const NavLink = styled(Link)`
   padding: var(--spacing);
   margin: 0 var(--spacing);
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: #fff;
   &:hover {
@@ -41,10 +41,11 @@ const Contents = styled.main`
   position: relative;
   flex: 1 0 auto;
   padding: 50px 0;
+  ${(props) => (props.$isMyPage ? "display:flex;" : "")};
 `;
 
 const FooterStyled = styled.footer`
-  padding: 40px 0;
+  padding: 20px 0;
   font-size: 1.2rem;
   text-align: center;
   border-top: 1px solid var(--gray3-color);
@@ -81,10 +82,13 @@ export const Footer = () => {
 };
 
 const Layout = ({ children }) => {
+  const location = useLocation();
+  const isMyPage = location.pathname === "/mypage";
+
   return (
     <>
       <Header />
-      <Contents>{children}</Contents>
+      <Contents $isMyPage={isMyPage}>{children}</Contents>
       <Footer />
     </>
   );

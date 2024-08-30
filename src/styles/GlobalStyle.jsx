@@ -1,8 +1,45 @@
 import { createGlobalStyle } from "styled-components";
+import PretendardLightWoff2 from "../assets/fonts/Pretendard-Light.subset.woff2";
+import PretendardLightWoff from "../assets/fonts/Pretendard-Light.subset.woff";
+import PretendardRegularWoff2 from "../assets/fonts/Pretendard-Regular.subset.woff2";
+import PretendardRegularWoff from "../assets/fonts/Pretendard-Regular.subset.woff";
+import PretendardMediumWoff2 from "../assets/fonts/Pretendard-Medium.subset.woff2";
+import PretendardMediumWoff from "../assets/fonts/Pretendard-Medium.subset.woff";
+import PretendardSemiBoldWoff2 from "../assets/fonts/Pretendard-SemiBold.subset.woff2";
+import PretendardSemiBoldWoff from "../assets/fonts/Pretendard-SemiBold.subset.woff";
+import PretendardBoldWoff2 from "../assets/fonts/Pretendard-Bold.subset.woff2";
+import PretendardBoldWoff from "../assets/fonts/Pretendard-Bold.subset.woff";
 
 const GlobalStyle = createGlobalStyle`
+/* Pretendard */
+@font-face {
+    font-family: "Pretendard";
+    src: local(Pretendard-Light), url(${PretendardLightWoff2}) format("woff2"), url(${PretendardLightWoff}) format("woff");
+    font-weight: 300;
+}
+@font-face {
+    font-family: "Pretendard";
+    src: local(Pretendard-Regular), url(${PretendardRegularWoff2}) format("woff2"), url(${PretendardRegularWoff}) format("woff");
+    font-weight: 400;
+}
+@font-face {
+    font-family: "Pretendard";
+    src: local(Pretendard-Medium), url(${PretendardMediumWoff2}) format("woff2"), url(${PretendardMediumWoff}) format("woff");
+    font-weight: 500;
+}
+@font-face {
+    font-family: "Pretendard";
+    src: local(Pretendard-SemiBold), url(${PretendardSemiBoldWoff2}) format("woff2"), url(${PretendardSemiBoldWoff}) format("woff");
+    font-weight: 600;
+}
+@font-face {
+    font-family: "Pretendard";
+    src: local(Pretendard-Bold), url(${PretendardBoldWoff2}) format("woff2"), url(${PretendardBoldWoff}) format("woff");
+    font-weight: 700;
+}
+
 :root {
-    --font-family: "NEXONLv1Gothic", "Nanum Gothic", "Apple SD Gothic Neo", Helvetica, Arial, sans-serif;
+    --font-family: "Pretendard", "Nanum Gothic", "Apple SD Gothic Neo", Helvetica, Arial, sans-serif;
     --yellow-color: #FFC565;
     --yellow-hover-color: #E7B158;
     --green-color: #143021;
@@ -21,23 +58,7 @@ const GlobalStyle = createGlobalStyle`
     --border-radius-sm: 4px;
 }
 
-/* NEXONLv1Gothic */
-@font-face {
-    font-family: "NEXONLv1Gothic";
-    src: local(NEXONLv1GothicLight), url("../assets/fonts/NEXONLv1GothicLight.woff2") format("font-woff2"), url("../assets/fonts/NEXONLv1GothicLight.woff") format("font-woff");
-    font-weight: 300;
-}
-@font-face {
-    font-family: "NEXONLv1Gothic";
-    src: local(NEXONLv1GothicRegular), url("../assets/fonts/NEXONLv1GothicRegular.woff2") format("font-woff2"), url("../assets/fonts/NEXONLv1GothicRegular.woff") format("font-woff");
-    font-weight: 400;
-}
-@font-face {
-    font-family: "NEXONLv1Gothic";
-    src: local(NEXONLv1GothicBold), url("../assets/fonts/NEXONLv1GothicBold.woff2") format("font-woff2"), url("../assets/fonts/NEXONLv1GothicBold.woff") format("font-woff");
-    font-weight: 700;
-}
-   html {
+html {
     font-size: 62.5% !important;
     font-family: var(--font-family); 
     overflow-x: hidden;
@@ -73,7 +94,7 @@ body {
     border: 5px solid transparent;
 }
 ::-webkit-scrollbar-track {
-    background: transparent; /* 스크롤바 뒷 배경 색상 */
+    background: var(--beige-color); /* 스크롤바 뒷 배경 색상 */
 }
 ::placeholder {
     color: rgba(0, 0, 0, 0.5);
