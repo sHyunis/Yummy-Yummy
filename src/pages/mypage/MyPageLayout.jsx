@@ -47,6 +47,7 @@ const ProfileEmail = styled.div`
 const ProfileIntro = styled.div`
   padding-top: 16px;
   font-size: 1.4rem;
+  word-break: keep-all;
   color: var(--gray2-color);
 `;
 const MyPageNav = styled.ul`
@@ -71,6 +72,8 @@ const MyPageNav = styled.ul`
     &.on {
       > a {
         font-weight: 700;
+        background-color: var(--beige-color);
+        cursor: default;
         .material-symbols-rounded {
           color: var(--yellow-color);
         }
