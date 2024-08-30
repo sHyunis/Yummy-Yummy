@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useCallback, useContext } from "react";
 import Label from "./Label";
 import styled from "styled-components";
 import Box from "./Box";
+import { WriteContext } from "../../../contexts/WriteContext";
 
 const CtgSelect = styled.select`
   padding: 0 10px;
@@ -20,11 +21,12 @@ const CtgSelect = styled.select`
 `;
 
 const CategoryBox = (props) => {
+  const { ctgChange } = useContext(WriteContext);
   return (
     <>
       <Box>
         <Label>{props.label}</Label>
-        <CtgSelect>
+        <CtgSelect onChange={(e) => ctgChange(e.target.value)}>
           <option>한식</option>
           <option>양식</option>
           <option>중식</option>

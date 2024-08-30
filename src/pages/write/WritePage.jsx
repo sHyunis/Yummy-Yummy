@@ -6,6 +6,7 @@ import RecipeInfo from "./components/RecipeInfo";
 import Ingredients from "./components/Ingredients";
 import RecipeCont from "./components/RecipeCont";
 import SaveBox from "./components/SaveBox";
+import { WriteProvider } from "../../contexts/WriteContext";
 
 const MainContainer = styled.div`
   height: fit-content;
@@ -25,19 +26,21 @@ const Title = styled.p`
 
 const WritePage = () => {
   return (
-    <MainContainer>
-      <Title>나만의 레시피 등록하기</Title>
-      <Content>
-        <RecipeInfo />
-      </Content>
-      <Content>
-        <Ingredients />
-        <RecipeCont />
-      </Content>
-      <Content>
-        <SaveBox />
-      </Content>
-    </MainContainer>
+    <WriteProvider>
+      <MainContainer>
+        <Title>나만의 레시피 등록하기</Title>
+        <Content>
+          <RecipeInfo />
+        </Content>
+        <Content>
+          <Ingredients />
+          <RecipeCont />
+        </Content>
+        <Content>
+          <SaveBox />
+        </Content>
+      </MainContainer>
+    </WriteProvider>
   );
 };
 

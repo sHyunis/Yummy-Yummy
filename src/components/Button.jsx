@@ -1,9 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-const Button = ({ onClick, children, fontsize }) => {
+const Button = ({ onClick, children, fontsize, onChange }) => {
   return (
-    <ButtonStyled type="button" onClick={onClick} $fontsize={fontsize}>
+    <ButtonStyled
+      type="button"
+      onClick={onClick}
+      $fontsize={fontsize}
+      onChange={onChange}
+    >
       {children}
     </ButtonStyled>
   );

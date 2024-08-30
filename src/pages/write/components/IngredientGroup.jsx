@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import Input from "./Input";
 import styled from "styled-components";
+import { WriteContext } from "../../../contexts/WriteContext";
 
 const GroupStyle = styled.div`
   display: flex;
@@ -16,7 +17,8 @@ const InputSize = styled.div`
   display: flex;
 `;
 
-const IngredientGroup = () => {
+const IngredientGroup = ({ index }) => {
+  const { removeIngGroup } = useContext(WriteContext);
   return (
     <>
       <GroupStyle>
@@ -26,6 +28,12 @@ const IngredientGroup = () => {
         <InputSize>
           <Input place="예) 1개, 30g 등" />
         </InputSize>
+        <p
+          onClick={() => removeIngGroup(index)}
+          style={{ cursor: "pointer", opacity: 0.5 }}
+        >
+          x
+        </p>
       </GroupStyle>
     </>
   );

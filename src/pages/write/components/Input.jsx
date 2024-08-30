@@ -11,8 +11,13 @@ const InputStyled = styled.textarea`
   resize: none;
 `;
 
-const Input = ({ place }) => {
-  return <InputStyled placeholder={place} />;
+const Input = ({ place, onChange, type }) => {
+  return (
+    <InputStyled
+      placeholder={place}
+      onChange={(e) => onChange(e.target.value, type)}
+    />
+  );
 };
 
 export default Input;

@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { WriteContext } from "../../../contexts/WriteContext";
 
 const MinText = styled.p`
   font-size: 1.3rem;
@@ -34,24 +35,8 @@ const UploadButton = styled.div`
 `;
 
 const MainImage = () => {
-  const [imageSrc, setImageSrc] = useState(null);
-  const fileInputRef = useRef(null);
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setImageSrc(reader.result);
-      };
-    }
-  };
-
-  const handleUploadButtonClick = () => {
-    fileInputRef.current.click();
-  };
-
+  const { handleUploadButtonClick, imageSrc, handleImageUpload, fileInputRef } =
+    useContext(WriteContext);
   return (
     <>
       <ImageBox onClick={handleUploadButtonClick}>
