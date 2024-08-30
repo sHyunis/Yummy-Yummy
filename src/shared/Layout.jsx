@@ -1,7 +1,8 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../components/Logo";
+import { useAuth } from "../contexts/AuthContext";
 
 const HeaderStyled = styled.header`
   display: flex;
@@ -44,6 +45,18 @@ const Contents = styled.main`
   ${(props) => (props.$isMyPage ? "display:flex;" : "")};
 `;
 
+const LogoutButton = styled.button`
+  border: none;
+  background-color: inherit;
+  padding: var(--spacing);
+  margin: 0 var(--spacing);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  &:hover {
+    color: var(--gray2-color);
+  }
+`;
 const FooterStyled = styled.footer`
   padding: 20px 0;
   font-size: 1.2rem;
@@ -52,6 +65,12 @@ const FooterStyled = styled.footer`
 `;
 
 export const Header = () => {
+  const { handleLogout, SignIn } = useAuth();
+  const navigate = useNavigate();
+  const LogoutSuccess = async () => {
+    await handleLogout();
+    navigate("/");
+  };
   return (
     <HeaderStyled>
       <HeaderContainer className="container">
@@ -61,10 +80,17 @@ export const Header = () => {
           </LogoStyled>
         </HeaderLeft>
         <HeaderRight>
-          {/* <NavLink to="/sign-in">로그인</NavLink>
-          <NavLink to="/sign-up">회원가입</NavLink> */}
-          <NavLink to="/">로그아웃</NavLink>
-          <NavLink to="/mypage">마이페이지</NavLink>
+          {SignIn ? (
+            <>
+              <LogoutButton onClick={LogoutSuccess}>로그아웃</LogoutButton>
+              <NavLink to="/mypage">마이페이지</NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink to="/sign-in">로그인</NavLink>
+              <NavLink to="/sign-up">회원가입</NavLink>
+            </>
+          )}
         </HeaderRight>
       </HeaderContainer>
     </HeaderStyled>

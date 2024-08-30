@@ -1,5 +1,6 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import supabase from "../../base-camp/supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 // Context 생성
 const AuthContext = createContext();
@@ -12,49 +13,83 @@ export const AuthProvider = ({ children }) => {
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [signIn, setSignIn] = useState(false);
+
+  const navigate = useNavigate();
+
+  // user 로그인 상태 확인
+  const checkSignIn = async () => {
+    const { data: session } = await supabase.auth.getSession();
+    const isSignIn = !!session?.session;
+    setSignIn(isSignIn);
+  };
+
+  useEffect(() => {
+    // 로그인 확인
+    checkSignIn();
+  }, []);
 
   // user 회원가입
   const handleSignUp = async () => {
     if (password !== confirmPassword) {
       setError("비밀번호가 일치하지 않습니다");
       return;
+    } else if (!email || !password || !confirmPassword || !nickname) {
+      setError("모든 칸을 입력해주세요");
+      return;
     }
 
+    // 회원가입
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { nickname },
+        data: {
+          nickname,
+        },
       },
     });
 
     if (error) {
       setError("회원가입 실패: " + error.message);
+      setSuccess("");
+      return;
     } else {
-      setSuccess("회원가입 성공!");
       setError("");
+      setSuccess("회원가입 성공!");
+      navigate("/sign-in");
     }
   };
 
   // user 로그인
   const handleSignIn = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
+      options: {
+        data: {
+          nickname,
+        },
+      },
     });
 
     if (error) {
-      setError("로그인 실패:" + error.message);
+      setError("로그인 실패: " + error.message);
+      setSuccess("");
     } else {
-      setSuccess("로그인 성공!");
       setError("");
+      setSuccess("로그인 성공!");
+      navigate("/");
     }
   };
 
   // user 로그아웃
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
+    await supabase.auth.signOut();
+    setSignIn(false); // 로그아웃 후 로그인 상태 초기화
+    navigate("/"); // 홈으로 이동
   };
+
   return (
     <AuthContext.Provider
       value={{
@@ -71,6 +106,8 @@ export const AuthProvider = ({ children }) => {
         handleSignUp,
         handleSignIn,
         handleLogout,
+        signIn,
+        checkSignIn,
       }}
     >
       {children}
