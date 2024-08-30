@@ -1,8 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import supabase from "../../../base-camp/supabaseClient";
+import { useState, useEffect } from "react";
 import ProfileImage from "../../components/ProfileImage";
-import { useSearchParams } from "react-router-dom";
 
 const MyPageLayoutContainer = styled.div`
   display: flex;
@@ -87,19 +87,34 @@ const MyPageRightStyled = styled.div`
 `;
 
 export const MyPageLeft = () => {
+  const [user, setUser] = useState([]);
   const [searchParams] = useSearchParams();
   const views = searchParams.get("views");
+
+  async function getProfile() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    setUser(user);
+  }
+
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   return (
     <MyPageLeftStyled>
       <ProfileContainer>
         <ProfileImage />
         <ProfileInfo>
-          <ProfileNickname>내 이름은 요리사</ProfileNickname>
-          <ProfileEmail>email_yummy@email.com</ProfileEmail>
+          <ProfileNickname>{user.user_metadata.nickname}</ProfileNickname>
+          <ProfileEmail>{user.user_metadata.email}</ProfileEmail>
         </ProfileInfo>
         <ProfileIntro>
-          <p>제가 만들라는데로 만드시면 당신도 백종원이 될수있어요</p>
+          <p>
+            제가 만들라는데로 만드시면 당신도 백종원이 될수있어요
+          </p>
         </ProfileIntro>
       </ProfileContainer>
       <MyPageNav>

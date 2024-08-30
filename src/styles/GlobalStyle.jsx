@@ -105,6 +105,7 @@ body {
     color: rgba(0, 0, 0, 0.5);
 }
 input,
+textarea,
 button {
     font-family: var(--font-family);
 }

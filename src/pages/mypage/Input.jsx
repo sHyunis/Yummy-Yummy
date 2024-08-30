@@ -13,13 +13,13 @@ const InputStyled = styled.input`
   border-radius: var(--border-radius);
 `;
 
-const Input = ({ type = "text", name, value, placeholber, onChange }) => {
+const Input = ({ type = "text", name, value, placeholder, onChange }) => {
   return (
     <InputStyled
       type={type}
       name={name}
       value={value}
-      placeholber={placeholber}
+      placeholder={placeholder}
       onChange={onChange}
     />
   );
