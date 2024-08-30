@@ -58,6 +58,11 @@ const GlobalStyle = createGlobalStyle`
     --border-radius-sm: 4px;
 }
 
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
 html {
     font-size: 62.5% !important;
     font-family: var(--font-family); 
@@ -100,7 +105,8 @@ body {
     color: rgba(0, 0, 0, 0.5);
 }
 input,
-button {
+button,
+textarea {
     font-family: var(--font-family);
 }
 a, button{

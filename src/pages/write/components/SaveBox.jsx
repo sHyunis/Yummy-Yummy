@@ -11,7 +11,7 @@ const SaveBox = () => {
     <>
       {" "}
       <ButtonSize>
-        <Button fontsize="2rem">저장하기</Button>
+        <Button fontsize="2">저장하기</Button>
       </ButtonSize>
       ;
     </>

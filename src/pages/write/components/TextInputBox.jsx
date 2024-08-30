@@ -8,9 +8,9 @@ import { WriteContext } from "../../../contexts/WriteContext";
 const Width = styled.div`
   width: 600px;
   display: flex;
-  min-height: 30px;
+  min-height: 40px;
   height: ${(props) => {
-    return props.height * 1.5 + "px";
+    return props.height * 2 + "px";
   }};
 `;
 

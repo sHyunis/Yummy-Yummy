@@ -16,16 +16,16 @@ const ImageBox = styled.div`
 `;
 
 const ImagePreview = styled.img`
-  width: 220px;
-  height: 220px;
+  width: 250px;
+  height: 250px;
   object-fit: cover;
   border-radius: var(--border-radius);
   box-shadow: 0 0 5px rgb(0, 0, 0, 0.3);
 `;
 
 const UploadButton = styled.div`
-  width: 220px;
-  height: 220px;
+  width: 250px;
+  height: 250px;
   border-radius: var(--border-radius);
   box-shadow: inset 0 0 3px rgb(0, 0, 0, 0.3);
   display: flex;

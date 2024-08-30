@@ -3,9 +3,11 @@ import { createContext, useRef, useState } from "react";
 export const WriteContext = createContext();
 
 export const WriteProvider = ({ children }) => {
+  // 인풋 추가할 때 사용하는 state
   const [ingredientGroups, setIngredientGroups] = useState([{}, {}]);
   const [recipeContGroups, setRecipeContGroups] = useState([{}]);
 
+  // 데이터 베이스 보낼 레시피 정보 state
   const [recipeInfo, setRecipeInfo] = useState({
     USER_ID: "",
     RECIPE_TITLE: "",
@@ -14,8 +16,7 @@ export const WriteProvider = ({ children }) => {
     RECIPE_IMG: "",
   });
 
-  console.log(recipeInfo);
-
+  // 입력창에서 받아온 value 저장
   const recipeInfoChange = (value, type) => {
     setRecipeInfo({
       ...recipeInfo,
@@ -23,6 +24,7 @@ export const WriteProvider = ({ children }) => {
     });
   };
 
+  // 카테고리도!!
   const ctgChange = (value) => {
     setRecipeInfo({
       ...recipeInfo,

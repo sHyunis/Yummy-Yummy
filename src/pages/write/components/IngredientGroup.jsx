@@ -6,14 +6,14 @@ import { WriteContext } from "../../../contexts/WriteContext";
 const GroupStyle = styled.div`
   display: flex;
   width: 450px;
-  height: 30px;
+  height: 50px;
   justify-content: space-between;
   padding: 10px 0;
 `;
 
 const InputSize = styled.div`
   width: 200px;
-  height: 15px;
+  height: 40px;
   display: flex;
 `;
 
