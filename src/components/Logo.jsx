@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const LogoSvg = styled.svg`
+const LogoSvg = styled.svg`
   width: auto;
   height: 100%;
   aspect-ratio: 446 / 227;
