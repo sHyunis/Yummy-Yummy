@@ -58,6 +58,11 @@ const GlobalStyle = createGlobalStyle`
     --border-radius-sm: 4px;
 }
 
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
 html {
     font-size: 62.5% !important;
     font-family: var(--font-family); 
