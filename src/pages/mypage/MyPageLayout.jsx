@@ -1,8 +1,8 @@
+import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import supabase from "../../../base-camp/supabaseClient";
-import { useState, useEffect } from "react";
 import ProfileImage from "../../components/ProfileImage";
+import supabase from "../../../base-camp/supabaseClient";
 
 const MyPageLayoutContainer = styled.div`
   display: flex;
@@ -44,7 +44,7 @@ const ProfileEmail = styled.div`
   text-decoration: underline;
   color: var(--gray2-color);
 `;
-const ProfileIntro = styled.div`
+const ProfileIntroduction = styled.div`
   padding-top: 16px;
   font-size: 1.4rem;
   word-break: keep-all;
@@ -87,20 +87,33 @@ const MyPageRightStyled = styled.div`
 `;
 
 export const MyPageLeft = () => {
-  const [user, setUser] = useState([]);
+  const [email, setEmail] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [introduction, setIntroduction] = useState("");
   const [searchParams] = useSearchParams();
   const views = searchParams.get("views");
 
-  async function getProfile() {
+  // 유저 정보
+  const userInfo = async () => {
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
-    setUser(user);
-  }
+    const { data } = await supabase
+      .from("userinfo")
+      .select("introduction")
+      .eq("id", user.id)
+      .single();
+
+    if (user) {
+      setEmail(user.email);
+      setNickname(user.user_metadata.nickname);
+      setIntroduction(data.introduction);
+    }
+  };
 
   useEffect(() => {
-    getProfile();
+    userInfo();
   }, []);
 
   return (
@@ -108,14 +121,14 @@ export const MyPageLeft = () => {
       <ProfileContainer>
         <ProfileImage />
         <ProfileInfo>
-          <ProfileNickname>{user.user_metadata.nickname}</ProfileNickname>
-          <ProfileEmail>{user.user_metadata.email}</ProfileEmail>
+          <ProfileNickname>{nickname}</ProfileNickname>
+          <ProfileEmail>{email}</ProfileEmail>
         </ProfileInfo>
-        <ProfileIntro>
-          <p>
-            제가 만들라는데로 만드시면 당신도 백종원이 될수있어요
-          </p>
-        </ProfileIntro>
+        {introduction && (
+          <ProfileIntroduction>
+            <p>{introduction}</p>
+          </ProfileIntroduction>
+        )}
       </ProfileContainer>
       <MyPageNav>
         <li className={views == "profile" ? "on" : ""}>
