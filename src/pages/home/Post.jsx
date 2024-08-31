@@ -1,12 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 `;
 
-const PostImage = styled.div`
+const PostImage = styled.img`
   height: 28.2rem;
   width: 28.2rem;
   background-color: gray;
@@ -33,22 +35,22 @@ const PostTitle = styled.h2`
 
 const PostExplain = styled.p`
   text-overflow: ellipsis;
+  text-align: center;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 `;
 
-const Post = () => {
+const Post = ({ img, title, description, id }) => {
+  const navigate = useNavigate();
+
   return (
-    <Wrap>
-      <PostImage />
+    <Wrap onClick={() => navigate(`/detail/${id}`)}>
+      <PostImage src={img} />
       <PostContentWrap>
-        <PostTitle>당근당근 당근케이크</PostTitle>
-        <PostExplain>
-          맛있는 당근케이크를 만들어보겠습니다. 맛있는 당근케이크를
-          만들어보겠습니다. 맛있는 당근케이크를 만들어보겠습니다.
-        </PostExplain>
+        <PostTitle>{title}</PostTitle>
+        <PostExplain>{description}</PostExplain>
       </PostContentWrap>
     </Wrap>
   );
