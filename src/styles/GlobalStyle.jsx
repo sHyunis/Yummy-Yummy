@@ -57,6 +57,9 @@ const GlobalStyle = createGlobalStyle`
         font-size: 10px;
     }
 }
+*{
+    box-sizing: border-box;
+}
 body {
     font-size: 1.6rem;
     line-height: 1.5;
