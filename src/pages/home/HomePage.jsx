@@ -1,7 +1,7 @@
-import React from "react";
 import styled from "styled-components";
 import searchIcon from "../../../public/images/search.svg";
 import PostList from "./PostList";
+import { useState } from "react";
 
 const Wrap = styled.div`
   max-width: 120rem;
@@ -30,13 +30,19 @@ const SearchImg = styled.img`
 `;
 
 const HomePage = () => {
+  const [inputValue, setInputValue] = useState("");
+
   return (
     <Wrap>
       <SearchbarWrap>
-        <Searchbar placeholder="검색어를 입력하세요" />
+        <Searchbar
+          placeholder="검색어를 입력하세요"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
         <SearchImg src={searchIcon} alt="" />
       </SearchbarWrap>
-      <PostList />
+      <PostList keyword={inputValue} />
     </Wrap>
   );
 };
