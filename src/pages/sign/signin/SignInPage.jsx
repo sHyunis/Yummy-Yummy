@@ -3,7 +3,7 @@ import styled from "styled-components";
 import SignButton from "../SignButton";
 import SignInput from "../SignInput";
 import Logo from "../../../components/Logo";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 
 const SignInPage = () => {
@@ -16,12 +16,7 @@ const SignInPage = () => {
     error,
     success,
   } = useAuth();
-  const navigate = useNavigate();
-  const signInSuccess = async () => {
-    await handleSignIn();
-    // 로그인 성공 후 홈화면 이동
-    navigate("/");
-  };
+
   return (
     <Container>
       <LoginWrap>
@@ -47,7 +42,7 @@ const SignInPage = () => {
           <SignButton
             backgroundColor="--green-color"
             textColor="white"
-            onClick={signInSuccess}
+            onClick={handleSignIn}
           >
             로그인
           </SignButton>
