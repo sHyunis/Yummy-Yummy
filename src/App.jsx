@@ -6,9 +6,8 @@ import { UserProvider } from "./contexts/UserContext";
 const App = () => {
   return (
     <>
+      <GlobalStyle />
       <UserProvider>
-        <GlobalStyle />
-
         <Router />
       </UserProvider>
     </>

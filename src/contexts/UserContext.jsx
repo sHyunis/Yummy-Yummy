@@ -11,13 +11,13 @@ export const UserProvider = ({ children }) => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
-      setUser(session ? session.user : null);
+      setUser(session?.user || null);
     };
     getSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        setUser(session?.user ? session?.user : null);
+        setUser(session?.user || null);
       },
     );
     return () => {

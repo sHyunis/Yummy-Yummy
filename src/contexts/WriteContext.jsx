@@ -1,12 +1,14 @@
-import { createContext, useRef, useState } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 import supabase from "../../base-camp/supabaseClient";
+import { UserContext } from "./UserContext";
 
 export const WriteContext = createContext();
 
 export const WriteProvider = ({ children }) => {
+  const { user } = useContext(UserContext);
   // 초기값 설정
   const initRecipeInfo = {
-    USER_ID: 1,
+    USER_ID: user?.id || null,
     RECIPE_TITLE: "",
     RECIPE_DESCR: "",
     RECIPE_CTG: "",
@@ -25,6 +27,8 @@ export const WriteProvider = ({ children }) => {
       ING_VOL: "",
     },
   ];
+
+  console.log(initRecipeInfo);
 
   // 인풋 추가할 때 사용하는 state
   const [ingredientGroups, setIngredientGroups] = useState(initIngInfo);
