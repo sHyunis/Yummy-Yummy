@@ -27,7 +27,7 @@ const ProfileImageStyle = styled.img`
   object-fit: cover;
 `;
 
-const ProfileImage = ({ src }) => {
+const ProfileImage = ({ src, width }) => {
   const [profileImage, setProfileImage] = useState();
 
   const checkProfileImage = async () => {
@@ -55,7 +55,7 @@ const ProfileImage = ({ src }) => {
   }, []);
 
   return (
-    <ProfileImageWrap>
+    <ProfileImageWrap width={width}>
       <ProfileImageStyle src={src || profileImage} alt="프로필 이미지" />
     </ProfileImageWrap>
   );

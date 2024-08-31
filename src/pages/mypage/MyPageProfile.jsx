@@ -50,7 +50,6 @@ const MyPageProfile = () => {
     }
 
     console.log(password, isPasswordConfirm, passwordErrorText);
-    
   };
 
   // 파일 확장자 가져오는 함수
@@ -74,6 +73,10 @@ const MyPageProfile = () => {
       setIntroduction(data.introduction);
     }
   };
+
+  useEffect(() => {
+    userIntroduction();
+  }, []);
 
   // 미리보기 이미지
   const handleChangeImageUrl = (e) => {
@@ -139,10 +142,6 @@ const MyPageProfile = () => {
     // 새로고침
     window.location.reload();
   };
-
-  useEffect(() => {
-    userIntroduction();
-  }, []);
 
   return (
     <>

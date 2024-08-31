@@ -3,7 +3,12 @@ import styled from "styled-components";
 
 const Button = ({ onClick, children, height, fontsize }) => {
   return (
-    <ButtonStyled type="button" onClick={onClick} $height={height} $fontsize={fontsize}>
+    <ButtonStyled
+      type="button"
+      onClick={onClick}
+      $height={height}
+      $fontsize={fontsize}
+    >
       {children}
     </ButtonStyled>
   );

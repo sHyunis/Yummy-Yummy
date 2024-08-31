@@ -4,11 +4,25 @@ import styled from "styled-components";
 import ProfileImage from "../../components/ProfileImage";
 import supabase from "../../../base-camp/supabaseClient";
 
+// MyPageLayout
 const MyPageLayoutContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 50px;
 `;
 
+const MyPageLayout = ({ children }) => {
+  return (
+    <MyPageLayoutContainer className="container">
+      <MyPageLeft />
+      <MyPageRight>{children}</MyPageRight>
+    </MyPageLayoutContainer>
+  );
+};
+
+export default MyPageLayout;
+
+// MyPageLeft
 const MyPageLeftStyled = styled.div`
   position: relative;
   width: 278px;
@@ -82,10 +96,6 @@ const MyPageNav = styled.ul`
   }
 `;
 
-const MyPageRightStyled = styled.div`
-  flex: 1 0 auto;
-`;
-
 export const MyPageLeft = () => {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
@@ -154,17 +164,12 @@ export const MyPageLeft = () => {
   );
 };
 
+// MyPageRight
+const MyPageRightStyled = styled.div`
+  width: calc(100% - 278px - 50px);
+  flex: 1 0 auto;
+`;
+
 export const MyPageRight = ({ children }) => {
   return <MyPageRightStyled>{children}</MyPageRightStyled>;
 };
-
-const MyPageLayout = ({ children }) => {
-  return (
-    <MyPageLayoutContainer className="container">
-      <MyPageLeft />
-      <MyPageRight>{children}</MyPageRight>
-    </MyPageLayoutContainer>
-  );
-};
-
-export default MyPageLayout;
