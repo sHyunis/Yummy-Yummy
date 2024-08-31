@@ -1,15 +1,16 @@
 import React from "react";
 import Router from "./shared/Router";
 import GlobalStyle from "./styles/GlobalStyle";
-import { AuthProvider } from "./contexts/AuthContext";
+import { UserProvider } from "./contexts/UserContext";
 
 const App = () => {
   return (
     <>
-      <GlobalStyle />
-      <AuthProvider>
+      <UserProvider>
+        <GlobalStyle />
+
         <Router />
-      </AuthProvider>
+      </UserProvider>
     </>
   );
 };

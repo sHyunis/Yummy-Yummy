@@ -30,8 +30,6 @@ export const WriteProvider = ({ children }) => {
   const [ingredientGroups, setIngredientGroups] = useState(initIngInfo);
   const [recipeContGroups, setRecipeContGroups] = useState([{}]);
 
-  console.log(ingredientGroups);
-
   // 데이터 베이스 보낼 레시피 정보 state
   const [recipeInfo, setRecipeInfo] = useState(initRecipeInfo);
   const [ingInfo, setIngInfo] = useState({});
@@ -54,9 +52,11 @@ export const WriteProvider = ({ children }) => {
 
   // 입력창에서 받아온 ing value 저장하는 onChange 함수
   const ingInfoChange = (value, type, index) => {
-    setIngInfo;
     ingredientGroups[index] = { ...ingredientGroups[index], [type]: value };
+    setIngInfo([...ingredientGroups]);
   };
+
+  console.log(ingInfo);
 
   // 저장버튼 누르면 다 보내버리기
   const saveRecipe = async () => {
