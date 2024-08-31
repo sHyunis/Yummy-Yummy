@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useContext } from "react";
 import Label from "./Label";
 import styled from "styled-components";
 import Box from "./Box";

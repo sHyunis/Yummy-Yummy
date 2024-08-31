@@ -11,11 +11,11 @@ const InputStyled = styled.textarea`
   resize: none;
 `;
 
-const Input = ({ place, onChange, type }) => {
+const Input = ({ place, onChange, type, index }) => {
   return (
     <InputStyled
       placeholder={place}
-      onChange={(e) => onChange(e.target.value, type)}
+      onChange={(e) => onChange(e.target.value, type, index)}
     />
   );
 };

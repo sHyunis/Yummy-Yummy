@@ -18,15 +18,25 @@ const InputSize = styled.div`
 `;
 
 const IngredientGroup = ({ index }) => {
-  const { removeIngGroup } = useContext(WriteContext);
+  const { removeIngGroup, ingInfoChange } = useContext(WriteContext);
   return (
     <>
       <GroupStyle>
         <InputSize>
-          <Input place="예) 당근" />
+          <Input
+            place="예) 당근"
+            type="ING_NAME"
+            index={index}
+            onChange={ingInfoChange}
+          />
         </InputSize>
         <InputSize>
-          <Input place="예) 1개, 30g 등" />
+          <Input
+            place="예) 1개, 30g 등"
+            type="ING_VOL"
+            index={index}
+            onChange={ingInfoChange}
+          />
         </InputSize>
         <p
           onClick={() => removeIngGroup(index)}

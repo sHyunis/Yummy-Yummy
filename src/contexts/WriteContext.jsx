@@ -1,22 +1,42 @@
 import { createContext, useRef, useState } from "react";
+import supabase from "../../base-camp/supabaseClient";
 
 export const WriteContext = createContext();
 
 export const WriteProvider = ({ children }) => {
-  // 인풋 추가할 때 사용하는 state
-  const [ingredientGroups, setIngredientGroups] = useState([{}, {}]);
-  const [recipeContGroups, setRecipeContGroups] = useState([{}]);
-
-  // 데이터 베이스 보낼 레시피 정보 state
-  const [recipeInfo, setRecipeInfo] = useState({
-    USER_ID: "",
+  // 초기값 설정
+  const initRecipeInfo = {
+    USER_ID: 1,
     RECIPE_TITLE: "",
     RECIPE_DESCR: "",
     RECIPE_CTG: "",
     RECIPE_IMG: "",
-  });
+  };
 
-  // 입력창에서 받아온 value 저장
+  const initIngInfo = [
+    {
+      RECIPE_ID: 0,
+      ING_NAME: "",
+      ING_VOL: "",
+    },
+    {
+      RECIPE_ID: 0,
+      ING_NAME: "",
+      ING_VOL: "",
+    },
+  ];
+
+  // 인풋 추가할 때 사용하는 state
+  const [ingredientGroups, setIngredientGroups] = useState(initIngInfo);
+  const [recipeContGroups, setRecipeContGroups] = useState([{}]);
+
+  console.log(ingredientGroups);
+
+  // 데이터 베이스 보낼 레시피 정보 state
+  const [recipeInfo, setRecipeInfo] = useState(initRecipeInfo);
+  const [ingInfo, setIngInfo] = useState({});
+
+  // 입력창에서 받아온 info value 저장하는 onChange 함수
   const recipeInfoChange = (value, type) => {
     setRecipeInfo({
       ...recipeInfo,
@@ -32,11 +52,26 @@ export const WriteProvider = ({ children }) => {
     });
   };
 
-  // 재료 관련
+  // 입력창에서 받아온 ing value 저장하는 onChange 함수
+  const ingInfoChange = (value, type, index) => {
+    setIngInfo;
+    ingredientGroups[index] = { ...ingredientGroups[index], [type]: value };
+  };
+
+  // 저장버튼 누르면 다 보내버리기
+  const saveRecipe = async () => {
+    await supabase.from("recipe_info").insert([recipeInfo]);
+    await supabase.from("recipe_ingredient").insert(ingInfo);
+    setRecipeInfo(initRecipeInfo);
+    setIngredientGroups(initIngInfo);
+  };
+
+  // 재료 그룹 추가하는 onClick 함수
   const addIngGroup = () => {
     setIngredientGroups([...ingredientGroups, {}]);
   };
 
+  // 재료 그룹 삭제하는 onClick 함수
   const removeIngGroup = (index) => {
     if (ingredientGroups.length === 2) {
       alert("최소 두 개의 재료는 추가되어야 합니다.");
@@ -46,11 +81,12 @@ export const WriteProvider = ({ children }) => {
     setIngredientGroups(newGroups);
   };
 
-  // 레시피 순서 관련
+  // 레시피 순서 추가하는 onClick 함수
   const addRecipeGroup = () => {
     setRecipeContGroups([...recipeContGroups, {}]);
   };
 
+  // 재료 그룹 삭제하는 onClick 함수
   const removeRecipeGroup = (index) => {
     if (recipeContGroups.length === 1) {
       alert("최소 한 개의 레시피는 작성되어야 합니다.");
@@ -60,7 +96,7 @@ export const WriteProvider = ({ children }) => {
     setRecipeContGroups(newGroups);
   };
 
-  // 이미지 업로드
+  // 이미지 미리보기 실행하는 부분
   const [imageSrc, setImageSrc] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -79,6 +115,7 @@ export const WriteProvider = ({ children }) => {
     }
   };
 
+  // 버튼이랑 인풋 연결하는 함수
   const handleUploadButtonClick = () => {
     fileInputRef.current.click();
   };
@@ -98,6 +135,8 @@ export const WriteProvider = ({ children }) => {
         fileInputRef,
         recipeInfoChange,
         ctgChange,
+        saveRecipe,
+        ingInfoChange,
       }}
     >
       {children}
