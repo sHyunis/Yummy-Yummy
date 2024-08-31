@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import commentWriter from "./commentWriter.png";
 
-const Comments = () => {
+const Comments = ({ recipeId }) => {
   return (
     <CommentsMainDiv>
       <StyledH2>댓글</StyledH2>

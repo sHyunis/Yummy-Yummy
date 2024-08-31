@@ -5,27 +5,31 @@ import RecipeContent from "./RecipeContent";
 import CookWriter from "./CookWriter";
 import Comments from "./Comments";
 import CommentWrite from "./CommentWrite";
+import { useParams } from "react-router-dom";
 
 const DetailPage = () => {
+  const params = useParams();
+  const recipeId = Number(params.id);
+
   return (
     <>
       <Container>
-        <DetailPageHeader />
+        <DetailPageHeader recipeId={recipeId} />
       </Container>
 
       <DivisionLineDiv />
       <Container>
-        <RecipeContent />
+        <RecipeContent recipeId={recipeId} />
       </Container>
 
       <DivisionLineDiv />
       <Container>
-        <CookWriter />
+        <CookWriter recipeId={recipeId} />
       </Container>
 
       <DivisionLineDiv />
       <Container>
-        <Comments />
+        <Comments recipeId={recipeId} />
       </Container>
 
       <DivisionLineDiv />

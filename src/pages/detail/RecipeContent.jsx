@@ -1,45 +1,88 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import supabase from "../../../base-camp/supabaseClient";
 
-const RecipeContent = () => {
+const RecipeContent = ({ recipeId }) => {
+  const [recipeIngredient, setRecipeIngredient] = useState([]);
+  const [recipeFlow, setRecipeFlow] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const ingredientResponse = await supabase
+          .from("recipe_ingredient")
+          .select("*")
+          .eq("RECIPE_ID", recipeId);
+
+        if (ingredientResponse.error) {
+          throw ingredientResponse.error;
+        }
+        setRecipeIngredient(ingredientResponse.data);
+
+        const flowResponse = await supabase
+          .from("recipe_flow")
+          .select("*")
+          .eq("RECIPE_ID", recipeId);
+
+        if (flowResponse.error) {
+          throw flowResponse.error;
+        }
+        setRecipeFlow(flowResponse.data);
+      } catch (error) {
+        console.error("error: => ", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [recipeId]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
   return (
     <StRecipeContentSection>
       <IngredientDiv>
         <StyledH2>재료</StyledH2>
         <LineDiv />
         <StIngredientDiv>
-          <div>달걀 - 100개</div>
-          <div>당근 - 160g</div>
-          <div>우유 - 1L</div>
-          <div>설탕 - 50g</div>
-          <div>밀가루 - 1kg</div>
+          {recipeIngredient.length > 0 ? (
+            recipeIngredient.map((ingredient) => (
+              <IngredientCard key={ingredient.ING_ID}>
+                <div>{ingredient.ING_NAME}</div>
+                <div>{ingredient.ING_VOL}</div>
+              </IngredientCard>
+            ))
+          ) : (
+            <p>No ingredients available.</p>
+          )}
         </StIngredientDiv>
       </IngredientDiv>
       <IngredientDiv>
         <StyledH2>레시피 순서</StyledH2>
         <LineDiv />
-        <p>1. 달걀을 믹싱 볼에 넣고 균일한 갈색이 될 때까지 저어줍니다.</p>
-        <p>2. 당근을 넣고 섞어줍니다...</p>
-        <p>1. 달걀을 믹싱 볼에 넣고 균일한 갈색이 될 때까지 저어줍니다.</p>
-        <p>2. 당근을 넣고 섞어줍니다...</p>
-        <p>1. 달걀을 믹싱 볼에 넣고 균일한 갈색이 될 때까지 저어줍니다.</p>
-        <p>2. 당근을 넣고 섞어줍니다...</p>
-        <p>1. 달걀을 믹싱 볼에 넣고 균일한 갈색이 될 때까지 저어줍니다.</p>
-        <p>2. 당근을 넣고 섞어줍니다...</p>
-        <p>1. 달걀을 믹싱 볼에 넣고 균일한 갈색이 될 때까지 저어줍니다.</p>
-        <p>2. 당근을 넣고 섞어줍니다...</p>
-        <p>1. 달걀을 믹싱 볼에 넣고 균일한 갈색이 될 때까지 저어줍니다.</p>
-        <p>2. 당근을 넣고 섞어줍니다...</p>
-        <p>1. 달걀을 믹싱 볼에 넣고 균일한 갈색이 될 때까지 저어줍니다.</p>
-        <p>2. 당근을 넣고 섞어줍니다...</p>
+        {recipeFlow.map((flow) => (
+          <RecipeFlowPTag key={flow.STEP_ID}>
+            {flow.RECIPE_STEP}. {flow.RECIPE_CONT}
+          </RecipeFlowPTag>
+        ))}
       </IngredientDiv>
     </StRecipeContentSection>
   );
 };
-
+const RecipeFlowPTag = styled.p`
+  margin-bottom: 10px;
+`;
 const StyledH2 = styled.h2`
   font-size: 30px;
   font-weight: bold;
+  text-align: center;
 `;
 
 const StIngredientDiv = styled.div`
@@ -56,7 +99,7 @@ const LineDiv = styled.div`
 
 const IngredientDiv = styled.div`
   padding: 10px;
-  text-align: center;
+  text-align: left;
 `;
 
 const StRecipeContentSection = styled.div`
@@ -65,6 +108,15 @@ const StRecipeContentSection = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   align-items: start;
+`;
+
+const IngredientCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin: 5px;
+  border-radius: 5px;
 `;
 
 export default RecipeContent;

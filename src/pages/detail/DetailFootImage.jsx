@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import image from "./food.png";
 
 const DetailFootImage = ({ recipeInfo }) => {
   return (

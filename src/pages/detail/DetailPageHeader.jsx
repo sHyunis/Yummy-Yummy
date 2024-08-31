@@ -3,15 +3,14 @@ import styled from "styled-components";
 import DetailFootImage from "./DetailFootImage";
 import supabase from "../../../base-camp/supabaseClient";
 
-const DetailPageHeader = () => {
+const DetailPageHeader = ({ recipeId }) => {
   const [recipeInfo, setRecipeInfo] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await supabase
         .from("recipe_info")
         .select("*")
-        .eq("RECIPE_ID", 1);
+        .eq("RECIPE_ID", recipeId);
 
       if (error) {
         console.error("error: => ", error);
@@ -20,9 +19,12 @@ const DetailPageHeader = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [recipeId]);
   // console.log(recipeInfo);
 
+  if (!recipeInfo || recipeInfo.length === 0) {
+    return <div>Loading...</div>;
+  }
   return (
     <FoodHeader>
       <FoodCategory>{recipeInfo[0].RECIPE_CTG}</FoodCategory>
