@@ -48,8 +48,6 @@ const MyPageProfile = () => {
       setPasswordErrorText("");
       setIsPasswordConfirm(true);
     }
-
-    console.log(password, isPasswordConfirm, passwordErrorText);
   };
 
   // 파일 확장자 가져오는 함수
@@ -64,7 +62,7 @@ const MyPageProfile = () => {
     } = await supabase.auth.getUser();
 
     const { data } = await supabase
-      .from("userinfo")
+      .from("user_info")
       .select("introduction")
       .eq("id", user.id)
       .single();
@@ -118,7 +116,7 @@ const MyPageProfile = () => {
 
       //업데이트
       const { error: updateImageError } = await supabase
-        .from("userinfo")
+        .from("user_info")
         .update({ user_img_url: imageUpload })
         .eq("id", user.id);
 
@@ -130,7 +128,7 @@ const MyPageProfile = () => {
     // 소개글 supabase에 업데이트
     if (introduction) {
       const { error: introductionError } = await supabase
-        .from("userinfo")
+        .from("user_info")
         .update({ introduction })
         .eq("id", user.id);
 

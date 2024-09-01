@@ -36,7 +36,7 @@ const ProfileImage = ({ src, width }) => {
     } = await supabase.auth.getUser();
 
     const { data, error } = await supabase
-      .from("userinfo")
+      .from("user_info")
       .select("user_img_url")
       .eq("id", user.id)
       .single();
