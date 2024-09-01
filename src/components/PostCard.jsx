@@ -18,14 +18,13 @@ const PostImage = styled.img`
 const PostContentWrap = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-top: 2.4rem;
-  padding: 0 1rem;
+  gap: 4px;
+  margin-top: 16px;
 `;
 
 const PostTitle = styled.h2`
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 1.8rem;
+  font-weight: 700;
   text-align: center;
   overflow: hidden;
   white-space: nowrap;
@@ -34,6 +33,8 @@ const PostTitle = styled.h2`
 `;
 
 const PostDescription = styled.p`
+  color: var(--gray2-color);
+  font-size: 1.4rem;
   text-overflow: ellipsis;
   text-align: center;
   overflow: hidden;

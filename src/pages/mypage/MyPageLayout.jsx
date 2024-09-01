@@ -7,6 +7,7 @@ const MyPageLayoutContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 50px;
+  padding-left: 0;
 `;
 
 const MyPageLayout = ({ children }) => {
