@@ -136,6 +136,7 @@ export const WriteProvider = ({ children }) => {
       // 상태 초기화
       setRecipeInfo(initRecipeInfo);
       setIngredientGroups(initIngInfo);
+      setRecipeCont(initRecipeCont);
 
       console.log("저장 성공!");
     } catch (err) {
