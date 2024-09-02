@@ -8,6 +8,7 @@ import SignUpPage from "../pages/sign/signup/SignUpPage";
 import SignInPage from "../pages/sign/signin/SignInPage";
 import Layout from "./Layout";
 import { AuthProvider } from "../contexts/AuthContext";
+import EditPage from "../pages/edit/EditPage";
 
 const Router = () => {
   return (
@@ -21,6 +22,7 @@ const Router = () => {
             <Route path="/write" element={<WritePage />} />
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
+            <Route path="/edit/:id" element={<EditPage />} />
           </Routes>
         </Layout>
       </AuthProvider>
