@@ -71,8 +71,6 @@ export const WriteProvider = ({ children }) => {
 
   // 데이터 베이스 보낼 레시피 정보 state
   const [recipeInfo, setRecipeInfo] = useState(initRecipeInfo);
-  // const [ingInfo, setIngInfo] = useState(initIngInfo);
-  // const [recipeCont, setRecipeCont] = useState(initRecipeCont);
 
   // 입력창에서 받아온 info value 저장하는 onChange 함수
   const recipeInfoChange = (value, type) => {
@@ -102,71 +100,75 @@ export const WriteProvider = ({ children }) => {
 
   // 저장버튼 누르면 다 보내버리기
   const saveRecipe = async () => {
-    try {
-      // 사용자 id 가져오기
-      const user = await supabase.auth.getUser();
-      const id = user.data.user.id;
+    // 정보 비었는지 검사
+    const validateInfoInput = (obj) => {
+      const isTrue = Object.values(obj).some((value) => value);
+      return !isTrue;
+    };
 
-      // 정보 비었는지 검사
-      const validateInfoInput = (obj) => {
-        const isTrue = Object.values(obj).some((value) => value);
-        return !isTrue;
-      };
+    // 재료 비었는지 검사
+    const validateIngInput = (arr) => {
+      return arr.some((value) => value.ING_NAME.length === 0 || value.ING_VOL.length === 0);
+    };
 
-      // 재료 비었는지 검사
-      const validateIngInput = (arr) => {
-        return arr.some((value) => value.ING_NAME.length === 0 || value.ING_VOL.length === 0);
-      };
+    // 순서 비었는지 검사
+    const validateContInput = (arr) => {
+      return arr.some((value) => value.RECIPE_STEP.length === 0 || value.RECIPE_CONT.length === 0);
+    };
 
-      // 순서 비었는지 검사
-      const validateContInput = (arr) => {
-        return arr.some((value) => value.RECIPE_STEP.length === 0 || value.RECIPE_CONT.length === 0);
-      };
+    if (validateInfoInput(recipeInfo) || validateIngInput(ingredientGroups) || validateContInput(recipeContGroups)) {
+      Swal.fire({
+        title: "빈칸 발견!",
+        html: "입력 되지 않은 정보가 있습니다.<br/> 모든 칸을 채워 레시피를 완성해주세요 :)",
+        icon: "error",
+        customClass: {
+          popup: "no-global-styles"
+        }
+      });
+      return;
+    }
+    const url = new URL(window.location.href);
+    const path = url.pathname.split("/").pop();
+    if (path === "write") {
+      try {
+        // 사용자 id 가져오기
+        const user = await supabase.auth.getUser();
+        const id = user.data.user.id;
 
-      if (validateInfoInput(recipeInfo) || validateIngInput(ingredientGroups) || validateContInput(recipeContGroups)) {
-        Swal.fire({
-          title: "빈칸 발견!",
-          html: "입력 되지 않은 정보가 있습니다.<br/> 모든 칸을 채워 레시피를 완성해주세요 :)",
-          icon: "error",
-          customClass: {
-            popup: "no-global-styles"
-          }
-        });
-        return;
+        // recipe_info 테이블에 레시피 정보 삽입
+        const { data } = await supabase
+          .from("recipe_info")
+          .insert([{ ...recipeInfo, USER_ID: id }])
+          .select();
+
+        const recipeId = data[0].RECIPE_ID;
+
+        // ingInfo 배열 안에서 모든 재료 객체 RECIPE_ID 변경
+        const updatedIngInfo = ingredientGroups.map((ingredient) => ({
+          ...ingredient,
+          RECIPE_ID: recipeId
+        }));
+
+        const updateRecipeCont = recipeContGroups.map((cont) => ({
+          ...cont,
+          RECIPE_ID: recipeId
+        }));
+
+        // recipe_ingredient 테이블에 재료 정보 삽입
+        await supabase.from("recipe_ingredient").insert(updatedIngInfo);
+        await supabase.from("recipe_flow").insert(updateRecipeCont);
+
+        // 상태 초기화
+        setRecipeInfo(initRecipeInfo);
+        setIngredientGroups(initIngInfo);
+        setRecipeContGroups(initRecipeCont);
+
+        console.log("저장 성공!");
+
+        navigate(`/detail/${recipeId}`);
+      } catch (err) {
+        console.error("저장 중 오류 발생:", err.message);
       }
-      // recipe_info 테이블에 레시피 정보 삽입
-      const { data } = await supabase
-        .from("recipe_info")
-        .insert([{ ...recipeInfo, USER_ID: id }])
-        .select();
-
-      const recipeId = data[0].RECIPE_ID;
-
-      // ingInfo 배열 안에서 모든 재료 객체 RECIPE_ID 변경
-      const updatedIngInfo = ingredientGroups.map((ingredient) => ({
-        ...ingredient,
-        RECIPE_ID: recipeId
-      }));
-
-      const updateRecipeCont = recipeContGroups.map((cont) => ({
-        ...cont,
-        RECIPE_ID: recipeId
-      }));
-
-      // recipe_ingredient 테이블에 재료 정보 삽입
-      await supabase.from("recipe_ingredient").insert(updatedIngInfo);
-      await supabase.from("recipe_flow").insert(updateRecipeCont);
-
-      // 상태 초기화
-      setRecipeInfo(initRecipeInfo);
-      setIngredientGroups(initIngInfo);
-      setRecipeContGroups(initRecipeCont);
-
-      console.log("저장 성공!");
-
-      navigate(`/detail/${recipeId}`);
-    } catch (err) {
-      console.error("저장 중 오류 발생:", err.message);
     }
   };
 
