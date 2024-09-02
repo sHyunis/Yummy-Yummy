@@ -4,8 +4,8 @@ import SignInput from "../SignInput";
 import SignButton from "../SignButton";
 import Logo from "../../../components/Logo";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import SocialSign from "../SocialSign";
 
 const SignUpPage = () => {
   const {
@@ -20,6 +20,7 @@ const SignUpPage = () => {
     error,
     success,
     handleSignUp,
+    signInWithKakao
   } = useAuth();
 
   return (
@@ -61,11 +62,7 @@ const SignUpPage = () => {
             />
           </InputBox>
           <ButtonBox>
-            <SignButton
-              backgroundColor="--green-color"
-              textColor="white"
-              onClick={handleSignUp}
-            >
+            <SignButton backgroundColor="--green-color" textColor="white" onClick={handleSignUp}>
               가입완료
             </SignButton>
             <Link to="/">
@@ -77,6 +74,7 @@ const SignUpPage = () => {
           {error && <ErrorMessage>{error}</ErrorMessage>}
           {success && <SuccessMessage>{success}</SuccessMessage>}
         </SignUp>
+        <SocialSign />
       </Container>
     </>
   );
@@ -121,7 +119,7 @@ const InputLabel = styled.label`
 `;
 
 const InputBox = styled.div`
-  width: 350px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -131,7 +129,7 @@ const InputBox = styled.div`
 const ButtonBox = styled.div`
   font-family: var(--font-family);
   margin: 0 auto;
-  width: 350px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;

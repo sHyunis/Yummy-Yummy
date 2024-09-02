@@ -101,7 +101,7 @@ body {
     height: 16px;
 }
 ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.5); /* 스크롤바 색상 */
+    background: rgba(0, 0, 0, 0.3); /* 스크롤바 색상 */
     border-radius: 12px; /* 스크롤바 둥근 테두리 */
     background-clip: padding-box;
     border: 5px solid transparent;
@@ -113,8 +113,8 @@ body {
     color: rgba(0, 0, 0, 0.5);
 }
 input,
-button,
-textarea {
+textarea,
+button {
     font-family: var(--font-family);
 }
 a, button{

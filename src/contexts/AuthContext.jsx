@@ -1,3 +1,4 @@
+// AuthContext.js
 import React, { createContext, useState, useContext, useEffect } from "react";
 import supabase from "../../base-camp/supabaseClient";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +23,10 @@ export const AuthProvider = ({ children }) => {
     const { data: session } = await supabase.auth.getSession();
     const isSignIn = !!session?.session;
     setSignIn(isSignIn);
+
+    // 로그인 상태확인 후 초기화
+    setSuccess("");
+    setError("");
   };
 
   useEffect(() => {
@@ -45,9 +50,10 @@ export const AuthProvider = ({ children }) => {
       password,
       options: {
         data: {
-          nickname,
-        },
-      },
+          NICKNAME: nickname,
+          user_img_url: "https://bgazafwsoohqylvwugug.supabase.co/storage/v1/object/public/avatars/default-profile.jpg"
+        }
+      }
     });
 
     if (error) {
@@ -65,20 +71,15 @@ export const AuthProvider = ({ children }) => {
   const handleSignIn = async () => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
-      password,
-      options: {
-        data: {
-          nickname,
-        },
-      },
+      password
     });
 
     if (error) {
       setError("로그인 실패: " + error.message);
       setSuccess("");
     } else {
-      setError("");
       setSuccess("로그인 성공!");
+      setError("");
       await checkSignIn();
       navigate("/");
     }
@@ -91,6 +92,46 @@ export const AuthProvider = ({ children }) => {
     navigate("/"); // 홈으로 이동
   };
 
+  // 카카오로 로그인
+  const signInWithKakao = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "kakao",
+      options: {
+        scopes: "profile_nickname profile_image" // 'email' 스코프를 제외하고 'profile' 스코프만 요청
+      }
+    });
+    if (error) {
+      console.log("카카오 로그인 실패", error.message);
+    } else {
+      console.log("로그인 성공", data);
+    }
+  };
+
+  // Gibhub로 로그인
+  const signInWithGithub = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "github"
+    });
+
+    if (error) {
+      console.log("깃허브 로그인 실패", error.message);
+    } else {
+      console.log("로그인 성공", data);
+    }
+  };
+
+  //
+  const signInWithGoogle = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google"
+    });
+
+    if (error) {
+      console.log("애플 로그인 실패", error.message);
+    } else {
+      console.log("로그인 성공", data);
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -109,6 +150,9 @@ export const AuthProvider = ({ children }) => {
         handleLogout,
         signIn,
         checkSignIn,
+        signInWithKakao,
+        signInWithGithub,
+        signInWithGoogle
       }}
     >
       {children}
