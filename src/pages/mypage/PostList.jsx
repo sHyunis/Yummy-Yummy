@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import supabase from "../../../base-camp/supabaseClient";
-import PostCard from "../../components/PostCard";
+import PostCard from "./PostCard";
 import { useInView } from "react-intersection-observer";
 
 const EmptyText = styled.div`
@@ -26,7 +26,7 @@ const Loading = styled.div`
   display: ${({ $isLoading }) => ($isLoading ? "flex" : "none")};
   align-items: center;
   justify-content: center;
-  margin: 40px auto;
+  margin: 60px auto;
   text-align: center;
   > .material-symbols-rounded {
     font-size: 5rem;
@@ -75,7 +75,7 @@ const PostList = () => {
     return data;
   };
 
-  const loadMorePosts = useCallback(async () => {
+  const loadMorePostList = useCallback(async () => {
     if (isLoading || !isHasMore) return; // 로딩 중, 더 이상 로딩할 데이터가 없으면 종료
 
     setIsLoading(true); // 로딩 시작
@@ -86,7 +86,7 @@ const PostList = () => {
   }, [isLoading, isHasMore, page]);
 
   useEffect(() => {
-    loadMorePosts(); // 처음 렌더링 로드
+    loadMorePostList(); // 처음 렌더링 로드
   }, []);
 
   // 무한 스크롤
@@ -97,9 +97,9 @@ const PostList = () => {
   useEffect(() => {
     // 무한 스크롤 가시성 감지
     if (inView && !isLoading) {
-      loadMorePosts();
+      loadMorePostList();
     }
-  }, [inView, isLoading, loadMorePosts]);
+  }, [inView, isLoading, loadMorePostList]);
 
   return (
     <>

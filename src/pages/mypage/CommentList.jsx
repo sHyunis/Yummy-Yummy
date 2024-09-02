@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import supabase from "../../../base-camp/supabaseClient";
-import PostCard from "../../components/PostCard";
 import CommentCard from "./CommentCard";
+import { useInView } from "react-intersection-observer";
 
 const EmptyText = styled.div`
   width: 100%;
@@ -21,10 +21,36 @@ const CommentListLi = styled.li`
   overflow: hidden;
 `;
 
+const Loading = styled.div`
+  display: ${({ $isLoading }) => ($isLoading ? "flex" : "none")};
+  align-items: center;
+  justify-content: center;
+  margin: 60px auto;
+  text-align: center;
+  > .material-symbols-rounded {
+    font-size: 5rem;
+    color: var(--gray2-color);
+    animation: loading-icon linear infinite 0.8s;
+  }
+  @keyframes loading-icon {
+    0% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+const limit = 4;
+
 const CommentList = () => {
   const [commentList, setCommentList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // 로딩 여부 확인
+  const [isHasMore, setIsHasMore] = useState(true); // 로딩할 데이터가 더 있는지 확인
+  const [page, setPage] = useState(1);
 
-  const getCommentList = async () => {
+  const getCommentList = async (page) => {
     const {
       data: { user }
     } = await supabase.auth.getUser();
@@ -50,27 +76,62 @@ const CommentList = () => {
       console.error("Error:", cmtCmtError);
       return;
     }
-    const latestCmt = [...cmtData, ...cmtCmtData].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-    setCommentList(latestCmt);
+    const latestCmt = [...cmtData, ...cmtCmtData]
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      .slice((page - 1) * limit, page * limit);
+
+    if (latestCmt.length < limit) {
+      setIsHasMore(false);
+    }
+
+    return latestCmt;
   };
 
+  const loadMoreCommentList = useCallback(async () => {
+    if (isLoading || !isHasMore) return; // 로딩 중, 더 이상 로딩할 데이터가 없으면 종료
+
+    setIsLoading(true); // 로딩 시작
+    const newPosts = await getCommentList(page); // 새로운 댓글 가져옴
+    setCommentList((prevPosts) => [...prevPosts, ...newPosts]);
+    setIsLoading(false); // 로딩 완료
+    setPage((prevPage) => prevPage + 1); // 페이지 번호 증가
+  }, [isLoading, isHasMore, page]);
+
   useEffect(() => {
-    getCommentList();
+    loadMoreCommentList(); // 처음 렌더링 로드
   }, []);
+
+  // 무한 스크롤
+  const { ref, inView } = useInView({
+    threshold: 0
+  });
+
+  useEffect(() => {
+    // 무한 스크롤 가시성 감지
+    if (inView && !isLoading) {
+      loadMoreCommentList();
+    }
+  }, [inView, isLoading, loadMoreCommentList]);
 
   return (
     <>
       {commentList.length === 0 ? (
         <EmptyText>작성한 댓글이 없습니다.</EmptyText>
       ) : (
-        <CommentListStyled>
-          {commentList.map((comment) => (
-            <CommentListLi key={comment.CMT_CMT_ID ? comment.CMT_CMT_ID : comment.CMT_ID}>
-              <CommentCard comment={comment} />
-            </CommentListLi>
-          ))}
-        </CommentListStyled>
+        <>
+          <CommentListStyled>
+            {commentList.map((comment) => (
+              <CommentListLi key={comment.CMT_CMT_ID ? comment.CMT_CMT_ID : comment.CMT_ID}>
+                <CommentCard comment={comment} />
+              </CommentListLi>
+            ))}
+          </CommentListStyled>
+          <Loading $isLoading={isLoading}>
+            <span className="material-symbols-rounded">progress_activity</span>
+          </Loading>
+          <div ref={ref}></div>
+        </>
       )}
     </>
   );
