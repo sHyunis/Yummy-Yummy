@@ -1,6 +1,9 @@
 {
-  "prettier.tabWidth": 4,
-  "prettier.printWidth": 5000,
-  "prettier.proseWrap": "never",
-  "prettier.bracketSameLine": true
+  "printWidth": 120,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "bracketSpacing": true,
+  "trailingComma": "none"
 }
