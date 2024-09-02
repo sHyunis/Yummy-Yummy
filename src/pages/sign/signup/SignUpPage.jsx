@@ -19,7 +19,7 @@ const SignUpPage = () => {
     setNickname,
     error,
     success,
-    handleSignUp,
+    handleSignUp
   } = useAuth();
 
   return (
@@ -61,11 +61,7 @@ const SignUpPage = () => {
             />
           </InputBox>
           <ButtonBox>
-            <SignButton
-              backgroundColor="--green-color"
-              textColor="white"
-              onClick={handleSignUp}
-            >
+            <SignButton backgroundColor="--green-color" textColor="white" onClick={handleSignUp}>
               가입완료
             </SignButton>
             <Link to="/">
@@ -121,7 +117,7 @@ const InputLabel = styled.label`
 `;
 
 const InputBox = styled.div`
-  width: 350px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -131,7 +127,7 @@ const InputBox = styled.div`
 const ButtonBox = styled.div`
   font-family: var(--font-family);
   margin: 0 auto;
-  width: 350px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
