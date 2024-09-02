@@ -5,7 +5,7 @@ const BoxDiv = styled.div`
   width: fit-content;
   display: flex;
   justify-content: right;
-  padding: 15px 0;
+  margin: 20px 0;
 `;
 
 const Box = ({ children }) => {

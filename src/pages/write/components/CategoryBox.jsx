@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import Label from "./Label";
 import styled from "styled-components";
 import Box from "./Box";
+import { WriteContext } from "../../../contexts/WriteContext";
 
 const CtgSelect = styled.select`
   padding: 0 10px;
   border-radius: var(--border-radius);
   border: none;
   box-shadow: inset 0 0 3px rgb(0, 0, 0, 0.3);
-  width: 480px;
+  width: 600px;
   height: 40px;
   appearance: none; /* 기본 화살표 숨기기 */
   -webkit-appearance: none;
@@ -20,11 +21,12 @@ const CtgSelect = styled.select`
 `;
 
 const CategoryBox = (props) => {
+  const { ctgChange } = useContext(WriteContext);
   return (
     <>
       <Box>
         <Label>{props.label}</Label>
-        <CtgSelect>
+        <CtgSelect onChange={(e) => ctgChange(e.target.value)}>
           <option>한식</option>
           <option>양식</option>
           <option>중식</option>

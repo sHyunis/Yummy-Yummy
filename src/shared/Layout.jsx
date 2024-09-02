@@ -71,6 +71,7 @@ export const Header = () => {
     await handleLogout();
     navigate("/");
   };
+
   return (
     <HeaderStyled>
       <HeaderContainer className="container">
@@ -83,7 +84,7 @@ export const Header = () => {
           {signIn ? (
             <>
               <LogoutButton onClick={LogoutSuccess}>로그아웃</LogoutButton>
-              <NavLink to="/mypage">마이페이지</NavLink>
+              <NavLink to="/mypage?views=profile">마이페이지</NavLink>
             </>
           ) : (
             <>
