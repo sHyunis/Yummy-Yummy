@@ -3,16 +3,16 @@ import styled from "styled-components";
 import DetailFootImage from "./DetailFootImage";
 import supabase from "../../../base-camp/supabaseClient";
 import LodingIcon from "./lodingIcon";
+import Button from "../../components/Button";
+import { useNavigate } from "react-router-dom";
 
 const DetailPageHeader = ({ recipeId }) => {
   const [recipeInfo, setRecipeInfo] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase
-        .from("recipe_info")
-        .select("*")
-        .eq("RECIPE_ID", recipeId);
+      const { data, error } = await supabase.from("recipe_info").select("*").eq("RECIPE_ID", recipeId);
 
       if (error) {
         console.error("error: => ", error);
@@ -32,6 +32,7 @@ const DetailPageHeader = ({ recipeId }) => {
       <FoodCategory>{recipeInfo[0].RECIPE_CTG}</FoodCategory>
       <FoodTitleH1>{recipeInfo[0].RECIPE_TITLE}</FoodTitleH1>
       <DetailFootImage recipeInfo={recipeInfo} />
+      <Button onClick={() => navigate(`/edit/${recipeId}`)}>수정</Button>
     </FoodHeader>
   );
 };
