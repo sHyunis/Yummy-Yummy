@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import DetailFootImage from "./DetailFootImage";
 import supabase from "../../../base-camp/supabaseClient";
+import LodingIcon from "./lodingIcon";
 
 const DetailPageHeader = ({ recipeId }) => {
   const [recipeInfo, setRecipeInfo] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await supabase
@@ -23,7 +25,7 @@ const DetailPageHeader = ({ recipeId }) => {
   // console.log(recipeInfo);
 
   if (!recipeInfo || recipeInfo.length === 0) {
-    return <div>Loading...</div>;
+    return <LodingIcon />;
   }
   return (
     <FoodHeader>

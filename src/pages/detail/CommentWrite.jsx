@@ -6,7 +6,7 @@ const CommentWrite = () => {
     <>
       <Form>
         <CommentTextarea placeholder="댓글을 작성해 주세요..."></CommentTextarea>
-        <Button type="button">등록</Button>
+        <Button type="submit">등록</Button>
       </Form>
     </>
   );

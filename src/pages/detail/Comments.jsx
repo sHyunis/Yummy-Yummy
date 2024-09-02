@@ -1,43 +1,56 @@
-import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import commentWriter from "./commentWriter.png";
+import LodingIcon from "./lodingIcon";
+import { useEffect, useState } from "react";
+import supabase from "../../../base-camp/supabaseClient";
 
 const Comments = ({ recipeId }) => {
+  const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("recipe_cmt")
+        .select(
+          `CMT_ID,CMT_CONT,USER_ID,created_at,user_info (NICKNAME, USER_IMG_URL)`,
+        )
+        .eq("RECIPE_ID", recipeId)
+        .order("created_at", { ascending: false });
+      if (error) {
+        console.error("error: => ", error);
+      } else {
+        setComments(data);
+      }
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [recipeId]);
+  // console.log(comments);
+
+  if (loading) {
+    return <LodingIcon />;
+  }
+
   return (
     <CommentsMainDiv>
       <StyledH2>댓글</StyledH2>
-      <CommentDiv>
-        <WriteImgDiv>
-          <WriteImg
-            src={commentWriter}
-            alt="댓글작성자"
-            className="chef-image"
-          />
-        </WriteImgDiv>
-        <WriteDiv>
-          <WriteNickName>백종원</WriteNickName>
-          <WriteNickName>
-            정말 맛있어 보여요!정말 맛있어 보여요!정말 맛있어 보여요! 정말 정말
-            맛있어 보여요!정말 맛있어 보여요!정말 맛있어 보여요! 정말 정말
-            맛있어 보여요!정말 맛있어 보여요!정말 맛있어 보여요! 정말 정말
-            맛있어 보여요!정말 맛있어 보여요!정말 맛있어 보여요! 정말 정말
-            맛있어 보여요!정말 맛있어 보여요!정말 맛있어 보여요! 정말
-          </WriteNickName>
-        </WriteDiv>
-      </CommentDiv>
-      <CommentDiv>
-        <WriteImgDiv>
-          <WriteImg
-            src={commentWriter}
-            alt="댓글작성자"
-            className="chef-image"
-          />
-        </WriteImgDiv>
-        <WriteDiv>
-          <WriteNickName>백종원</WriteNickName>
-          <WriteNickName>정말 맛있어 보여요!</WriteNickName>
-        </WriteDiv>
-      </CommentDiv>
+      {comments.length > 0 ? (
+        comments.map((comment) => (
+          <CommentDiv key={comment.CMT_ID}>
+            <WriteImgDiv>
+              <WriteImg src={comment.user_info.USER_IMG_URL} alt="댓글작성자" />
+            </WriteImgDiv>
+            <WriteDiv>
+              <WriteNickName>{comment.user_info.NICKNAME}</WriteNickName>
+              <WriteNickName>{comment.CMT_CONT}</WriteNickName>
+            </WriteDiv>
+          </CommentDiv>
+        ))
+      ) : (
+        <p>등록된 댓글이 없습니다.</p>
+      )}
     </CommentsMainDiv>
   );
 };

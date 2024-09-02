@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import supabase from "../../../base-camp/supabaseClient";
+import LodingIcon from "./lodingIcon";
 
 const RecipeContent = ({ recipeId }) => {
   const [recipeIngredient, setRecipeIngredient] = useState([]);
@@ -43,8 +44,7 @@ const RecipeContent = ({ recipeId }) => {
     fetchData();
   }, [recipeId]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <LodingIcon />;
 
   return (
     <StRecipeContentSection>
@@ -60,18 +60,22 @@ const RecipeContent = ({ recipeId }) => {
               </IngredientCard>
             ))
           ) : (
-            <p>No ingredients available.</p>
+            <p>등록된 재료가 없어요!!!</p>
           )}
         </StIngredientDiv>
       </IngredientDiv>
       <IngredientDiv>
         <StyledH2>레시피 순서</StyledH2>
         <LineDiv />
-        {recipeFlow.map((flow) => (
-          <RecipeFlowPTag key={flow.STEP_ID}>
-            {flow.RECIPE_STEP}. {flow.RECIPE_CONT}
-          </RecipeFlowPTag>
-        ))}
+        {recipeFlow.length > 0 ? (
+          recipeFlow.map((flow) => (
+            <RecipeFlowPTag key={flow.FLOW_ID}>
+              {flow.RECIPE_STEP}. {flow.RECIPE_CONT}
+            </RecipeFlowPTag>
+          ))
+        ) : (
+          <p>등록된 레시피가 없어요!!!</p>
+        )}
       </IngredientDiv>
     </StRecipeContentSection>
   );
