@@ -22,11 +22,7 @@ const TextInputBox = (props) => {
       <Box>
         <Label>{props.label}</Label>
         <Width height={props.place.length}>
-          <Input
-            place={props.place}
-            onChange={recipeInfoChange}
-            type={props.type}
-          />
+          <Input place={props.place} onChange={recipeInfoChange} type={props.type} />
         </Width>
       </Box>
     </>
