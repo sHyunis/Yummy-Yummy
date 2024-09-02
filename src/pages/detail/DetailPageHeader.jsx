@@ -8,7 +8,17 @@ import { useNavigate } from "react-router-dom";
 
 const DetailPageHeader = ({ recipeId }) => {
   const [recipeInfo, setRecipeInfo] = useState(null);
+  const [userId, setUserId] = useState(null);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUserId(data.user?.id);
+    };
+    getUser();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +32,6 @@ const DetailPageHeader = ({ recipeId }) => {
     };
     fetchData();
   }, [recipeId]);
-  // console.log(recipeInfo);
 
   if (!recipeInfo || recipeInfo.length === 0) {
     return <LodingIcon />;
@@ -32,7 +41,7 @@ const DetailPageHeader = ({ recipeId }) => {
       <FoodCategory>{recipeInfo[0].RECIPE_CTG}</FoodCategory>
       <FoodTitleH1>{recipeInfo[0].RECIPE_TITLE}</FoodTitleH1>
       <DetailFootImage recipeInfo={recipeInfo} />
-      <Button onClick={() => navigate(`/edit/${recipeId}`)}>수정</Button>
+      {userId === recipeInfo[0].USER_ID ? <Button onClick={() => navigate(`/edit/${recipeId}`)}>수정</Button> : null}
     </FoodHeader>
   );
 };
