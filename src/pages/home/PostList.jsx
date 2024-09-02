@@ -27,14 +27,20 @@ const Loading = styled.img`
 `;
 
 const PostList = ({ keyword }) => {
+  const countPost = parseInt(
+    (document.documentElement.scrollHeight - 450) / 385,
+  );
   const [postList, setPostList] = useState([]);
-  const [postLimit, setPostLimit] = useState(8);
+  const [postLimit, setPostLimit] = useState(countPost * 4 + 4);
   const [loadingVisibility, setLoadingVisibility] = useState("none");
   const [allPostLength, setAllPostLength] = useState(0);
 
   useEffect(() => {
+    keyword && setPostLimit(countPost * 4 + 4);
     const fetchData = async (limit) => {
-      postLimit - 8 > allPostLength
+      console.log("postLimit", postLimit);
+      console.log("allPostLength", allPostLength);
+      keyword || postLimit - 8 > allPostLength
         ? setLoadingVisibility("none")
         : setLoadingVisibility("block");
       try {
@@ -51,7 +57,6 @@ const PostList = ({ keyword }) => {
               keyword.replace(/\s/gi, ""),
             ),
           );
-          console.log(filteredData);
           setPostList(filteredData);
         } else {
           response = await supabase
@@ -73,7 +78,6 @@ const PostList = ({ keyword }) => {
       const scrollHeight = document.documentElement.scrollHeight;
       const scrollTop = document.documentElement.scrollTop;
       const clientHeight = document.documentElement.clientHeight;
-
       if (scrollTop + clientHeight >= scrollHeight - 1) {
         setPostLimit((prev) => prev + 8);
       }
@@ -85,10 +89,6 @@ const PostList = ({ keyword }) => {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [postLimit, keyword, allPostLength]);
-
-  useEffect(() => {
-    setPostLimit(8);
-  }, [keyword]);
 
   return (
     <>
