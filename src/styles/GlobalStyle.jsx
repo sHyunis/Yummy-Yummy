@@ -69,6 +69,11 @@ html {
     overflow-x: hidden;
     overflow-y: scroll;
 }
+
+html.no-global-styles, .swal2-popup.no-global-styles {
+  font-size: initial !important;
+}
+
 @media screen and (min-width: 0\0) {
     /* IE 9, IE 10, IE 11 */
     :root,

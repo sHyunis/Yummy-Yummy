@@ -1,5 +1,7 @@
 import { createContext, useRef, useState } from "react";
 import supabase from "../../base-camp/supabaseClient";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
 export const WriteContext = createContext();
 
@@ -70,8 +72,6 @@ export const WriteProvider = ({ children }) => {
 
   // 데이터 베이스 보낼 레시피 정보 state
   const [recipeInfo, setRecipeInfo] = useState(initRecipeInfo);
-  const [ingInfo, setIngInfo] = useState({});
-  const [recipeCont, setRecipeCont] = useState({});
 
   // 입력창에서 받아온 info value 저장하는 onChange 함수
   const recipeInfoChange = (value, type) => {
@@ -92,13 +92,12 @@ export const WriteProvider = ({ children }) => {
   // 입력창에서 받아온 ing value 저장하는 onChange 함수
   const ingInfoChange = (value, type, index) => {
     ingredientGroups[index] = { ...ingredientGroups[index], [type]: value };
-    setIngInfo([...ingredientGroups]);
   };
 
+  console.log(ingredientGroups);
   // 입력창에서 받아온 recipe cont 저장하는 onChange 함수
   const recipeContChange = (value, _, index) => {
     recipeContGroups[index] = { RECIPE_STEP: index, RECIPE_CONT: value };
-    setRecipeCont([...recipeContGroups]);
   };
 
   // 저장버튼 누르면 다 보내버리기
@@ -108,6 +107,25 @@ export const WriteProvider = ({ children }) => {
       const user = await supabase.auth.getUser();
       const id = user.data.user.id;
 
+      // 유효성 검사
+      const validateInput = (obj) => {
+        return Object.values(obj).some((value) => !value);
+      };
+
+      if (
+        validateInput(recipeInfo) ||
+        ingredientGroups.some(validateInput) ||
+        recipeContGroups.some(validateInput)
+      ) {
+        Swal.fire({
+          title: "빈칸 발견!",
+          html: "입력 되지 않은 정보가 있습니다.<br/> 모든 칸을 채워 레시피를 완성해주세요 :)",
+          icon: "error",
+          customClass: {
+            popup: "no-global-styles",
+          },
+        });
+      }
       // recipe_info 테이블에 레시피 정보 삽입
       const { data } = await supabase
         .from("recipe_info")
@@ -117,17 +135,15 @@ export const WriteProvider = ({ children }) => {
       const recipeId = data[0].RECIPE_ID;
 
       // ingInfo 배열 안에서 모든 재료 객체 RECIPE_ID 변경
-      const updatedIngInfo = ingInfo.map((ingredient) => ({
+      const updatedIngInfo = recipeContGroups.map((ingredient) => ({
         ...ingredient,
         RECIPE_ID: recipeId,
       }));
 
-      const updateRecipeCont = recipeCont.map((cont) => ({
+      const updateRecipeCont = recipeContGroups.map((cont) => ({
         ...cont,
         RECIPE_ID: recipeId,
       }));
-
-      console.log(updateRecipeCont);
 
       // recipe_ingredient 테이블에 재료 정보 삽입
       await supabase.from("recipe_ingredient").insert(updatedIngInfo);
@@ -136,7 +152,7 @@ export const WriteProvider = ({ children }) => {
       // 상태 초기화
       setRecipeInfo(initRecipeInfo);
       setIngredientGroups(initIngInfo);
-      setRecipeCont(initRecipeCont);
+      setRecipeContGroups(initRecipeCont);
 
       console.log("저장 성공!");
     } catch (err) {
