@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import DetailPageHeader from "./DetailPageHeader";
 import RecipeContent from "./RecipeContent";
@@ -10,6 +10,11 @@ import { useParams } from "react-router-dom";
 const DetailPage = () => {
   const params = useParams();
   const recipeId = Number(params.id);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleCommentAdded = () => {
+    setRefreshKey((prevKey) => prevKey + 1); // 댓글 작성 후 Comments 컴포넌트 새로고침
+  };
 
   return (
     <>
@@ -29,12 +34,12 @@ const DetailPage = () => {
 
       <DivisionLineDiv />
       <Container>
-        <Comments recipeId={recipeId} />
+        <Comments key={refreshKey} recipeId={recipeId} />
       </Container>
 
       <DivisionLineDiv />
       <Container>
-        <CommentWrite />
+        <CommentWrite recipeId={recipeId} onCommentAdded={handleCommentAdded} />
       </Container>
     </>
   );

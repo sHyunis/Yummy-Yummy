@@ -1,11 +1,43 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import supabase from "../../../base-camp/supabaseClient";
 
-const CommentWrite = () => {
+const CommentWrite = ({ recipeId, onCommentAdded }) => {
+  const [comment, setComment] = useState("");
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUserId(data.user?.id);
+    };
+
+    getUser();
+  }, []);
+
+  const handleComment = async (e) => {
+    e.preventDefault();
+
+    const { data, error } = await supabase
+      .from("recipe_cmt")
+      .insert([{ RECIPE_ID: recipeId, CMT_CONT: comment, USER_ID: userId }]);
+    if (error) {
+      console.log(error);
+    } else {
+      alert("댓글등록이 완료하였습니다.");
+      setComment("");
+      if (onCommentAdded) onCommentAdded();
+    }
+  };
+
   return (
     <>
-      <Form>
-        <CommentTextarea placeholder="댓글을 작성해 주세요..."></CommentTextarea>
+      <Form onSubmit={handleComment}>
+        <CommentTextarea
+          placeholder="댓글을 작성해 주세요..."
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        ></CommentTextarea>
         <Button type="submit">등록</Button>
       </Form>
     </>

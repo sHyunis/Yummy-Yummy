@@ -5,7 +5,7 @@ import supabase from "../../../base-camp/supabaseClient";
 import LodingIcon from "./lodingIcon";
 
 const CookWriter = ({ recipeId }) => {
-  const [comments, setComments] = useState([]);
+  const [cookWriter, setCookWriter] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,16 +17,17 @@ const CookWriter = ({ recipeId }) => {
           `
             user_info!inner(
               NICKNAME,
-              USER_IMG_URL
+              USER_IMG_URL,
+              INTRODUCTION
             )
-          `,
+          `
         )
         .eq("RECIPE_ID", recipeId);
 
       if (error) {
         console.error("error: => ", error);
       } else {
-        setComments(data);
+        setCookWriter(data);
       }
       setLoading(false);
     };
@@ -43,16 +44,11 @@ const CookWriter = ({ recipeId }) => {
   return (
     <StRecipeContentSection>
       <WriteImgDiv>
-        <WriteImg
-          src={comments[0].user_info.USER_IMG_URL}
-          className="chef-image"
-        />
+        <WriteImg src={cookWriter[0].user_info.USER_IMG_URL} className="chef-image" />
       </WriteImgDiv>
       <WriteDiv>
-        <WriteNickName>{comments[0].user_info.NICKNAME}</WriteNickName>
-        <Introduction>
-          제가 만드는 대로 만드시면 당신도 백종원이 될 수있어요~~
-        </Introduction>
+        <WriteNickName>{cookWriter[0].user_info.NICKNAME}</WriteNickName>
+        <Introduction>{cookWriter[0].user_info.INTRODUCTION}</Introduction>
       </WriteDiv>
     </StRecipeContentSection>
   );

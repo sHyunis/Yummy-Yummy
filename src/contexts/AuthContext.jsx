@@ -50,10 +50,9 @@ export const AuthProvider = ({ children }) => {
       options: {
         data: {
           NICKNAME: nickname,
-          user_img_url:
-            "https://bgazafwsoohqylvwugug.supabase.co/storage/v1/object/public/avatars/default-profile.jpg",
-        },
-      },
+          user_img_url: "https://bgazafwsoohqylvwugug.supabase.co/storage/v1/object/public/avatars/default-profile.jpg"
+        }
+      }
     });
 
     if (error) {
@@ -71,7 +70,7 @@ export const AuthProvider = ({ children }) => {
   const handleSignIn = async () => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
-      password,
+      password
     });
 
     if (error) {
@@ -109,7 +108,7 @@ export const AuthProvider = ({ children }) => {
         handleSignIn,
         handleLogout,
         signIn,
-        checkSignIn,
+        checkSignIn
       }}
     >
       {children}
