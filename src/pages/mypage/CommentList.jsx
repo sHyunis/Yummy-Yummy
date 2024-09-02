@@ -29,9 +29,30 @@ const CommentList = () => {
       data: { user }
     } = await supabase.auth.getUser();
 
-    const { data } = await supabase.from("recipe_cmt").select("*").eq("USER_ID", user.id);
+    const { data: cmtData, error: cmtError } = await supabase
+      .from("recipe_cmt")
+      .select("*")
+      .eq("USER_ID", user.id)
+      .order("created_at", { ascending: false });
 
-    setCommentList(data);
+    if (cmtError) {
+      console.error("Error:", cmtError);
+      return;
+    }
+
+    const { data: cmtCmtData, error: cmtCmtError } = await supabase
+      .from("recipe_cmt_cmt")
+      .select("*")
+      .eq("USER_ID", user.id)
+      .order("created_at", { ascending: false });
+
+    if (cmtCmtError) {
+      console.error("Error:", cmtCmtError);
+      return;
+    }
+    const latestCmt = [...cmtData, ...cmtCmtData].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    setCommentList(latestCmt);
   };
 
   useEffect(() => {
@@ -45,7 +66,7 @@ const CommentList = () => {
       ) : (
         <CommentListStyled>
           {commentList.map((comment) => (
-            <CommentListLi key={comment.cmt_id}>
+            <CommentListLi key={comment.CMT_CMT_ID ? comment.CMT_CMT_ID : comment.CMT_ID}>
               <CommentCard comment={comment} />
             </CommentListLi>
           ))}

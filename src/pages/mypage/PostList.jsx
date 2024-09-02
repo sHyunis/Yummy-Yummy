@@ -65,6 +65,7 @@ const PostList = () => {
 
     if (error) {
       console.error("Error:", error);
+      return;
     }
 
     if (data.length < limit) {

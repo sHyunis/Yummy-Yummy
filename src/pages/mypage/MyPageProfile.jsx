@@ -118,6 +118,7 @@ const MyPageProfile = () => {
 
       if (updateImageError) {
         console.error("Error:", updateImageError);
+        return;
       }
     }
 
