@@ -149,10 +149,14 @@ export const AuthProvider = ({ children }) => {
         handleSignIn,
         handleLogout,
         signIn,
+<<<<<<< HEAD
         checkSignIn,
         signInWithKakao,
         signInWithGithub,
         signInWithGoogle
+=======
+        checkSignIn
+>>>>>>> 3f3590ca13ae8814a2461cc3dad8e8240d8c64c8
       }}
     >
       {children}
