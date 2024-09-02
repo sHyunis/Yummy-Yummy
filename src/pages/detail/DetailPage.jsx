@@ -6,6 +6,7 @@ import CookWriter from "./CookWriter";
 import Comments from "./Comments";
 import CommentWrite from "./CommentWrite";
 import { useParams } from "react-router-dom";
+import { Container, DivisionLineDiv } from "./styled";
 
 const DetailPage = () => {
   const params = useParams();
@@ -44,21 +45,5 @@ const DetailPage = () => {
     </>
   );
 };
-const Container = styled.div`
-  width: var(--container-width);
-  background-color: var(--gray4-color);
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
-const DivisionLineDiv = styled.div`
-  width: var(--container-width);
-  height: 20px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 export default DetailPage;
