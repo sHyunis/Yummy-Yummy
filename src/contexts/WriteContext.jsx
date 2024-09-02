@@ -100,8 +100,6 @@ export const WriteProvider = ({ children }) => {
     recipeContGroups[index] = { RECIPE_STEP: index + 1, RECIPE_CONT: value };
   };
 
-  console.log(ingredientGroups);
-
   // 저장버튼 누르면 다 보내버리기
   const saveRecipe = async () => {
     try {
@@ -124,10 +122,6 @@ export const WriteProvider = ({ children }) => {
       const validateContInput = (arr) => {
         return arr.some((value) => value.RECIPE_STEP.length === 0 || value.RECIPE_CONT.length === 0);
       };
-
-      console.log(validateInfoInput(recipeInfo));
-      console.log(validateIngInput(ingredientGroups));
-      console.log(validateContInput(recipeContGroups));
 
       if (validateInfoInput(recipeInfo) || validateIngInput(ingredientGroups) || validateContInput(recipeContGroups)) {
         Swal.fire({
