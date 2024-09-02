@@ -3,7 +3,7 @@ import styled from "styled-components";
 import supabase from "../../base-camp/supabaseClient";
 import { useState } from "react";
 import { useEffect } from "react";
-import defaultProfile from "../assets/imgs/default-profile.jpg";
+import defaultProfile from "../assets/images/default-profile.jpg";
 
 const ProfileImageWrap = styled.div`
   display: flex;
