@@ -4,8 +4,8 @@ import SignInput from "../SignInput";
 import SignButton from "../SignButton";
 import Logo from "../../../components/Logo";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import SocialSign from "../SocialSign";
 
 const SignUpPage = () => {
   const {
@@ -19,7 +19,8 @@ const SignUpPage = () => {
     setNickname,
     error,
     success,
-    handleSignUp
+    handleSignUp,
+    signInWithKakao
   } = useAuth();
 
   return (
@@ -73,6 +74,7 @@ const SignUpPage = () => {
           {error && <ErrorMessage>{error}</ErrorMessage>}
           {success && <SuccessMessage>{success}</SuccessMessage>}
         </SignUp>
+        <SocialSign />
       </Container>
     </>
   );
