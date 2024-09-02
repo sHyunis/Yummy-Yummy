@@ -43,15 +43,13 @@
 <img src="https://img.shields.io/badge/git actions-181717?style=for-the-badge&logo=github&logoColor=white">
 <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white">
 <img src="https://img.shields.io/badge/VSCODE-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white">
+<img src="https://img.shields.io/badge/SUPABASE-007ACC?style=for-the-badge&logo=SUPABASE&logoColor=white">
+<img src="https://img.shields.io/badge/FIGMA-pink?style=for-the-badge&logo=FIGMA&logoColor=white">
+<img src="https://img.shields.io/badge/VERCEL-007ACC?style=for-the-badge&logo=VERCEL&logoColor=white">
+<img src="https://img.shields.io/badge/SLACK-green?style=for-the-badge&logo=SLACK&logoColor=white">
 </div>
 
-#### 개발환경
-
-- yarn vite
-- React
-- styled-component
-
-#### Code Convention
+## Code Convention
 
 - ES Lint , prettier 사용
 - 컴포넌트일 경우에만 .jsx확장자 사용
@@ -60,12 +58,29 @@
 - 함수인 경우: handle (handleClick 등등)
 - 상수 : 모두 대문자 스네이크 케이스(snake_case) 예시) SNAKE_CASE
 - js(변수, 함수, 인스턴스) : 카멜 케이스(camelCase) 예시) const createMovie = [];
-- css, html : 케밥 케이스(kebab**_-_**case) 예시) <div class=”movie-items”></div>
+- css, html : 케밥 케이스(kebab**_-_**case) 예시) `<div class=”movie-items”></div>`
 - image 명 : 케밥 케이스(kebab**_-_**case) 예시) movie-img.jpg
 - 주석 최대한 활용하기 : 해당 코드 제목, 설명 간단하게 적어놓기
 - 약칭은 되도록 사용하지 않기
 
 ---
+
+## Git Commit Convention
+
+- init: 프로젝트 최초 생성 시 사용
+- feat: 새로운 기능을 추가하거나 기존 기능을 요구사항에 맞게 수정함.
+- fix: 기능과 관련된 버그를 수정함.
+- build: 빌드 프로세스와 관련된 변경 사항을 적용함.
+- chore: 패키지 관리자 설정 변경이나 기타 잡다한 변경을 수행함.
+- ci: CI(지속적 통합) 관련 설정을 수정함.
+- docs: 문서나 주석을 수정함.
+- style: UI, 레이아웃 등 디자인 관련 사항 변경함.
+- refactor: 기능의 변경 없이 코드 구조를 리팩토링함 (예: 변수 이름 변경).
+- test: 테스트 코드를 추가하거나 수정함.
+- release: 새로운 버전을 릴리스함.
+- merge : 브렌치 병합할때 사용
+- dep : 의존성 추가,제거 또는 업데이트
+- perf : 성능 개선하기위해 코드변경
 
 ## 🗂️ 기능 설명
 
@@ -88,6 +103,48 @@
 - (로그인 시) 게시글 작성과, 로그아웃, 마이페이지 메뉴
 - (로그아웃 시) 로그인, 회원가입 메뉴
 
+<details>
+<summary style="font-weight:bold; font-size: 25px">레시피 상세정보 </summary>
+<div dir="auto">
+
+<br>
+
+- **DetailPageHeader**
+  - 카테고리
+    - 한식 , 양식 , 중식 , 일식 , 디저트 , 퓨전 확인 가능
+  - 음식 메인 사진
+    - 음식 사진을 확인 할 수 있음
+  * 간단한 레시피 소개
+    - 간단한 레시피 소개글 확인 가능
+  * 레시피 수정 버튼
+    - 해당 레시피를 작성한 작성자만 수정버튼이 활성화 되고 수정 버튼 클릭시 수정페이지로 이동
+- **RecipeContent**
+  - 재료 정보 확인
+    - 재료 정보를 확인 할 수 있음
+  * 레시피 순서 확인
+    - 음식 만드는 레시피를 확인 할 수 있음
+- **CookWriter**
+  - 작성자의 프로필 이미지 확인 가능
+  - 작성자 닉네임 확인 가능
+  - 작성자 소개글 확인 가능
+- **CookWriter**
+
+  - 작성자의 프로필 이미지 확인 가능
+  - 작성자 닉네임 확인 가능
+  - 작성자 소개글 확인 가능
+
+- **Comments , CommentWrite**
+  - 댓글
+    - 최신순(작성일순) 으로 댓글 확인 가능
+    - 로그인시 댓글 작성 가능
+    - 작성한 댓글 수정 / 삭제 가능
+    - 댓글에 대댓글 가능
+    - 댓글 작성자만 수정/삭제 버튼 활성화
+    - 로그인한 사람만 대댓글 버튼 활성화
+
+</div>
+</details>
+
 ---
 
 ### 💥 Trouble Shooting
@@ -98,8 +155,8 @@
 - 해결방법 : Table명, Column명을 하나씩 변경해보며 명칭변경으로 인한 문제인 지 API키 문제인 지 파악 후 명칭변경으로 인한 문제인 점을 확인.
   SQL 문을 입력해 연결이 되어있었던 Table명과 Column명을 변경
 
-#### Technologies & Tools
+## 📑 관련 문서 (클릭시 페이지 이동)
 
-JAVASCRIPT, REACT, FIGMA, SUPABASE, , VERCEL, GIT, GITHUB, SLACK, NOTION
+### <img width="50" src="https://img.shields.io/badge/FIGMA-pink?style=for-the-badge&logo=FIGMA&logoColor=white"> [화면 정의서](<https://www.figma.com/design/Y2U8SPO7gYk7EDoo6OQitd/야미야미(Yummy-Yummy!)?node-id=0-1&t=Zroo2t8re0QloTdr-1>)
 
 ⓒ 2024. Yummy Yummy All rights reserved. 1등하조

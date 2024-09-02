@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import LodingIcon from "./lodingIcon";
 import { useEffect, useState } from "react";
 import supabase from "../../../base-camp/supabaseClient";
 import Button from "../../components/Button";
 import Swal from "sweetalert2";
 import CommentWrite from "./CommentWrite";
+import LoadingIcon from "../../components/LoadingIcon";
 
 const Comments = ({ recipeId }) => {
   const [comments, setComments] = useState({ comments: [], replies: [] });
@@ -160,6 +160,7 @@ const Comments = ({ recipeId }) => {
 
   const handleAddComment = (parentCommentId) => {
     setReplyToComment(parentCommentId);
+    setEditingComment(null);
   };
 
   const renderComments = (comments, replies) => {
@@ -185,14 +186,12 @@ const Comments = ({ recipeId }) => {
             <WriteContent>{comment.CMT_CONT}</WriteContent>
           </WriteDiv>
         </CommentDiv>
-        {(editingComment?.CMT_ID === comment.CMT_ID || replyToComment === comment.CMT_ID) && (
-          <CommentWrite
-            recipeId={recipeId}
-            onCommentAdded={handleCommentAdded}
-            initialComment={editingComment}
-            parentCommentId={replyToComment === comment.CMT_ID ? comment.CMT_ID : null}
-          />
+
+        {/* 댓글 아래 대댓글 입력 */}
+        {replyToComment === comment.CMT_ID && (
+          <CommentWrite recipeId={recipeId} onCommentAdded={handleCommentAdded} parentCommentId={replyToComment} />
         )}
+
         {(replies || [])
           .filter((reply) => reply.recipe_cmt.CMT_ID === comment.CMT_ID)
           .map((reply) => (
@@ -216,12 +215,14 @@ const Comments = ({ recipeId }) => {
                   <RepliesWriteContent>{reply.CMT_CONT}</RepliesWriteContent>
                 </RepliesWriteDiv>
               </RepliesCommentDiv>
-              {(editingComment?.CMT_CMT_ID === reply.CMT_CMT_ID || replyToComment === reply.recipe_cmt.CMT_ID) && (
+
+              {/* 대댓글 수정*/}
+              {editingComment?.CMT_CMT_ID === reply.CMT_CMT_ID && (
                 <CommentWrite
                   recipeId={recipeId}
                   onCommentAdded={handleCommentAdded}
                   initialComment={editingComment}
-                  parentCommentId={replyToComment === reply.recipe_cmt.CMT_ID ? reply.recipe_cmt.CMT_ID : null}
+                  parentCommentId={reply.recipe_cmt.CMT_ID}
                 />
               )}
             </ReplyDiv>
@@ -230,9 +231,7 @@ const Comments = ({ recipeId }) => {
     ));
   };
 
-  if (loading) {
-    return <LodingIcon />;
-  }
+  if (loading) return <LoadingIcon isLoading={loading} />;
 
   return (
     <CommentsMainDiv>

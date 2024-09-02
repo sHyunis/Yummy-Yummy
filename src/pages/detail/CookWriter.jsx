@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import supabase from "../../../base-camp/supabaseClient";
-import LodingIcon from "./lodingIcon";
+import LoadingIcon from "../../components/LoadingIcon";
 
 const CookWriter = ({ recipeId }) => {
   const [cookWriter, setCookWriter] = useState([]);
@@ -37,9 +37,7 @@ const CookWriter = ({ recipeId }) => {
 
   // console.log(comments);
 
-  if (loading) {
-    return <LodingIcon />;
-  }
+  if (loading) return <LoadingIcon isLoading={loading} />;
 
   return (
     <StRecipeContentSection>

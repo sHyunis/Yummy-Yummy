@@ -3,7 +3,8 @@ import styled from "styled-components";
 import Post from "./Post";
 import supabase from "../../../base-camp/supabaseClient";
 import { throttle } from "lodash";
-import loadingIcon from "../../../public/images/loading.png";
+// import loadingIcon from "../../../public/images/loading.png";
+import LoadingIcon from "../../components/LoadingIcon";
 
 const Wrap = styled.div`
   margin-top: 7rem;
@@ -15,43 +16,41 @@ const Wrap = styled.div`
   margin-bottom: 3rem;
 `;
 
-const LoadingWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+// const LoadingWrapper = styled.div`
+//   display: flex;
+//   justify-content: center;
+// `;
 
-const Loading = styled.img`
-  display: ${(props) => props.$visibility};
-  height: 3rem;
-  width: 3rem;
-`;
+// const Loading = styled.img`
+//   display: ${(props) => props.$visibility};
+//   height: 3rem;
+//   width: 3rem;
+// `;
 
 const PostList = ({ keyword }) => {
+  const countPost = parseInt((document.documentElement.scrollHeight - 450) / 385);
   const [postList, setPostList] = useState([]);
-  const [postLimit, setPostLimit] = useState(8);
-  const [loadingVisibility, setLoadingVisibility] = useState("none");
+  const [postLimit, setPostLimit] = useState(countPost * 4 + 4);
+  // const [loadingVisibility, setLoadingVisibility] = useState("none");
+  const [loadingVisibility, setLoadingVisibility] = useState(false);
   const [allPostLength, setAllPostLength] = useState(0);
 
   useEffect(() => {
+    keyword && setPostLimit(countPost * 4 + 4);
     const fetchData = async (limit) => {
-      postLimit - 8 > allPostLength
-        ? setLoadingVisibility("none")
-        : setLoadingVisibility("block");
+      console.log("postLimit", postLimit);
+      console.log("allPostLength", allPostLength);
+      // keyword || postLimit - 8 > allPostLength ? setLoadingVisibility("none") : setLoadingVisibility("block");
+      keyword || postLimit - 8 > allPostLength ? setLoadingVisibility(false) : setLoadingVisibility(true);
       try {
         let response;
         if (keyword) {
           console.log(keyword);
-          response = await supabase
-            .from("recipe_info")
-            .select("*")
-            .order("RECIPE_ID", { ascending: true });
+          response = await supabase.from("recipe_info").select("*").order("RECIPE_ID", { ascending: true });
 
           const filteredData = response.data.filter((post) =>
-            post.RECIPE_TITLE.replace(/\s/gi, "").includes(
-              keyword.replace(/\s/gi, ""),
-            ),
+            post.RECIPE_TITLE.replace(/\s/gi, "").includes(keyword.replace(/\s/gi, ""))
           );
-          console.log(filteredData);
           setPostList(filteredData);
         } else {
           response = await supabase
@@ -65,7 +64,8 @@ const PostList = ({ keyword }) => {
       } catch (error) {
         console.log(error);
       } finally {
-        setLoadingVisibility("none");
+        // setLoadingVisibility("none");
+        setLoadingVisibility(false);
       }
     };
 
@@ -73,7 +73,6 @@ const PostList = ({ keyword }) => {
       const scrollHeight = document.documentElement.scrollHeight;
       const scrollTop = document.documentElement.scrollTop;
       const clientHeight = document.documentElement.clientHeight;
-
       if (scrollTop + clientHeight >= scrollHeight - 1) {
         setPostLimit((prev) => prev + 8);
       }
@@ -85,10 +84,6 @@ const PostList = ({ keyword }) => {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [postLimit, keyword, allPostLength]);
-
-  useEffect(() => {
-    setPostLimit(8);
-  }, [keyword]);
 
   return (
     <>
@@ -103,9 +98,10 @@ const PostList = ({ keyword }) => {
           />
         ))}
       </Wrap>
-      <LoadingWrapper>
+      {/* <LoadingWrapper>
         <Loading src={loadingIcon} $visibility={loadingVisibility} />
-      </LoadingWrapper>
+      </LoadingWrapper> */}
+      <LoadingIcon isLoading={loadingVisibility} />
     </>
   );
 };
