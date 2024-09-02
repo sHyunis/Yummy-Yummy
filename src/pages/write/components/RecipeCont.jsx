@@ -13,11 +13,7 @@ const RecipeCont = () => {
       <Container>
         <Label>레시피 순서</Label>
         {recipeContGroups.map((_, index) => (
-          <RecipeContGroup
-            key={`RecipeContGroup-${index}`}
-            num={index + 1}
-            index={index}
-          />
+          <RecipeContGroup key={`RecipeContGroup-${index}`} index={index} />
         ))}
         <AddRecipeButton />
       </Container>
