@@ -3,6 +3,7 @@ import styled from "styled-components";
 import supabase from "../../base-camp/supabaseClient";
 import { useState } from "react";
 import { useEffect } from "react";
+import defaultProfile from "../assets/images/default-profile.jpg";
 
 const ProfileImageWrap = styled.div`
   display: flex;
@@ -12,19 +13,18 @@ const ProfileImageWrap = styled.div`
   aspect-ratio: 1/1;
   border-radius: 100%;
   background-color: var(--gray3-color);
-  background-image: url(https://bgazafwsoohqylvwugug.supabase.co/storage/v1/object/public/avatars/default-profile.jpg?t=2024-08-31T13%3A21%3A52.366Z);
+  background-image: url(${defaultProfile});
   background-position: 50% 50%;
   background-size: cover;
   background-repeat: no-repeat;
   overflow: hidden;
 `;
-const ProfileImageStyle = styled.img`
+const ProfileImageStyle = styled.div`
   width: 100%;
   aspect-ratio: 1/1;
-  text-indent: -9999px;
-  color: transparent;
-  background-color: transparent;
-  object-fit: cover;
+  background-position: 50% 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 const ProfileImage = ({ src, width }) => {
@@ -32,21 +32,17 @@ const ProfileImage = ({ src, width }) => {
 
   const checkProfileImage = async () => {
     const {
-      data: { user },
+      data: { user }
     } = await supabase.auth.getUser();
 
-    const { data, error } = await supabase
-      .from("user_info")
-      .select("user_img_url")
-      .eq("id", user.id)
-      .single();
+    const { data, error } = await supabase.from("user_info").select("USER_IMG_URL").eq("id", user.id).single();
     if (error) {
       console.error("Error:", error);
       return;
     }
 
     if (data) {
-      setProfileImage(data.user_img_url);
+      setProfileImage(data.USER_IMG_URL);
     }
   };
 
@@ -56,7 +52,9 @@ const ProfileImage = ({ src, width }) => {
 
   return (
     <ProfileImageWrap width={width}>
-      <ProfileImageStyle src={src || profileImage} alt="프로필 이미지" />
+      <ProfileImageStyle style={{ backgroundImage: `url(${src || profileImage})` }}>
+        <div className="sr-only">프로필 이미지</div>
+      </ProfileImageStyle>
     </ProfileImageWrap>
   );
 };

@@ -11,7 +11,7 @@ const Wrap = styled.div`
 const PostImage = styled.img`
   height: 28.2rem;
   width: 28.2rem;
-  background-color: gray;
+  object-fit: cover;
 `;
 
 const PostContentWrap = styled.div`
