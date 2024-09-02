@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import DetailFootImage from "./DetailFootImage";
 import supabase from "../../../base-camp/supabaseClient";
-import LodingIcon from "./lodingIcon";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
+import LoadingIcon from "../../components/LoadingIcon";
 
 const DetailPageHeader = ({ recipeId }) => {
   const [recipeInfo, setRecipeInfo] = useState(null);
@@ -34,7 +34,7 @@ const DetailPageHeader = ({ recipeId }) => {
   }, [recipeId]);
 
   if (!recipeInfo || recipeInfo.length === 0) {
-    return <LodingIcon />;
+    return <LoadingIcon />;
   }
   return (
     <FoodHeader>
