@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import supabase from "../../../base-camp/supabaseClient";
 import PostCard from "../../components/PostCard";
@@ -26,7 +26,7 @@ const Loading = styled.div`
   display: ${({ $isLoading }) => ($isLoading ? "flex" : "none")};
   align-items: center;
   justify-content: center;
-  margin: 24px auto;
+  margin: 40px auto;
   text-align: center;
   > .material-symbols-rounded {
     font-size: 5rem;
@@ -43,38 +43,49 @@ const Loading = styled.div`
   }
 `;
 
+const limit = 8;
+
 const PostList = () => {
   const [postList, setPostList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // 로딩 여부 확인
+  const [isHasMore, setIsHasMore] = useState(true); // 로딩할 데이터가 더 있는지 확인
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const limit = 8;
 
   const getPostList = async (page) => {
     const {
       data: { user }
     } = await supabase.auth.getUser();
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("recipe_info")
-      .select("*")
+      .select("*", { count: "exact" })
       .eq("USER_ID", user.id)
-      // range() : 시작 인덱스, 끝 인덱스 지정해서 데이터 가져옴
-      .range((page - 1) * limit, page * limit - 1);
+      .order("created_at", { ascending: false }) // 최신순 정렬
+      .range((page - 1) * limit, page * limit - 1); // 시작 인덱스, 끝 인덱스 지정해서 데이터 가져옴
+
+    if (error) {
+      console.error("Error:", error);
+    }
+
+    if (data.length < limit) {
+      setIsHasMore(false);
+    }
 
     return data;
   };
 
-  const loadMorePosts = async () => {
-    setLoading(true); // 데이터를 불러오는 동안 로딩 상태를 true로 설정
+  const loadMorePosts = useCallback(async () => {
+    if (isLoading || !isHasMore) return; // 로딩 중, 더 이상 로딩할 데이터가 없으면 종료
+
+    setIsLoading(true); // 로딩 시작
     const newPosts = await getPostList(page); // 새로운 게시글 가져옴
-    setPostList((prevPosts) => [...prevPosts, ...newPosts]); // 기존 게시글 목록(prevPosts)에 새로 가져온 게시글(newPosts)을 추가
-    setLoading(false); // 데이터를 다 불러온 후 로딩 상태를 false로 설정
-    setPage((prevPage) => prevPage + 1); // 현재 페이지 번호 1 증가
-  };
+    setPostList((prevPosts) => [...prevPosts, ...newPosts]);
+    setIsLoading(false); // 로딩 완료
+    setPage((prevPage) => prevPage + 1); // 페이지 번호 증가
+  }, [isLoading, isHasMore, page]);
 
   useEffect(() => {
-    // 초기 데이터 로드
-    loadMorePosts();
+    loadMorePosts(); // 처음 렌더링 로드
   }, []);
 
   // 무한 스크롤
@@ -83,12 +94,11 @@ const PostList = () => {
   });
 
   useEffect(() => {
-    // 가시성 감지
-    if (inView && !loading) {
+    // 무한 스크롤 가시성 감지
+    if (inView && !isLoading) {
       loadMorePosts();
-      console.log("감지");
     }
-  }, [inView, loading, loadMorePosts]);
+  }, [inView, isLoading, loadMorePosts]);
 
   return (
     <>
@@ -103,7 +113,7 @@ const PostList = () => {
               </PostListLi>
             ))}
           </PostListStyled>
-          <Loading $isLoading={loading}>
+          <Loading $isLoading={isLoading}>
             <span className="material-symbols-rounded">progress_activity</span>
           </Loading>
           <div ref={ref}></div>
