@@ -14,20 +14,14 @@ const RecipeContent = ({ recipeId }) => {
       try {
         setLoading(true);
 
-        const ingredientResponse = await supabase
-          .from("recipe_ingredient")
-          .select("*")
-          .eq("RECIPE_ID", recipeId);
+        const ingredientResponse = await supabase.from("recipe_ingredient").select("*").eq("RECIPE_ID", recipeId);
 
         if (ingredientResponse.error) {
           throw ingredientResponse.error;
         }
         setRecipeIngredient(ingredientResponse.data);
 
-        const flowResponse = await supabase
-          .from("recipe_flow")
-          .select("*")
-          .eq("RECIPE_ID", recipeId);
+        const flowResponse = await supabase.from("recipe_flow").select("*").eq("RECIPE_ID", recipeId);
 
         if (flowResponse.error) {
           throw flowResponse.error;
