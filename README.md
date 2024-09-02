@@ -2,17 +2,48 @@
 
 ![og](https://github.com/user-attachments/assets/53dfcd84-7dfe-4af7-8fa3-b8314bbf3067)
 
-### 프로젝트명 : 야미야미(Yummy Yummy!)
+---
 
-### 소개 : 유저들이 공유한 요리 레시피 기록을 한 눈에 볼 수 있는 뉴스피드 사이트
+## 프로젝트 소개
 
-#### OUR TEAM
+유저들이 공유한 요리 레시피 기록을 한 눈에 볼 수 있는 뉴스피드 사이트
 
-팀장 : 정소현 - 로그인, 회원가입 기능 + 페이지
-팀원 : 조아영 - 마이페이지
-팀원 : 정수희 - 레시피 작성페이지
-팀원 : 선채훈 - 메인페이지
-팀원 : 이태연 - 상세페이지
+---
+
+## 🚩 프로젝트 개요
+
+- **프로젝트명** &nbsp; :&nbsp;
+  **Yummy Yummy!**
+
+- **진행 기간** &nbsp;: &nbsp;
+  **24.08.28 ~ 24.09.04**
+
+---
+
+## 👨‍👩‍👧‍👦 팀원 소개
+
+|             정소현             |   조아영   |      정수희       |   선채훈   |   이태연   |
+| :----------------------------: | :--------: | :---------------: | :--------: | :--------: |
+|            **팀장**            |  **팀원**  |     **팀원**      |  **팀원**  |  **팀원**  |
+| 로그인, 회원가입 기능 + 페이지 | 마이페이지 | 레시피 작성페이지 | 메인페이지 | 상세페이지 |
+
+---
+
+</br>
+<div align=Left>
+<h1>📚 STACKS</h1>
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+<img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+<img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+<img src="https://img.shields.io/badge/styled Components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white">
+<img src="https://img.shields.io/badge/reactrouter-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white">
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+<img src="https://img.shields.io/badge/git actions-181717?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white">
+<img src="https://img.shields.io/badge/VSCODE-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white">
+</div>
 
 #### 개발환경
 
@@ -36,7 +67,7 @@
 
 ---
 
-### 프로젝트 기능👀👐
+## 🗂️ 기능 설명
 
 #### 로그인
 
