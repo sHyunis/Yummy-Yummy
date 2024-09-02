@@ -17,15 +17,15 @@ const InputSize = styled.div`
   display: flex;
 `;
 
-const RecipeContGroup = ({ num, index }) => {
-  const { removeRecipeGroup } = useContext(WriteContext);
+const RecipeContGroup = ({ index }) => {
+  const { removeRecipeGroup, recipeContChange } = useContext(WriteContext);
   const ex = "조리 전, 미역을 충분히 불려 놓습니다.";
   return (
     <>
       <GroupStyle>
-        {num}.
+        {index + 1}
         <InputSize>
-          <Input place={ex}></Input>
+          <Input place={ex} index={index} onChange={recipeContChange}></Input>
         </InputSize>
         <p
           onClick={() => removeRecipeGroup(index)}
