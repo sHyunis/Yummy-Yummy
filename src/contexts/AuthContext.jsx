@@ -127,7 +127,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     if (error) {
-      console.log("애플 로그인 실패", error.message);
+      console.log("구글 로그인 실패", error.message);
     } else {
       console.log("로그인 성공", data);
     }
