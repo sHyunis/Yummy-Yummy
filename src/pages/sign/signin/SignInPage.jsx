@@ -5,17 +5,10 @@ import SignInput from "../SignInput";
 import Logo from "../../../components/Logo";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
+import SocialSign from "../SocialSign";
 
 const SignInPage = () => {
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    handleSignIn,
-    error,
-    success,
-  } = useAuth();
+  const { email, setEmail, password, setPassword, handleSignIn, error, success } = useAuth();
 
   return (
     <Container>
@@ -25,12 +18,7 @@ const SignInPage = () => {
         </LogoBox>
         <LoginP>LOGIN</LoginP>
         <InputBox>
-          <SignInput
-            type="email"
-            placeholder="이메일"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <SignInput type="email" placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} />
           <SignInput
             type="password"
             placeholder="비밀번호"
@@ -39,11 +27,7 @@ const SignInPage = () => {
           />
         </InputBox>
         <ButtonBox>
-          <SignButton
-            backgroundColor="--green-color"
-            textColor="white"
-            onClick={handleSignIn}
-          >
+          <SignButton backgroundColor="--green-color" textColor="white" onClick={handleSignIn}>
             로그인
           </SignButton>
           <Link to="/sign-up">
@@ -56,6 +40,7 @@ const SignInPage = () => {
         {success && <SuccessMessage>{success}</SuccessMessage>}
         <p>SNS계정으로 간편로그인</p>
       </LoginWrap>
+      <SocialSign />
     </Container>
   );
 };
@@ -63,6 +48,7 @@ const SignInPage = () => {
 const Container = styled.div`
   margin: 0 auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
