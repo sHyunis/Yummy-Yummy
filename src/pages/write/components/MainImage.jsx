@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { WriteContext } from "../../../contexts/WriteContext";
 
 const MinText = styled.p`
   font-size: 1.3rem;
@@ -15,15 +16,16 @@ const ImageBox = styled.div`
 `;
 
 const ImagePreview = styled.img`
-  width: 220px;
-  height: 220px;
+  width: 250px;
+  height: 250px;
   object-fit: cover;
   border-radius: var(--border-radius);
+  box-shadow: 0 0 5px rgb(0, 0, 0, 0.3);
 `;
 
 const UploadButton = styled.div`
-  width: 220px;
-  height: 220px;
+  width: 250px;
+  height: 250px;
   border-radius: var(--border-radius);
   box-shadow: inset 0 0 3px rgb(0, 0, 0, 0.3);
   display: flex;
@@ -33,24 +35,8 @@ const UploadButton = styled.div`
 `;
 
 const MainImage = () => {
-  const [imageSrc, setImageSrc] = useState(null);
-  const fileInputRef = useRef(null);
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageSrc(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleUploadButtonClick = () => {
-    fileInputRef.current.click();
-  };
-
+  const { handleUploadButtonClick, imageSrc, handleImageUpload, fileInputRef } =
+    useContext(WriteContext);
   return (
     <>
       <ImageBox onClick={handleUploadButtonClick}>
@@ -66,7 +52,7 @@ const MainImage = () => {
           style={{ display: "none" }}
           onChange={handleImageUpload}
         />
-        <MinText>정사각형 비율의 사진이 예쁘게 나와요❤️</MinText>
+        <MinText>1:1 비율의 사진이 예쁘게 나와요❤️</MinText>
       </ImageBox>
     </>
   );

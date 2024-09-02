@@ -7,15 +7,17 @@ const InputStyled = styled.textarea`
   border: none;
   box-shadow: inset 0 0 3px rgb(0, 0, 0, 0.3);
   width: 100%;
-  height: ${(props) => {
-    const height = props.placeholder.length;
-    return height > 15 ? height * 1.5 + "px" : 20 + "px";
-  }};
+  height: 100%;
   resize: none;
 `;
 
-const Input = ({ place }) => {
-  return <InputStyled placeholder={place} />;
+const Input = ({ place, onChange, type, index }) => {
+  return (
+    <InputStyled
+      placeholder={place}
+      onChange={(e) => onChange(e.target.value, type, index)}
+    />
+  );
 };
 
 export default Input;

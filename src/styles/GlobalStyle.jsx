@@ -58,6 +58,11 @@ const GlobalStyle = createGlobalStyle`
     --border-radius-sm: 4px;
 }
 
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
 html {
     font-size: 62.5% !important;
     font-family: var(--font-family); 
@@ -78,6 +83,9 @@ html {
         font-size: 10px;
     }
 }
+*{
+    box-sizing: border-box;
+}
 body {
     font-size: 1.6rem;
     line-height: 1.5;
@@ -88,7 +96,7 @@ body {
     height: 16px;
 }
 ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.5); /* 스크롤바 색상 */
+    background: rgba(0, 0, 0, 0.3); /* 스크롤바 색상 */
     border-radius: 12px; /* 스크롤바 둥근 테두리 */
     background-clip: padding-box;
     border: 5px solid transparent;
@@ -100,6 +108,7 @@ body {
     color: rgba(0, 0, 0, 0.5);
 }
 input,
+textarea,
 button {
     font-family: var(--font-family);
 }
