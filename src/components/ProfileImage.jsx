@@ -32,21 +32,17 @@ const ProfileImage = ({ src, width }) => {
 
   const checkProfileImage = async () => {
     const {
-      data: { user },
+      data: { user }
     } = await supabase.auth.getUser();
 
-    const { data, error } = await supabase
-      .from("user_info")
-      .select("user_img_url")
-      .eq("id", user.id)
-      .single();
+    const { data, error } = await supabase.from("user_info").select("USER_IMG_URL").eq("id", user.id).single();
     if (error) {
       console.error("Error:", error);
       return;
     }
 
     if (data) {
-      setProfileImage(data.user_img_url);
+      setProfileImage(data.USER_IMG_URL);
     }
   };
 

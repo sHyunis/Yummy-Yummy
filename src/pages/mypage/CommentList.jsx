@@ -26,13 +26,10 @@ const CommentList = () => {
 
   const getCommentList = async () => {
     const {
-      data: { user },
+      data: { user }
     } = await supabase.auth.getUser();
 
-    const { data } = await supabase
-      .from("recipe_cmt")
-      .select("*")
-      .eq("user_id", user.id);
+    const { data } = await supabase.from("recipe_cmt").select("*").eq("USER_ID", user.id);
 
     setCommentList(data);
   };

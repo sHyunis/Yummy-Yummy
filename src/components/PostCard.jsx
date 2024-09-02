@@ -13,6 +13,7 @@ const PostImage = styled.img`
   aspect-ratio: 1/1;
   background-color: var(--gray4-color);
   border-radius: var(--border-radius);
+  object-fit: cover;
 `;
 
 const PostContentWrap = styled.div`
