@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Post from "./Post";
 import supabase from "../../../base-camp/supabaseClient";
 import { throttle } from "lodash";
-// import loadingIcon from "../../../public/images/loading.png";
 import LoadingIcon from "../../components/LoadingIcon";
 
 const Wrap = styled.div`
@@ -16,22 +15,10 @@ const Wrap = styled.div`
   margin-bottom: 3rem;
 `;
 
-// const LoadingWrapper = styled.div`
-//   display: flex;
-//   justify-content: center;
-// `;
-
-// const Loading = styled.img`
-//   display: ${(props) => props.$visibility};
-//   height: 3rem;
-//   width: 3rem;
-// `;
-
 const PostList = ({ keyword }) => {
   const countPost = parseInt((document.documentElement.scrollHeight - 450) / 385);
   const [postList, setPostList] = useState([]);
   const [postLimit, setPostLimit] = useState(countPost * 4 + 4);
-  // const [loadingVisibility, setLoadingVisibility] = useState("none");
   const [loadingVisibility, setLoadingVisibility] = useState(false);
   const [allPostLength, setAllPostLength] = useState(0);
 
@@ -40,7 +27,6 @@ const PostList = ({ keyword }) => {
     const fetchData = async (limit) => {
       console.log("postLimit", postLimit);
       console.log("allPostLength", allPostLength);
-      // keyword || postLimit - 8 > allPostLength ? setLoadingVisibility("none") : setLoadingVisibility("block");
       keyword || postLimit - 8 > allPostLength ? setLoadingVisibility(false) : setLoadingVisibility(true);
       try {
         let response;
@@ -64,7 +50,6 @@ const PostList = ({ keyword }) => {
       } catch (error) {
         console.log(error);
       } finally {
-        // setLoadingVisibility("none");
         setLoadingVisibility(false);
       }
     };
@@ -98,9 +83,6 @@ const PostList = ({ keyword }) => {
           />
         ))}
       </Wrap>
-      {/* <LoadingWrapper>
-        <Loading src={loadingIcon} $visibility={loadingVisibility} />
-      </LoadingWrapper> */}
       <LoadingIcon isLoading={loadingVisibility} />
     </>
   );
