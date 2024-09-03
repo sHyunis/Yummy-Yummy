@@ -12,20 +12,12 @@ const TextareaStyled = styled.textarea`
   resize: vertical;
 `;
 
-const Textarea = ({
-  type = "text",
-  name,
-  value,
-  placeholder,
-  rows = "4",
-  ref,
-  onChange,
-}) => {
+const Textarea = ({ type = "text", name, value, placeholder, rows = "4", ref, onChange }) => {
   return (
     <TextareaStyled
       type={type}
       name={name}
-      value={value}
+      value={value || ""}
       ref={ref}
       placeholder={placeholder}
       rows={rows}

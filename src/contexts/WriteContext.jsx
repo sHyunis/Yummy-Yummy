@@ -97,12 +97,12 @@ export const WriteProvider = ({ children }) => {
   }
 
   // 재료 그룹 추가하는 onClick 함수
-  const addIngGroup = () => {
+  const handleAddIngGroup = () => {
     setIngredientGroups([...ingredientGroups, { ING_NAME: "", ING_VOL: "" }]);
   };
 
   // 재료 그룹 삭제하는 onClick 함수
-  const removeIngGroup = (index) => {
+  const handleRemoveIngGroup = (index) => {
     if (ingredientGroups.length === 2) {
       alert("최소 두 개의 재료는 추가되어야 합니다.");
       return;
@@ -112,12 +112,12 @@ export const WriteProvider = ({ children }) => {
   };
 
   // 레시피 순서 추가하는 onClick 함수
-  const addRecipeGroup = () => {
+  const handleAddRecipeGroup = () => {
     setRecipeContGroups([...recipeContGroups, { RECIPE_STEP: "0", RECIPE_CONT: "" }]);
   };
 
   // 재료 그룹 삭제하는 onClick 함수
-  const removeRecipeGroup = (index) => {
+  const handleRemoveRecipeGroup = (index) => {
     if (recipeContGroups.length === 1) {
       alert("최소 한 개의 레시피는 작성되어야 합니다.");
       return;
@@ -253,11 +253,11 @@ export const WriteProvider = ({ children }) => {
   return (
     <WriteContext.Provider
       value={{
-        addIngGroup,
-        removeIngGroup,
+        handleAddIngGroup,
+        handleRemoveIngGroup,
         ingredientGroups,
-        addRecipeGroup,
-        removeRecipeGroup,
+        handleAddRecipeGroup,
+        handleRemoveRecipeGroup,
         recipeContGroups,
         handleUploadButtonClick,
         handleImageUpload,
