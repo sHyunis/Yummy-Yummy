@@ -162,5 +162,8 @@
 ## 📄 관련 문서 (클릭시 페이지 이동)
 ### <img width="50" src="https://img.shields.io/badge/FIGMA-pink?style=for-the-badge&logo=FIGMA&logoColor=white"> [화면 정의서](<https://www.figma.com/design/Ne9k4MrKWqWg4XVQzBg0sn/%EC%95%BC%EB%AF%B8%EC%95%BC%EB%AF%B8(Yummy-Yummy!)-(Copy)?node-id=0-1&t=KcM51G4n7FhF6llr-1>)
 
+### [배포 vercel : https://yummy-yummy-pi.vercel.app/](https://yummy-yummy-pi.vercel.app/)
+### [배포 도메인적용 : https://www.yummy-yummy.shop/](https://www.yummy-yummy.shop/)
+
 <br /><br />
 ⓒ 2024. Yummy Yummy All rights reserved. 1등하조
