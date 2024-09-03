@@ -21,6 +21,10 @@ const SortButtonWrap = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-bottom: 30px;
+  .material-symbols-rounded {
+    margin-left: -6px;
+    margin-right: 4px;
+  }
 `;
 
 const PostList = ({ keyword }) => {
@@ -81,6 +85,7 @@ const PostList = ({ keyword }) => {
     <>
       <SortButtonWrap>
         <Button
+          height="40px"
           onClick={() => {
             setPostLimit(parseInt((document.documentElement.clientHeight - 450) / 385) * 4 + 4);
             setAscending((prev) => !prev);
