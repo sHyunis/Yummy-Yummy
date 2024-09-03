@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const LabelStyled = styled.label`
-  padding-top: 3px;
+  padding-top: 2px;
   margin-right: 20px;
   font-weight: 600;
 `;

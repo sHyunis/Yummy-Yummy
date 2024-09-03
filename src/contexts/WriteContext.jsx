@@ -1,8 +1,8 @@
-import supabase from "../../supabaseClient";
 import { createContext, useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
-import { useNavigate, useParams } from "react-router-dom";
+import supabase from "../../supabaseClient";
 
 export const WriteContext = createContext();
 
@@ -75,17 +75,19 @@ export const WriteProvider = ({ children }) => {
   const [recipeInfo, setRecipeInfo] = useState(initRecipeInfo);
 
   // edit 일때는 밸류 채워주기
-  if (path === "edit") {
-    useEffect(() => {
+  useEffect(() => {
+    if (path === "edit") {
       const getData = async () => {
         const { data: info } = await supabase.from("recipe_info").select("*").eq("RECIPE_ID", editId);
         setRecipeInfo(...info);
         setImageSrc(info[0].RECIPE_IMG);
+
         const { data: ingInfo } = await supabase
           .from("recipe_ingredient")
           .select("ING_NAME,ING_VOL")
           .eq("RECIPE_ID", editId);
         setIngredientGroups(ingInfo);
+
         const { data: cont } = await supabase
           .from("recipe_flow")
           .select("RECIPE_STEP, RECIPE_CONT")
@@ -93,8 +95,8 @@ export const WriteProvider = ({ children }) => {
         setRecipeContGroups(cont);
       };
       getData();
-    }, [path]);
-  }
+    }
+  }, [path, editId]);
 
   // 재료 그룹 추가하는 onClick 함수
   const handleAddIngGroup = () => {
