@@ -64,7 +64,6 @@ const PostList = ({ keyword }) => {
       try {
         let response;
         if (keyword) {
-          console.log(keyword);
           response = await supabase.from("recipe_info").select("*").order("created_at", { ascending: ascending });
 
           const filteredData = response.data.filter((post) =>
@@ -134,12 +133,12 @@ const PostList = ({ keyword }) => {
           {ascending ? (
             <>
               <span className="material-symbols-rounded">arrow_upward</span>
-              오름차순
+              예전 등록순
             </>
           ) : (
             <>
               <span className="material-symbols-rounded">arrow_downward</span>
-              내림차순
+              최신 등록순
             </>
           )}
         </Button>
