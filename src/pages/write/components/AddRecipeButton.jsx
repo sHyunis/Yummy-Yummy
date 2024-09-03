@@ -14,7 +14,10 @@ const AddRecipeButton = () => {
   return (
     <>
       <Margin>
+
         <Button fontsize="1.4rem" onClick={handleAddRecipeGroup} color="beige">
+
+      
           순서 추가
         </Button>
       </Margin>

@@ -14,7 +14,9 @@ const AddIngButton = () => {
   return (
     <>
       <Margin>
+
         <Button fontsize="1.4rem" onClick={handleAddIngGroup} color="beige">
+
           재료 추가
         </Button>
       </Margin>
