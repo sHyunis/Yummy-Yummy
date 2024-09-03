@@ -1,10 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import SignInput from "../SignInput";
-import SignButton from "../SignButton";
+// import SignButton from "../SignButton";
+import Title from "../../../components/Title";
 import Logo from "../../../components/Logo";
+import Input from "../../../components/Input";
+import Button from "../../../components/Button";
+import LinkButton from "../../../components/LinkButton";
 import { useAuth } from "../../../contexts/AuthContext";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import SocialSign from "../SocialSign";
 
 const SignUpPage = () => {
@@ -25,51 +28,61 @@ const SignUpPage = () => {
 
   return (
     <>
-      <Container>
+      <Container className="container">
         <LogoBox>
           <Logo />
         </LogoBox>
         <SignUp>
-          <SignP>간편가입</SignP>
+          <Title size="small">간편가입</Title>
           <InputBox>
-            <InputLabel>이메일</InputLabel>
-            <SignInput
-              type="email"
-              placeholder="이메일 입력"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-            />
-            <InputLabel>비밀번호</InputLabel>
-            <SignInput
-              type="password"
-              placeholder="비밀번호 입력"
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-            />
-            <InputLabel>비밀번호 재입력</InputLabel>
-            <SignInput
-              type="password"
-              placeholder="비밀번호 재입력"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              value={confirmPassword}
-            />
-            <InputLabel>닉네임</InputLabel>
-            <SignInput
-              type="text"
-              placeholder="닉네임 입력"
-              onChange={(e) => setNickname(e.target.value)}
-              value={nickname}
-            />
+            <div>
+              <InputLabel>이메일</InputLabel>
+              <Input
+                type="email"
+                placeholder="이메일 입력"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                size="small"
+              />
+            </div>
+            <div>
+              <InputLabel>비밀번호</InputLabel>
+              <Input
+                type="password"
+                placeholder="비밀번호 입력"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                size="small"
+              />
+            </div>
+            <div>
+              <InputLabel>비밀번호 재입력</InputLabel>
+              <Input
+                type="password"
+                placeholder="비밀번호 재입력"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                value={confirmPassword}
+                size="small"
+              />
+            </div>
+            <div>
+              <InputLabel>닉네임</InputLabel>
+              <Input
+                type="text"
+                placeholder="닉네임 입력"
+                onChange={(e) => setNickname(e.target.value)}
+                value={nickname}
+                size="small"
+              />
+            </div>
           </InputBox>
           <ButtonBox>
-            <SignButton backgroundColor="--green-color" textColor="white" onClick={handleSignUp}>
+            <Button height="40px" onClick={handleSignUp}>
               가입완료
-            </SignButton>
-            <Link to="/">
-              <SignButton backgroundColor="--beige-color" textColor="black">
-                취소
-              </SignButton>
-            </Link>
+            </Button>
+            <LinkButton height="40px" color="beige" to="/">
+              취소
+            </LinkButton>
           </ButtonBox>
           {error && <ErrorMessage>{error}</ErrorMessage>}
           {success && <SuccessMessage>{success}</SuccessMessage>}
@@ -81,6 +94,7 @@ const SignUpPage = () => {
 };
 
 const Container = styled.div`
+  max-width: calc(400px + var(--gutter) * 2) !important;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -89,23 +103,17 @@ const Container = styled.div`
 `;
 
 const SignUp = styled.div`
-  width: 350px;
+  width: 100%;
   background-color: var(--gray4-color);
   display: flex;
   flex-direction: column;
-  gap: 20px;
   text-align: center;
-  padding: 20px;
+  padding: var(--spacing-lg);
   border-radius: var(--border-radius);
 `;
 
-const SignP = styled.p`
-  font-weight: 700;
-  font-size: 1.5rem;
-`;
-
 const LogoBox = styled.div`
-  width: 350px;
+  width: 100%;
   height: 100px;
   display: flex;
   justify-content: center;
@@ -113,9 +121,11 @@ const LogoBox = styled.div`
 `;
 
 const InputLabel = styled.label`
+  display: block;
   text-align: left;
-  font-size: 15px;
+  font-size: 1.4rem;
   font-weight: 700;
+  margin-bottom: 6px;
 `;
 
 const InputBox = styled.div`
@@ -127,12 +137,11 @@ const InputBox = styled.div`
 `;
 
 const ButtonBox = styled.div`
-  font-family: var(--font-family);
-  margin: 0 auto;
+  margin: var(--spacing-lg) auto 0;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 10px;
 `;
 
 const ErrorMessage = styled.p`

@@ -43,7 +43,7 @@ const GlobalStyle = createGlobalStyle`
     --yellow-color: #FFC565;
     --yellow-hover-color: #E7B158;
     --green-color: #143021;
-    --green-hover-color: #0F2318;
+    --green-hover-color: #264d37;
     --beige-color: #F6EED7;
     --beige-hover-color: #DED5BC;
     --gray1-color : #111111;
