@@ -25,12 +25,9 @@ const RecipeContGroup = ({ index }) => {
       <GroupStyle>
         {index + 1}
         <InputSize>
-          <Input place={ex} index={index} onChange={recipeContChange}></Input>
+          <Input place={ex} index={index} onChange={recipeContChange} type="RECIPE_CONT" table="flow"></Input>
         </InputSize>
-        <p
-          onClick={() => removeRecipeGroup(index)}
-          style={{ cursor: "pointer", opacity: 0.5 }}
-        >
+        <p onClick={() => removeRecipeGroup(index)} style={{ cursor: "pointer", opacity: 0.5 }}>
           x
         </p>
       </GroupStyle>

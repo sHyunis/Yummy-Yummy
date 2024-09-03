@@ -15,15 +15,15 @@ const EmptyText = styled.div`
 const PostListStyled = styled.ul`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  column-gap: var(--spacing);
-  row-gap: 30px;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: var(--spacing-lg);
+  row-gap: 34px;
   > li {
     overflow: hidden;
   }
 `;
 
-const limit = 8;
+const limit = 6;
 
 const PostList = () => {
   const [postList, setPostList] = useState([]);

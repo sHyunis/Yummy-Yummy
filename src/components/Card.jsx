@@ -23,7 +23,7 @@ const ContentWrap = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 1.8rem;
+  font-size: 2.2rem;
   font-weight: 700;
   text-align: center;
   overflow: hidden;
@@ -34,7 +34,7 @@ const Title = styled.h2`
 
 const Description = styled.p`
   color: var(--gray2-color);
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   text-overflow: ellipsis;
   text-align: center;
   overflow: hidden;

@@ -4,9 +4,9 @@ import Post from "./Post";
 import supabase from "../../../supabaseClient";
 import { throttle } from "lodash";
 import LoadingIcon from "../../components/LoadingIcon";
+import Button from "../../components/Button";
 
-const Wrap = styled.div`
-  margin-top: 3rem;
+const PostListStyled = styled.ul`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -17,12 +17,10 @@ const Wrap = styled.div`
   }
 `;
 
-const SortButton = styled.button`
-  height: 4rem;
-  padding: 0 1.5rem;
-  align-self: self-end;
-  border-radius: 8px;
-  font-weight: 600;
+const SortButtonWrap = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 30px;
 `;
 
 const PostList = ({ keyword }) => {
@@ -81,21 +79,33 @@ const PostList = ({ keyword }) => {
 
   return (
     <>
-      <SortButton
-        onClick={() => {
-          setPostLimit(parseInt((document.documentElement.clientHeight - 450) / 385) * 4 + 4);
-          setAscending((prev) => !prev);
-        }}
-      >
-        정렬 : {ascending ? "오름차순" : "내림차순"}
-      </SortButton>
-      <Wrap>
+      <SortButtonWrap>
+        <Button
+          onClick={() => {
+            setPostLimit(parseInt((document.documentElement.clientHeight - 450) / 385) * 4 + 4);
+            setAscending((prev) => !prev);
+          }}
+        >
+          {ascending ? (
+            <>
+              <span className="material-symbols-rounded">arrow_upward</span>
+              오름차순
+            </>
+          ) : (
+            <>
+              <span className="material-symbols-rounded">arrow_downward</span>
+              내림차순
+            </>
+          )}
+        </Button>
+      </SortButtonWrap>
+      <PostListStyled>
         {postList.map((post) => (
           <li key={post.RECIPE_ID}>
             <Post id={post.RECIPE_ID} img={post.RECIPE_IMG} title={post.RECIPE_TITLE} description={post.RECIPE_DESCR} />
           </li>
         ))}
-      </Wrap>
+      </PostListStyled>
 
       <LoadingIcon isLoading={loadingVisibility} />
     </>

@@ -29,7 +29,11 @@ const RecipeContent = ({ recipeId }) => {
         }
         setRecipeIngredient(ingredientResponse.data);
 
-        const flowResponse = await supabase.from("recipe_flow").select("*").eq("RECIPE_ID", recipeId);
+        const flowResponse = await supabase
+          .from("recipe_flow")
+          .select("*")
+          .eq("RECIPE_ID", recipeId)
+          .order("RECIPE_STEP");
 
         if (flowResponse.error) {
           throw flowResponse.error;

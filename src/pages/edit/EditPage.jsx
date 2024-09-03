@@ -28,7 +28,7 @@ const EditPage = () => {
   return (
     <WriteProvider>
       <MainContainer>
-        <Title>나만의 레시피 등록하기</Title>
+        <Title>나만의 레시피 수정하기</Title>
         <Content>
           <RecipeInfo />
         </Content>
