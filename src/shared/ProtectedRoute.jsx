@@ -3,11 +3,13 @@ import { useAuth } from "../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import LoadingIcon from "../components/LoadingIcon";
 
 const ProtectedRoute = ({ element }) => {
   const { session } = useAuth();
   const [message, setMessage] = useState(false);
   const [redirect, setRedirect] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // session(로그인) 상태이면 해당 element로 이동 session 상태가 아니면 sign-in 페이지로 이동
 
   useEffect(() => {
@@ -15,8 +17,10 @@ const ProtectedRoute = ({ element }) => {
     if (!session) {
       // 사용자가 로그인하지 않았으면 메세지 표시
       setMessage(true);
+      setIsLoading(true);
       const timer = setTimeout(() => {
         setRedirect(true);
+        setIsLoading(false);
       }, 2000); // 2초 후 로그인페이지 이동
 
       return () => clearTimeout(timer); // 타이머를 정리
@@ -33,7 +37,8 @@ const ProtectedRoute = ({ element }) => {
 
   return (
     <>
-      {message ? (
+      {isLoading && <LoadingIcon isLoading={isLoading} />} {/* 로딩 아이콘 표시 */}
+      {message && !isLoading ? (
         <MessageBox>
           권한이 없는 페이지입니다. <br />
           로그인 후 이용 가능합니다.
@@ -41,7 +46,7 @@ const ProtectedRoute = ({ element }) => {
           로그인 페이지로 자동으로 이동합니다.
         </MessageBox>
       ) : (
-        element
+        !isLoading && element
       )}
     </>
   );
