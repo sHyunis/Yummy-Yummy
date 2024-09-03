@@ -81,28 +81,22 @@ const PostList = ({ keyword }) => {
 
   return (
     <>
-      <PostListStyled>
-        <SortButton
-          onClick={() => {
-            setPostLimit(parseInt((document.documentElement.clientHeight - 450) / 385) * 4 + 4);
-            setAscending((prev) => !prev);
-          }}
-        >
-          정렬 : {ascending ? "오름차순" : "내림차순"}
-        </SortButton>
-        <Wrap>
-          {postList.map((post) => (
-            <li key={post.RECIPE_ID}>
-              <Post
-                id={post.RECIPE_ID}
-                img={post.RECIPE_IMG}
-                title={post.RECIPE_TITLE}
-                description={post.RECIPE_DESCR}
-              />
-            </li>
-          ))}
-        </Wrap>
-      </PostListStyled>
+      <SortButton
+        onClick={() => {
+          setPostLimit(parseInt((document.documentElement.clientHeight - 450) / 385) * 4 + 4);
+          setAscending((prev) => !prev);
+        }}
+      >
+        정렬 : {ascending ? "오름차순" : "내림차순"}
+      </SortButton>
+      <Wrap>
+        {postList.map((post) => (
+          <li key={post.RECIPE_ID}>
+            <Post id={post.RECIPE_ID} img={post.RECIPE_IMG} title={post.RECIPE_TITLE} description={post.RECIPE_DESCR} />
+          </li>
+        ))}
+      </Wrap>
+
       <LoadingIcon isLoading={loadingVisibility} />
     </>
   );

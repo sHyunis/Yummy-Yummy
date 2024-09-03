@@ -6,10 +6,15 @@ import Logo from "../../../components/Logo";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import SocialSign from "../SocialSign";
+import { useEffect } from "react";
 
 const SignInPage = () => {
-  const { email, setEmail, password, setPassword, handleSignIn, error, success } = useAuth();
+  const { email, setEmail, password, setPassword, handleSignIn, error, success, setError, setSuccess } = useAuth();
 
+  useEffect(() => {
+    setError("");
+    setSuccess("");
+  }, []);
   return (
     <Container>
       <LoginWrap>

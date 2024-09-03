@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   // user 로그인 상태 확인
   const checkSignIn = async () => {
     const { data: session } = await supabase.auth.getSession();
-    setSession(session);
+    setSession(session ? session.session : null);
 
     // 로그인 상태확인 후 초기화
     setSuccess("");
@@ -29,13 +29,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => setSession(session));
+    const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session ? session.session : null);
+    });
+
     // 초기 로그인 확인
     checkSignIn();
 
+    // 컴포넌트 언마운트 시 구독 해제
     return () => {
       subscription.unsubscribe();
-    }; // 사용하지 않을 때 메모리 효율적 처리 (클린업함수)
+    };
   }, []);
 
   // user 회원가입
@@ -92,7 +96,7 @@ export const AuthProvider = ({ children }) => {
   // user 로그아웃
   const handleLogout = async () => {
     await supabase.auth.signOut();
-
+    setSession(null); // 로그아웃 후 세션 상태를 null로 설정
     navigate("/"); // 홈으로 이동
   };
 
@@ -136,6 +140,7 @@ export const AuthProvider = ({ children }) => {
       console.log("로그인 성공", data);
     }
   };
+
   return (
     <AuthContext.Provider
       value={{
@@ -156,7 +161,9 @@ export const AuthProvider = ({ children }) => {
         checkSignIn,
         signInWithKakao,
         signInWithGithub,
-        signInWithGoogle
+        signInWithGoogle,
+        setError,
+        setSuccess
       }}
     >
       {children}
