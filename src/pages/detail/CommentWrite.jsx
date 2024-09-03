@@ -1,5 +1,5 @@
+import supabase from "../../../supabaseClient";
 import React, { useEffect, useRef, useState } from "react";
-import supabase from "../../../base-camp/supabaseClient";
 import Swal from "sweetalert2";
 import { CommentWriteDiv, CommentTextarea, Button, Form } from "./detail.styled";
 import { useNavigate } from "react-router-dom";

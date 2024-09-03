@@ -9,6 +9,7 @@ import SignInPage from "../pages/sign/signin/SignInPage";
 import Layout from "./Layout";
 import { AuthProvider } from "../contexts/AuthContext";
 import EditPage from "../pages/edit/EditPage";
+import ProtectedRoute from "./ProtectedRoute";
 
 const Router = () => {
   return (
@@ -18,11 +19,11 @@ const Router = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/detail/:id" element={<DetailPage />} />
-            <Route path="/mypage" element={<MyPage />} />
-            <Route path="/write" element={<WritePage />} />
+            <Route path="/mypage" element={<ProtectedRoute element={<MyPage />} />} />
+            <Route path="/write" element={<ProtectedRoute element={<WritePage />} />} />
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
-            <Route path="/edit/:id" element={<EditPage />} />
+            <Route path="/edit/:id" element={<ProtectedRoute element={<EditPage />} />} />
           </Routes>
         </Layout>
       </AuthProvider>

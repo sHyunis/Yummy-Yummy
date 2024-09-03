@@ -8,7 +8,7 @@ const BoxDiv = styled.div`
   margin: 20px 0;
 `;
 
-const Box = ({ children }) => {
+const Box = ({ children, mode }) => {
   return <BoxDiv>{children} </BoxDiv>;
 };
 

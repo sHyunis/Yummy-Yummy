@@ -1,6 +1,6 @@
 // AuthContext.js
 import React, { createContext, useState, useContext, useEffect } from "react";
-import supabase from "../../base-camp/supabaseClient";
+import supabase from "../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
 // Context 생성
@@ -14,15 +14,14 @@ export const AuthProvider = ({ children }) => {
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [signIn, setSignIn] = useState(false);
+  const [session, setSession] = useState(null);
 
   const navigate = useNavigate();
 
   // user 로그인 상태 확인
   const checkSignIn = async () => {
     const { data: session } = await supabase.auth.getSession();
-    const isSignIn = !!session?.session;
-    setSignIn(isSignIn);
+    setSession(session ? session.session : null);
 
     // 로그인 상태확인 후 초기화
     setSuccess("");
@@ -30,8 +29,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // 로그인 확인
+    const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session ? session.session : null);
+    });
+
+    // 초기 로그인 확인
     checkSignIn();
+
+    // 컴포넌트 언마운트 시 구독 해제
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   // user 회원가입
@@ -88,7 +96,7 @@ export const AuthProvider = ({ children }) => {
   // user 로그아웃
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    setSignIn(false); // 로그아웃 후 로그인 상태 초기화
+    setSession(null); // 로그아웃 후 세션 상태를 null로 설정
     navigate("/"); // 홈으로 이동
   };
 
@@ -127,11 +135,12 @@ export const AuthProvider = ({ children }) => {
     });
 
     if (error) {
-      console.log("애플 로그인 실패", error.message);
+      console.log("구글 로그인 실패", error.message);
     } else {
       console.log("로그인 성공", data);
     }
   };
+
   return (
     <AuthContext.Provider
       value={{
@@ -148,11 +157,13 @@ export const AuthProvider = ({ children }) => {
         handleSignUp,
         handleSignIn,
         handleLogout,
-        signIn,
+        session,
         checkSignIn,
         signInWithKakao,
         signInWithGithub,
-        signInWithGoogle
+        signInWithGoogle,
+        setError,
+        setSuccess
       }}
     >
       {children}

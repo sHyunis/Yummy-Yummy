@@ -9,6 +9,7 @@ import LinkButton from "../../../components/LinkButton";
 import { useAuth } from "../../../contexts/AuthContext";
 // import { Link } from "react-router-dom";
 import SocialSign from "../SocialSign";
+import { useEffect } from "react";
 
 const SignUpPage = () => {
   const {
@@ -23,9 +24,14 @@ const SignUpPage = () => {
     error,
     success,
     handleSignUp,
-    signInWithKakao
+    setSuccess,
+    setError
   } = useAuth();
 
+  useEffect(() => {
+    setSuccess("");
+    setError("");
+  }, []);
   return (
     <>
       <Container className="container">
