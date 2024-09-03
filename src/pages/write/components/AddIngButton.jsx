@@ -10,11 +10,11 @@ const Margin = styled.div`
 `;
 
 const AddIngButton = () => {
-  const { addIngGroup } = useContext(WriteContext);
+  const { handleAddIngGroup } = useContext(WriteContext);
   return (
     <>
       <Margin>
-        <Button fontsize="1.4rem" onClick={addIngGroup}>
+        <Button fontsize="1.4rem" onClick={handleAddIngGroup}>
           재료 추가
         </Button>
       </Margin>
