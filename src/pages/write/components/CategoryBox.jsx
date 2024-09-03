@@ -21,7 +21,7 @@ const CtgSelect = styled.select`
 `;
 
 const CategoryBox = (props) => {
-  const { ctgChange } = useContext(WriteContext);
+  const { ctgChange, recipeInfo } = useContext(WriteContext);
   return (
     <>
       <Box>

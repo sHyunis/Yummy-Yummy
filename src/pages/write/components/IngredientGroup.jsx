@@ -23,10 +23,10 @@ const IngredientGroup = ({ index }) => {
     <>
       <GroupStyle>
         <InputSize>
-          <Input place="예) 당근" type="ING_NAME" index={index} onChange={ingInfoChange} />
+          <Input place="예) 당근" type="ING_NAME" index={index} onChange={ingInfoChange} table="ing" />
         </InputSize>
         <InputSize>
-          <Input place="예) 1개, 30g 등" type="ING_VOL" index={index} onChange={ingInfoChange} />
+          <Input place="예) 1개, 30g 등" type="ING_VOL" index={index} onChange={ingInfoChange} table="ing" />
         </InputSize>
         <p onClick={() => removeIngGroup(index)} style={{ cursor: "pointer", opacity: 0.5 }}>
           x
