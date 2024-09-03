@@ -26,13 +26,13 @@ const CommentText = styled.p`
 `;
 
 const CommentCard = ({ comment }) => {
-  const { recipe_id, cmt_cont } = comment;
+  const { RECIPE_ID, CMT_CONT } = comment;
   const navigate = useNavigate();
 
   return (
-    <CommentCardStyled onClick={() => navigate(`/detail/${recipe_id}`)}>
+    <CommentCardStyled onClick={() => navigate(`/detail/${RECIPE_ID}`)}>
       <ProfileImage width="60px" />
-      <CommentText>{cmt_cont}</CommentText>
+      <CommentText>{CMT_CONT}</CommentText>
     </CommentCardStyled>
   );
 };

@@ -43,7 +43,7 @@ const GlobalStyle = createGlobalStyle`
     --yellow-color: #FFC565;
     --yellow-hover-color: #E7B158;
     --green-color: #143021;
-    --green-hover-color: #0F2318;
+    --green-hover-color: #264d37;
     --beige-color: #F6EED7;
     --beige-hover-color: #DED5BC;
     --gray1-color : #111111;
@@ -69,6 +69,11 @@ html {
     overflow-x: hidden;
     overflow-y: scroll;
 }
+
+html.no-global-styles, .swal2-popup.no-global-styles {
+  font-size: initial !important;
+}
+
 @media screen and (min-width: 0\0) {
     /* IE 9, IE 10, IE 11 */
     :root,
@@ -135,7 +140,17 @@ a{
     margin: 0 auto;
     
 }
-
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	border: 0;
+	clip: rect(0 0 0 0);
+}
 `;
 
 export default GlobalStyle;

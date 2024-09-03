@@ -1,40 +1,54 @@
 import React from "react";
 import styled from "styled-components";
-import SignButton from "../SignButton";
-import SignInput from "../SignInput";
+// import SignButton from "../SignButton";
+// import SignInput from "../SignInput";
+import Title from "../../../components/Title";
+import Input from "../../../components/Input";
+import Button from "../../../components/Button";
+import LinkButton from "../../../components/LinkButton";
 import Logo from "../../../components/Logo";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import SocialSign from "../SocialSign";
+import { useEffect } from "react";
 
 const SignInPage = () => {
-  const { email, setEmail, password, setPassword, handleSignIn, error, success } = useAuth();
+  const { email, setEmail, password, setPassword, handleSignIn, error, success, setError, setSuccess } = useAuth();
 
+  useEffect(() => {
+    setError("");
+    setSuccess("");
+  }, []);
   return (
     <Container>
       <LoginWrap>
         <LogoBox>
           <Logo />
         </LogoBox>
-        <LoginP>LOGIN</LoginP>
+        <Title size="small">LOGIN</Title>
         <InputBox>
-          <SignInput type="email" placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <SignInput
+          <Input
+            type="email"
+            placeholder="이메일"
+            value={email}
+            size="small"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
             type="password"
             placeholder="비밀번호"
             value={password}
+            size="small"
             onChange={(e) => setPassword(e.target.value)}
           />
         </InputBox>
         <ButtonBox>
-          <SignButton backgroundColor="--green-color" textColor="white" onClick={handleSignIn}>
+          <Button height="40px" onClick={handleSignIn}>
             로그인
-          </SignButton>
-          <Link to="/sign-up">
-            <SignButton backgroundColor="--beige-color" textColor="black">
-              회원가입
-            </SignButton>
-          </Link>
+          </Button>
+          <LinkButton to="/sign-up" height="40px" color="beige">
+            회원가입
+          </LinkButton>
         </ButtonBox>
         {error && <ErrorMessage>{error}</ErrorMessage>}
         {success && <SuccessMessage>{success}</SuccessMessage>}
@@ -68,10 +82,10 @@ const LogoBox = styled.div`
   margin-bottom: 40px;
 `;
 
-const LoginP = styled.p`
-  font-weight: 700;
-  font-size: 1.5rem;
-`;
+// const LoginP = styled.p`
+//   font-weight: 700;
+//   font-size: 1.5rem;
+// `;
 
 const InputBox = styled.div`
   width: 350px;
@@ -85,7 +99,7 @@ const ButtonBox = styled.div`
   width: 350px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 10px;
 `;
 
 const ErrorMessage = styled.p`

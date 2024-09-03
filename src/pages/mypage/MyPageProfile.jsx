@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import supabase from "../../../base-camp/supabaseClient";
+import supabase from "../../../supabaseClient";
+import Title from "../../components/Title";
 import Button from "../../components/Button";
+import Input from "../../components/Input";
 import ProfileImage from "../../components/ProfileImage";
 import ButtonGroup from "./ButtonGroup";
-import Input from "./Input";
 import Textarea from "./Textarea";
-import MyPageTitle from "./MyPageTitle";
 
 const ProfileImageWrap = styled.div`
   display: flex;
@@ -33,12 +33,12 @@ const MyPageProfile = () => {
   // 비밀번호 확인
   const handleConfirmPassword = async () => {
     const {
-      data: { user },
+      data: { user }
     } = await supabase.auth.getUser();
 
     const { error } = await supabase.auth.signInWithPassword({
       email: user.email, // 현재 로그인된 사용자의 이메일을 사용
-      password,
+      password
     });
 
     if (error) {
@@ -58,17 +58,13 @@ const MyPageProfile = () => {
   // 기존 유저 소개글
   const userIntroduction = async () => {
     const {
-      data: { user },
+      data: { user }
     } = await supabase.auth.getUser();
 
-    const { data } = await supabase
-      .from("user_info")
-      .select("introduction")
-      .eq("id", user.id)
-      .single();
+    const { data } = await supabase.from("user_info").select("INTRODUCTION").eq("id", user.id).single();
 
     if (user && data) {
-      setIntroduction(data.introduction);
+      setIntroduction(data.INTRODUCTION);
     }
   };
 
@@ -101,7 +97,7 @@ const MyPageProfile = () => {
   // 프로필 수정
   const handleSaveProfile = async () => {
     const {
-      data: { user },
+      data: { user }
     } = await supabase.auth.getUser();
 
     // 이미지 파일 supabase에 업로드, 업데이트
@@ -117,11 +113,12 @@ const MyPageProfile = () => {
       //업데이트
       const { error: updateImageError } = await supabase
         .from("user_info")
-        .update({ user_img_url: imageUpload })
+        .update({ USER_IMG_URL: imageUpload })
         .eq("id", user.id);
 
       if (updateImageError) {
         console.error("Error:", updateImageError);
+        return;
       }
     }
 
@@ -129,7 +126,7 @@ const MyPageProfile = () => {
     if (introduction) {
       const { error: introductionError } = await supabase
         .from("user_info")
-        .update({ introduction })
+        .update({ INTRODUCTION: introduction })
         .eq("id", user.id);
 
       if (introductionError) {
@@ -143,7 +140,7 @@ const MyPageProfile = () => {
 
   return (
     <>
-      <MyPageTitle>프로필 수정</MyPageTitle>
+      <Title>프로필 수정</Title>
 
       {isPasswordConfirm ? (
         <>
@@ -159,11 +156,7 @@ const MyPageProfile = () => {
             />
           </ProfileImageWrap>
           <TextareaWrap>
-            <Textarea
-              value={introduction}
-              placeholder="소개글을 입력해주세요."
-              onChange={handleChangeIntroduction}
-            />
+            <Textarea value={introduction} placeholder="소개글을 입력해주세요." onChange={handleChangeIntroduction} />
           </TextareaWrap>
           <ButtonGroup>
             <Button height="50px" onClick={handleSaveProfile}>

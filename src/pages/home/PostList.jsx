@@ -1,63 +1,59 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Post from "./Post";
-import supabase from "../../../base-camp/supabaseClient";
+import supabase from "../../../supabaseClient";
 import { throttle } from "lodash";
-import loadingIcon from "../../../public/images/loading.png";
+import LoadingIcon from "../../components/LoadingIcon";
+import Button from "../../components/Button";
 
-const Wrap = styled.div`
-  margin-top: 7rem;
+const PostListStyled = styled.ul`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  column-gap: 2.4rem;
-  row-gap: 3rem;
-  margin-bottom: 3rem;
+  column-gap: var(--spacing-lg);
+  row-gap: 34px;
+  > li {
+    overflow: hidden;
+  }
 `;
 
-const LoadingWrapper = styled.div`
+const SortButtonWrap = styled.div`
   display: flex;
-  justify-content: center;
-`;
-
-const Loading = styled.img`
-  display: ${(props) => props.$visibility};
-  height: 3rem;
-  width: 3rem;
+  justify-content: flex-end;
+  margin-bottom: 30px;
+  .material-symbols-rounded {
+    margin-left: -6px;
+    margin-right: 4px;
+  }
 `;
 
 const PostList = ({ keyword }) => {
+  const countPost = parseInt((document.documentElement.scrollHeight - 450) / 385);
   const [postList, setPostList] = useState([]);
-  const [postLimit, setPostLimit] = useState(8);
-  const [loadingVisibility, setLoadingVisibility] = useState("none");
+  const [postLimit, setPostLimit] = useState(countPost * 4 + 4);
+  const [loadingVisibility, setLoadingVisibility] = useState(false);
   const [allPostLength, setAllPostLength] = useState(0);
+  const [ascending, setAscending] = useState(false);
 
   useEffect(() => {
+    keyword && setPostLimit(countPost * 4 + 4);
     const fetchData = async (limit) => {
-      postLimit - 8 > allPostLength
-        ? setLoadingVisibility("none")
-        : setLoadingVisibility("block");
+      keyword || postLimit - 8 > allPostLength ? setLoadingVisibility(false) : setLoadingVisibility(true);
       try {
         let response;
         if (keyword) {
           console.log(keyword);
-          response = await supabase
-            .from("recipe_info")
-            .select("*")
-            .order("RECIPE_ID", { ascending: true });
+          response = await supabase.from("recipe_info").select("*").order("created_at", { ascending: ascending });
 
           const filteredData = response.data.filter((post) =>
-            post.RECIPE_TITLE.replace(/\s/gi, "").includes(
-              keyword.replace(/\s/gi, ""),
-            ),
+            post.RECIPE_TITLE.replace(/\s/gi, "").includes(keyword.replace(/\s/gi, ""))
           );
-          console.log(filteredData);
           setPostList(filteredData);
         } else {
           response = await supabase
             .from("recipe_info")
             .select("*")
-            .order("RECIPE_ID", { ascending: true })
+            .order("created_at", { ascending: ascending })
             .limit(limit);
           setPostList(response.data);
         }
@@ -65,7 +61,7 @@ const PostList = ({ keyword }) => {
       } catch (error) {
         console.log(error);
       } finally {
-        setLoadingVisibility("none");
+        setLoadingVisibility(false);
       }
     };
 
@@ -73,7 +69,6 @@ const PostList = ({ keyword }) => {
       const scrollHeight = document.documentElement.scrollHeight;
       const scrollTop = document.documentElement.scrollTop;
       const clientHeight = document.documentElement.clientHeight;
-
       if (scrollTop + clientHeight >= scrollHeight - 1) {
         setPostLimit((prev) => prev + 8);
       }
@@ -84,28 +79,40 @@ const PostList = ({ keyword }) => {
     window.addEventListener("scroll", handleScroll);
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [postLimit, keyword, allPostLength]);
-
-  useEffect(() => {
-    setPostLimit(8);
-  }, [keyword]);
+  }, [postLimit, keyword, ascending]);
 
   return (
     <>
-      <Wrap>
+      <SortButtonWrap>
+        <Button
+          height="40px"
+          onClick={() => {
+            setPostLimit(parseInt((document.documentElement.clientHeight - 450) / 385) * 4 + 4);
+            setAscending((prev) => !prev);
+          }}
+        >
+          {ascending ? (
+            <>
+              <span className="material-symbols-rounded">arrow_upward</span>
+              오름차순
+            </>
+          ) : (
+            <>
+              <span className="material-symbols-rounded">arrow_downward</span>
+              내림차순
+            </>
+          )}
+        </Button>
+      </SortButtonWrap>
+      <PostListStyled>
         {postList.map((post) => (
-          <Post
-            key={post.RECIPE_ID}
-            id={post.RECIPE_ID}
-            img={post.RECIPE_IMG}
-            title={post.RECIPE_TITLE}
-            description={post.RECIPE_DESCR}
-          />
+          <li key={post.RECIPE_ID}>
+            <Post id={post.RECIPE_ID} img={post.RECIPE_IMG} title={post.RECIPE_TITLE} description={post.RECIPE_DESCR} />
+          </li>
         ))}
-      </Wrap>
-      <LoadingWrapper>
-        <Loading src={loadingIcon} $visibility={loadingVisibility} />
-      </LoadingWrapper>
+      </PostListStyled>
+
+      <LoadingIcon isLoading={loadingVisibility} />
     </>
   );
 };

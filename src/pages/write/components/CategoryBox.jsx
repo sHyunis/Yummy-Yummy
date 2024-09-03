@@ -21,18 +21,21 @@ const CtgSelect = styled.select`
 `;
 
 const CategoryBox = (props) => {
-  const { ctgChange } = useContext(WriteContext);
+  const { ctgChange, recipeInfo } = useContext(WriteContext);
   return (
     <>
       <Box>
         <Label>{props.label}</Label>
-        <CtgSelect onChange={(e) => ctgChange(e.target.value)}>
-          <option>한식</option>
-          <option>양식</option>
-          <option>중식</option>
-          <option>일식</option>
-          <option>디저트</option>
-          <option>퓨전</option>
+        <CtgSelect onChange={(e) => ctgChange(e.target.value)} value={recipeInfo.RECIPE_CTG || ""}>
+          <option value="" disabled hidden>
+            카테고리를 선택해주세요.
+          </option>
+          <option value="한식">한식</option>
+          <option value="양식">양식</option>
+          <option value="중식">중식</option>
+          <option value="일식">일식</option>
+          <option value="디저트">디저트</option>
+          <option value="퓨전">퓨전</option>
         </CtgSelect>
       </Box>
     </>
