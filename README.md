@@ -131,6 +131,20 @@
 - **무한 스크롤:** react-intersection-observer를 사용해 무한 스크롤 기능을 구현하고, useCallback을 이용해 렌더링을 최적화하여 성능을 개선했습니다. 이를 통해 사용자에게 끊김 없는 탐색 경험을 제공합니다.
 - **게시글로 이동:** 클릭 시 해당 게시글 또는 댓글이 포함된 게시글로 즉시 이동할 수 있는 기능을 구현하여 편의성을 높였습니다.
 
+
+#### 게시글 작성 페이지
+- 사용자가 입력한 값 저장
+- supabase 테이블 3개 연결 (레시피 정보 테이블의 ID 값으로 연결함)
+- 저장 버튼 누르면 차례대로 insert 하며 지정된 형태로 입력값을 DB에 저장
+
+#### 게시글 수정 페이지
+- params로 받은 id값과 일치하는 레시피 정보 select
+- 해당 id값과 연결된 재료, 순서 select
+- value값과 연결하여 불러온 데이터를 입력창에 추가
+- 작성 페이지와 사용자 입력값을 받는 부분은 동일하게 처리
+- 저장 버튼 누르면 id와 연결된 재료, 순서 모두 삭제하고 입력값을 새로 insert<br/>
+  (사용자가 추가하거나 삭제한 행을 추척하기 어려움)
+
 ---
 
 ## 💥 Trouble Shooting
@@ -147,6 +161,9 @@
 
 ## 📄 관련 문서 (클릭시 페이지 이동)
 ### <img width="50" src="https://img.shields.io/badge/FIGMA-pink?style=for-the-badge&logo=FIGMA&logoColor=white"> [화면 정의서](<https://www.figma.com/design/Ne9k4MrKWqWg4XVQzBg0sn/%EC%95%BC%EB%AF%B8%EC%95%BC%EB%AF%B8(Yummy-Yummy!)-(Copy)?node-id=0-1&t=KcM51G4n7FhF6llr-1>)
+
+### [배포 vercel : https://yummy-yummy-pi.vercel.app/](https://yummy-yummy-pi.vercel.app/)
+### [배포 도메인적용 : https://www.yummy-yummy.shop/](https://www.yummy-yummy.shop/)
 
 <br /><br />
 ⓒ 2024. Yummy Yummy All rights reserved. 1등하조

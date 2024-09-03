@@ -42,7 +42,7 @@ const ProfileEmail = styled.div`
 const ProfileIntroduction = styled.div`
   padding-top: 16px;
   font-size: 1.4rem;
-  word-break: keep-all;
+  word-break: break-all;
   color: var(--gray2-color);
 `;
 const MyPageNav = styled.ul`
