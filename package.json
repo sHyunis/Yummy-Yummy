@@ -18,11 +18,15 @@
     "react-router-dom": "^6.26.1",
     "styled-components": "^6.1.12",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "sweetalert2": "^11.12.4",
     "sweetalert2-react-content": "^5.0.7"
 =======
     "sweetalert2": "^11.12.4"
 >>>>>>> f8b91b0cf374819db02952b4a4a99e96c40521c2
+=======
+    "sweetalert2": "^11.12.4"
+>>>>>>> 739ae3800b8ab4ff494e990b2d6e51b98d275378
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

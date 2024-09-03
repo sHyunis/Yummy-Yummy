@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import supabase from "../../../base-camp/supabaseClient";
-import PostCard from "../../components/PostCard";
+import PostCard from "./PostCard";
 import { useInView } from "react-intersection-observer";
+import LoadingIcon from "../../components/LoadingIcon";
 
 const EmptyText = styled.div`
   width: 100%;
@@ -14,67 +15,58 @@ const EmptyText = styled.div`
 const PostListStyled = styled.ul`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  column-gap: var(--spacing);
-  row-gap: 30px;
-`;
-const PostListLi = styled.li`
-  overflow: hidden;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: var(--spacing-lg);
+  row-gap: 34px;
+  > li {
+    overflow: hidden;
+  }
 `;
 
-const Loading = styled.div`
-  display: ${({ $isLoading }) => ($isLoading ? "flex" : "none")};
-  align-items: center;
-  justify-content: center;
-  margin: 24px auto;
-  text-align: center;
-  > .material-symbols-rounded {
-    font-size: 5rem;
-    color: var(--gray2-color);
-    animation: loading-icon linear infinite 0.8s;
-  }
-  @keyframes loading-icon {
-    0% {
-      transform: rotate(0);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-`;
+const limit = 6;
 
 const PostList = () => {
   const [postList, setPostList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // 로딩 여부 확인
+  const [isHasMore, setIsHasMore] = useState(true); // 로딩할 데이터가 더 있는지 확인
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const limit = 8;
 
   const getPostList = async (page) => {
     const {
       data: { user }
     } = await supabase.auth.getUser();
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("recipe_info")
-      .select("*")
+      .select("*", { count: "exact" })
       .eq("USER_ID", user.id)
-      // range() : 시작 인덱스, 끝 인덱스 지정해서 데이터 가져옴
-      .range((page - 1) * limit, page * limit - 1);
+      .order("created_at", { ascending: false }) // 최신순 정렬
+      .range((page - 1) * limit, page * limit - 1); // 시작 인덱스, 끝 인덱스 지정해서 데이터 가져옴
+
+    if (error) {
+      console.error("Error:", error);
+      return;
+    }
+
+    if (data.length < limit) {
+      setIsHasMore(false);
+    }
 
     return data;
   };
 
-  const loadMorePosts = async () => {
-    setLoading(true); // 데이터를 불러오는 동안 로딩 상태를 true로 설정
+  const loadMorePostList = useCallback(async () => {
+    if (isLoading || !isHasMore) return; // 로딩 중, 더 이상 로딩할 데이터가 없으면 종료
+
+    setIsLoading(true); // 로딩 시작
     const newPosts = await getPostList(page); // 새로운 게시글 가져옴
-    setPostList((prevPosts) => [...prevPosts, ...newPosts]); // 기존 게시글 목록(prevPosts)에 새로 가져온 게시글(newPosts)을 추가
-    setLoading(false); // 데이터를 다 불러온 후 로딩 상태를 false로 설정
-    setPage((prevPage) => prevPage + 1); // 현재 페이지 번호 1 증가
-  };
+    setPostList((prevPosts) => [...prevPosts, ...newPosts]);
+    setIsLoading(false); // 로딩 완료
+    setPage((prevPage) => prevPage + 1); // 페이지 번호 증가
+  }, [isLoading, isHasMore, page]);
 
   useEffect(() => {
-    // 초기 데이터 로드
-    loadMorePosts();
+    loadMorePostList(); // 처음 렌더링 로드
   }, []);
 
   // 무한 스크롤
@@ -83,12 +75,11 @@ const PostList = () => {
   });
 
   useEffect(() => {
-    // 가시성 감지
-    if (inView && !loading) {
-      loadMorePosts();
-      console.log("감지");
+    // 무한 스크롤 가시성 감지
+    if (inView && !isLoading) {
+      loadMorePostList();
     }
-  }, [inView, loading, loadMorePosts]);
+  }, [inView, isLoading, loadMorePostList]);
 
   return (
     <>
@@ -98,14 +89,12 @@ const PostList = () => {
         <>
           <PostListStyled>
             {postList.map((post) => (
-              <PostListLi key={post.RECIPE_ID}>
+              <li key={post.RECIPE_ID}>
                 <PostCard post={post} />
-              </PostListLi>
+              </li>
             ))}
           </PostListStyled>
-          <Loading $isLoading={loading}>
-            <span className="material-symbols-rounded">progress_activity</span>
-          </Loading>
+          <LoadingIcon isLoading={isLoading} />
           <div ref={ref}></div>
         </>
       )}

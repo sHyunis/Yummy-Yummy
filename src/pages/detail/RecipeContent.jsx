@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import supabase from "../../../base-camp/supabaseClient";
-import LodingIcon from "./lodingIcon";
+
+import LoadingIcon from "../../components/LoadingIcon";
 
 const RecipeContent = ({ recipeId }) => {
   const [recipeIngredient, setRecipeIngredient] = useState([]);
@@ -38,7 +39,7 @@ const RecipeContent = ({ recipeId }) => {
     fetchData();
   }, [recipeId]);
 
-  if (loading) return <LodingIcon />;
+  if (loading) return <LoadingIcon isLoading={loading} />;
 
   return (
     <StRecipeContentSection>

@@ -44,7 +44,7 @@ const Input = React.forwardRef(
           accept={accept}
           onChange={onChange}
         />
-        {hint !== "" ? <InputHint color={hintColor}>{hint}</InputHint> : null}
+        {hint ? <InputHint color={hintColor}>{hint}</InputHint> : null}
       </InputWrap>
     );
   }
