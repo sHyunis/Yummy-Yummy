@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import supabase from "../../../base-camp/supabaseClient";
+import supabase from "../../../supabaseClient";
 import Swal from "sweetalert2";
 import { CommentWriteDiv, CommentTextarea, Button, Form } from "./detail.styled";
 

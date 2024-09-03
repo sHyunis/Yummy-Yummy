@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import supabase from "../../../base-camp/supabaseClient";
+import supabase from "../../../supabaseClient";
 import Button from "../../components/Button";
 import ProfileImage from "../../components/ProfileImage";
 import ButtonGroup from "./ButtonGroup";

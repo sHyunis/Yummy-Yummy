@@ -1,44 +1,26 @@
 import React from "react";
 import styled from "styled-components";
 import { useAuth } from "../../contexts/AuthContext";
-<<<<<<< HEAD
-import kakaoImg from "../../assets/imgs/kakao-logo.png";
-import googleImg from "../../assets/imgs/google-logo.png";
-import githubImg from "../../assets/imgs/github-logo.png";
-=======
 import kakaoLogo from "../../assets/images/kakao-logo.png";
 import githubLogo from "../../assets/images/github-logo.png";
 import googleLogo from "../../assets/images/google-logo.png";
 
->>>>>>> c083c4e130d55dd05255caa20200a9aaf037474d
 const SocialSign = () => {
   const { signInWithKakao, signInWithGithub, signInWithGoogle } = useAuth();
 
   const Social = [
     {
-<<<<<<< HEAD
-      src: kakaoImg,
-=======
       src: kakaoLogo,
->>>>>>> c083c4e130d55dd05255caa20200a9aaf037474d
       alt: "kakao-logo",
       onClick: signInWithKakao
     },
     {
-<<<<<<< HEAD
-      src: githubImg,
-=======
       src: githubLogo,
->>>>>>> c083c4e130d55dd05255caa20200a9aaf037474d
       alt: "github-logo",
       onClick: signInWithGithub
     },
     {
-<<<<<<< HEAD
-      src: googleImg,
-=======
       src: googleLogo,
->>>>>>> c083c4e130d55dd05255caa20200a9aaf037474d
       alt: "google-logo",
       onClick: signInWithGoogle
     }

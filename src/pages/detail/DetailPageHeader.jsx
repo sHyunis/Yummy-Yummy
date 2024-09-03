@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DetailFootImage from "./DetailFootImage";
-import supabase from "../../../base-camp/supabaseClient";
+import supabase from "../../../supabaseClient";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import LoadingIcon from "../../components/LoadingIcon";

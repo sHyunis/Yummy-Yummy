@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import styled from "styled-components";
-import supabase from "../../../base-camp/supabaseClient";
+import supabase from "../../../supabaseClient";
 import ProfileImage from "../../components/ProfileImage";
 
 const MyPageLeftStyled = styled.div`
