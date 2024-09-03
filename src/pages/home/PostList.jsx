@@ -6,15 +6,26 @@ import { throttle } from "lodash";
 // import loadingIcon from "../../../public/images/loading.png";
 import LoadingIcon from "../../components/LoadingIcon";
 
-const Wrap = styled.div`
-  margin-top: 7rem;
+const PostListStyled = styled.ul`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  column-gap: 2.4rem;
-  row-gap: 3rem;
-  margin-bottom: 3rem;
+  column-gap: var(--spacing);
+  row-gap: 30px;
+  > li {
+    overflow: hidden;
+  }
 `;
+
+// const Wrap = styled.div`
+//   margin-top: 7rem;
+//   width: 100%;
+//   display: grid;
+//   grid-template-columns: repeat(4, 1fr);
+//   column-gap: 2.4rem;
+//   row-gap: 3rem;
+//   margin-bottom: 3rem;
+// `;
 
 // const LoadingWrapper = styled.div`
 //   display: flex;
@@ -87,17 +98,13 @@ const PostList = ({ keyword }) => {
 
   return (
     <>
-      <Wrap>
+      <PostListStyled>
         {postList.map((post) => (
-          <Post
-            key={post.RECIPE_ID}
-            id={post.RECIPE_ID}
-            img={post.RECIPE_IMG}
-            title={post.RECIPE_TITLE}
-            description={post.RECIPE_DESCR}
-          />
+          <li key={post.RECIPE_ID}>
+            <Post id={post.RECIPE_ID} img={post.RECIPE_IMG} title={post.RECIPE_TITLE} description={post.RECIPE_DESCR} />
+          </li>
         ))}
-      </Wrap>
+      </PostListStyled>
       {/* <LoadingWrapper>
         <Loading src={loadingIcon} $visibility={loadingVisibility} />
       </LoadingWrapper> */}

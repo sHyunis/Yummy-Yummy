@@ -18,9 +18,9 @@ const PostListStyled = styled.ul`
   grid-template-columns: repeat(4, 1fr);
   column-gap: var(--spacing);
   row-gap: 30px;
-`;
-const PostListLi = styled.li`
-  overflow: hidden;
+  > li {
+    overflow: hidden;
+  }
 `;
 
 const limit = 8;
@@ -89,9 +89,9 @@ const PostList = () => {
         <>
           <PostListStyled>
             {postList.map((post) => (
-              <PostListLi key={post.RECIPE_ID}>
+              <li key={post.RECIPE_ID}>
                 <PostCard post={post} />
-              </PostListLi>
+              </li>
             ))}
           </PostListStyled>
           <LoadingIcon isLoading={isLoading} />
