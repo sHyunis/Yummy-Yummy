@@ -12,7 +12,7 @@ const InputStyled = styled.input`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 50px;
+  height: ${(props) => (props.$size === "small" ? "40px" : "50px")};
   padding: 10px 16px;
   font-size: 1.6rem;
   font-family: var(--font-family);
@@ -32,7 +32,7 @@ const InputHint = styled.div`
 `;
 
 const Input = React.forwardRef(
-  ({ type = "text", name, value, placeholder, accept, hint, hintColor, onChange, className }, ref) => {
+  ({ type = "text", name, value, placeholder, accept, hint, hintColor, size, onChange, className }, ref) => {
     return (
       <InputWrap className={className}>
         <InputStyled
@@ -42,6 +42,7 @@ const Input = React.forwardRef(
           ref={ref}
           placeholder={placeholder}
           accept={accept}
+          $size={size}
           onChange={onChange}
         />
         {hint ? <InputHint color={hintColor}>{hint}</InputHint> : null}

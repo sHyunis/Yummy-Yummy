@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Post from "./Post";
-import supabase from "../../../base-camp/supabaseClient";
+import supabase from "../../../supabaseClient";
 import { throttle } from "lodash";
 import LoadingIcon from "../../components/LoadingIcon";
 import Button from "../../components/Button";
@@ -21,6 +21,10 @@ const SortButtonWrap = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-bottom: 30px;
+  .material-symbols-rounded {
+    margin-left: -6px;
+    margin-right: 4px;
+  }
 `;
 
 const PostList = ({ keyword }) => {
@@ -81,6 +85,7 @@ const PostList = ({ keyword }) => {
     <>
       <SortButtonWrap>
         <Button
+          height="40px"
           onClick={() => {
             setPostLimit(parseInt((document.documentElement.clientHeight - 450) / 385) * 4 + 4);
             setAscending((prev) => !prev);
@@ -106,6 +111,7 @@ const PostList = ({ keyword }) => {
           </li>
         ))}
       </PostListStyled>
+
       <LoadingIcon isLoading={loadingVisibility} />
     </>
   );

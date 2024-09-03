@@ -1,6 +1,6 @@
 // ChefIntro.js
 import React, { useEffect, useState } from "react";
-import supabase from "../../../base-camp/supabaseClient";
+import supabase from "../../../supabaseClient";
 import LoadingIcon from "../../components/LoadingIcon";
 import { Introduction, StRecipeContentSection, WriteDiv, WriteImg, WriteImgDiv, WriteNickName } from "./detail.styled";
 

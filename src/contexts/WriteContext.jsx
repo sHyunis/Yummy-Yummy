@@ -1,5 +1,5 @@
+import supabase from "../../supabaseClient";
 import { createContext, useEffect, useRef, useState } from "react";
-import supabase from "../../base-camp/supabaseClient";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import { useNavigate, useParams } from "react-router-dom";

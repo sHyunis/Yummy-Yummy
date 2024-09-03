@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const Button = ({ onClick, children, height, fontsize, color }) => {
+const Button = ({ to, onClick, children, height, fontsize, color }) => {
   const bgColorSwitch = (color) => {
     switch (color) {
       case "beige":
@@ -28,8 +29,9 @@ const Button = ({ onClick, children, height, fontsize, color }) => {
   };
 
   return (
-    <ButtonStyled
+    <LinkButtonStyled
       type="button"
+      to={to}
       onClick={onClick}
       $height={height}
       $fontsize={fontsize}
@@ -38,11 +40,11 @@ const Button = ({ onClick, children, height, fontsize, color }) => {
       $textColor={textColorSwitch(color)}
     >
       {children}
-    </ButtonStyled>
+    </LinkButtonStyled>
   );
 };
 
-const ButtonStyled = styled.button`
+const LinkButtonStyled = styled(Link)`
   display: inline-flex;
   align-items: center;
   justify-content: center;

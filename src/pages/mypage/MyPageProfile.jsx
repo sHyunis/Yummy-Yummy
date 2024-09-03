@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import supabase from "../../../base-camp/supabaseClient";
+import supabase from "../../../supabaseClient";
+import Title from "../../components/Title";
 import Button from "../../components/Button";
+import Input from "../../components/Input";
 import ProfileImage from "../../components/ProfileImage";
 import ButtonGroup from "./ButtonGroup";
-import Input from "./Input";
 import Textarea from "./Textarea";
-import MyPageTitle from "./MyPageTitle";
 
 const ProfileImageWrap = styled.div`
   display: flex;
@@ -140,7 +140,7 @@ const MyPageProfile = () => {
 
   return (
     <>
-      <MyPageTitle>프로필 수정</MyPageTitle>
+      <Title>프로필 수정</Title>
 
       {isPasswordConfirm ? (
         <>

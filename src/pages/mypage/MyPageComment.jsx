@@ -1,10 +1,10 @@
 import CommentList from "./CommentList";
-import MyPageTitle from "./MyPageTitle";
+import Title from "../../components/Title";
 
 const MyPageComment = () => {
   return (
     <>
-      <MyPageTitle>내가 작성한 댓글</MyPageTitle>
+      <Title>내가 작성한 댓글</Title>
       <CommentList />
     </>
   );

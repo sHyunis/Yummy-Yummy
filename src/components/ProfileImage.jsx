@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import supabase from "../../base-camp/supabaseClient";
+import supabase from "../../supabaseClient";
 import { useState } from "react";
 import { useEffect } from "react";
 import defaultProfile from "../assets/images/default-profile.jpg";

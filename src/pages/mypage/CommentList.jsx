@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
-import supabase from "../../../base-camp/supabaseClient";
+import supabase from "../../../supabaseClient";
 import CommentCard from "./CommentCard";
 import { useInView } from "react-intersection-observer";
 import LoadingIcon from "../../components/LoadingIcon";
