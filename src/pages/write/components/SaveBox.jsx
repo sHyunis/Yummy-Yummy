@@ -17,7 +17,6 @@ const SaveBox = () => {
           저장하기
         </Button>
       </ButtonSize>
-      ;
     </>
   );
 };
