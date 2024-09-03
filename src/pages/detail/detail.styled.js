@@ -267,6 +267,7 @@ export const CommentTextarea = styled.textarea`
   border-radius: 30px;
   font-size: 20px;
   margin-bottom: 15px;
+
 `;
 
 export const Button = styled.button`

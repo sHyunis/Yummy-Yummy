@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import Swal from "sweetalert2";
 import CommentWrite from "./CommentWrite";
 import LoadingIcon from "../../components/LoadingIcon";
+
 import {
   ButtonDiv,
   CommentDiv,
@@ -120,58 +121,123 @@ const Comments = ({ recipeId }) => {
     setReplyToComment(null);
   };
   const handleDeleteReply = async (replyId) => {
-    const confirmDelete = window.confirm("정말로 대댓글을 삭제하시겠습니까?");
-    if (!confirmDelete) return;
-
-    try {
-      // 대댓글 삭제
-      const { error: deleteReplyError } = await supabase.from("recipe_cmt_cmt").delete().eq("CMT_CMT_ID", replyId);
-
-      if (deleteReplyError) {
-        throw deleteReplyError;
+    // 사용자에게 삭제 확인 알림을 띄움
+    Swal.fire({
+      title: "대댓글을 삭제 하시겠습니까?",
+      text: "이 작업은 되돌릴 수 없습니다!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+      customClass: {
+        popup: "no-global-styles"
       }
+    }).then(async (result) => {
+      // '삭제' 버튼을 눌렀을 때
+      if (result.isConfirmed) {
+        try {
+          // 대댓글 삭제
+          const { error: deleteReplyError } = await supabase.from("recipe_cmt_cmt").delete().eq("CMT_CMT_ID", replyId);
 
-      // 상태 업데이트
-      setComments((prevComments) => ({
-        comments: prevComments.comments,
-        replies: prevComments.replies.filter((reply) => reply.CMT_CMT_ID !== replyId)
-      }));
+          if (deleteReplyError) {
+            throw deleteReplyError;
+          }
 
-      Swal.fire("대댓글이 삭제되었습니다.");
-    } catch (error) {
-      console.error("대댓글 삭제 오류:", error);
-    }
+          // 상태 업데이트
+          setComments((prevComments) => ({
+            comments: prevComments.comments,
+            replies: prevComments.replies.filter((reply) => reply.CMT_CMT_ID !== replyId)
+          }));
+
+          // 삭제 완료 알림
+          Swal.fire({
+            title: "삭제됨!",
+            text: "대댓글이 삭제 되었습니다.",
+            icon: "success",
+            customClass: {
+              popup: "no-global-styles"
+            }
+          });
+        } catch (error) {
+          console.error("대댓글 삭제 오류:", error);
+          // 오류 발생 알림
+          Swal.fire({
+            title: "오류 발생!",
+            text: "대댓글 삭제 중 문제가 발생했습니다.",
+            icon: "error",
+            customClass: {
+              popup: "no-global-styles"
+            }
+          });
+        }
+      } else {
+        return;
+      }
+    });
   };
 
   const handleDeleteComment = async (commentId) => {
-    const confirmDelete = window.confirm("정말로 댓글을 삭제하시겠습니까?");
-    if (!confirmDelete) return;
-
-    try {
-      // 1. 댓글에 달린 모든 대댓글 삭제
-      const { error: deleteRepliesError } = await supabase.from("recipe_cmt_cmt").delete().eq("CMT_ID", commentId);
-
-      if (deleteRepliesError) {
-        throw deleteRepliesError;
+    Swal.fire({
+      title: "댓글을 삭제 하시겠습니까?",
+      text: "이 작업은 되돌릴 수 없습니다!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+      customClass: {
+        popup: "no-global-styles"
       }
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        // '삭제' 버튼을 클릭했을 때
+        try {
+          // 1. 댓글에 달린 모든 대댓글 삭제
+          const { error: deleteRepliesError } = await supabase.from("recipe_cmt_cmt").delete().eq("CMT_ID", commentId); // CMT_ID와 일치하는 대댓글 삭제
 
-      // 2. 댓글 삭제
-      const { error: deleteCommentError } = await supabase.from("recipe_cmt").delete().eq("CMT_ID", commentId);
+          if (deleteRepliesError) {
+            throw deleteRepliesError; // 오류가 발생하면 throw
+          }
 
-      if (deleteCommentError) {
-        throw deleteCommentError;
+          // 2. 댓글 삭제
+          const { error: deleteCommentError } = await supabase.from("recipe_cmt").delete().eq("CMT_ID", commentId); // CMT_ID와 일치하는 댓글 삭제
+
+          if (deleteCommentError) {
+            throw deleteCommentError; // 오류가 발생하면 throw
+          }
+
+          // 상태 업데이트 (삭제된 댓글과 대댓글을 제외)
+          setComments((prevComments) => ({
+            comments: prevComments.comments.filter((comment) => comment.CMT_ID !== commentId),
+            replies: prevComments.replies.filter((reply) => reply.recipe_cmt.CMT_ID !== commentId)
+          }));
+
+          // 삭제 완료 메시지
+          Swal.fire({
+            title: "삭제 완료!",
+            text: "댓글이 삭제되었습니다.",
+            icon: "success",
+            customClass: {
+              popup: "no-global-styles"
+            }
+          });
+        } catch (error) {
+          console.error("댓글 삭제 오류:", error);
+          // 오류 발생 시 알림 표시
+          Swal.fire({
+            title: "오류 발생!",
+            text: "댓글 삭제 중 문제가 발생했습니다.",
+            icon: "error",
+            customClass: {
+              popup: "no-global-styles"
+            }
+          });
+        }
       }
-
-      // 상태 업데이트
-      setComments((prevComments) => ({
-        comments: prevComments.comments.filter((comment) => comment.CMT_ID !== commentId),
-        replies: prevComments.replies.filter((reply) => reply.recipe_cmt.CMT_ID !== commentId)
-      }));
-
-      Swal.fire("댓글이 삭제되었습니다.");
-    } catch (error) {
-      console.error("댓글 삭제 오류:", error);
-    }
+    });
   };
 
   const handleAddComment = (parentCommentId) => {
