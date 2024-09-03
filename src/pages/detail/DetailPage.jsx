@@ -6,7 +6,7 @@ import CookWriter from "./CookWriter";
 import Comments from "./Comments";
 import CommentWrite from "./CommentWrite";
 import { useParams } from "react-router-dom";
-import { Container, DivisionLineDiv } from "./styled";
+import { Container, DivisionLineDiv } from "./detail.styled";
 
 const DetailPage = () => {
   const params = useParams();

@@ -23,7 +23,7 @@ import {
   WriteContent,
   WriteImg,
   WriteImgDiv
-} from "./styled";
+} from "./detail.styled";
 
 const Comments = ({ recipeId }) => {
   const [comments, setComments] = useState({ comments: [], replies: [] });
@@ -105,8 +105,6 @@ const Comments = ({ recipeId }) => {
   const totalPages = Math.ceil(comments.comments.length / commentsPerPage);
 
   const handleUpdateComment = (comment) => {
-    console.log("Updating comment:", comment); // 콘솔 로그 추가
-
     setEditingComment(comment);
     setReplyToComment(null);
   };
@@ -118,7 +116,6 @@ const Comments = ({ recipeId }) => {
   };
 
   const handleUpdateReply = (reply) => {
-    console.log("Updating reply:", reply); // 콘솔 로그 추가
     setEditingComment(reply);
     setReplyToComment(null);
   };

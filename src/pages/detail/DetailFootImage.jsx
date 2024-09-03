@@ -1,5 +1,5 @@
 import React from "react";
-import { StDetailFootImage, StDetailFootMainDiv, StDetailFootText } from "./styled";
+import { StDetailFootImage, StDetailFootMainDiv, StDetailFootText } from "./detail.styled";
 
 const DetailFootImage = ({ recipeInfo }) => {
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import supabase from "../../../base-camp/supabaseClient";
 import Swal from "sweetalert2";
-import { CommentWriteDiv, CommentTextarea, Button, Form } from "./styled";
+import { CommentWriteDiv, CommentTextarea, Button, Form } from "./detail.styled";
 
 const CommentWrite = ({ recipeId, onCommentAdded, initialComment, parentCommentId }) => {
   const [comment, setComment] = useState(initialComment ? initialComment.CMT_CONT : "");

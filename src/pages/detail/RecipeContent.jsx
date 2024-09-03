@@ -9,7 +9,7 @@ import {
   StIngredientDiv,
   StRecipeContentSection,
   StyledH2
-} from "./styled";
+} from "./detail.styled";
 
 const RecipeContent = ({ recipeId }) => {
   const [recipeIngredient, setRecipeIngredient] = useState([]);

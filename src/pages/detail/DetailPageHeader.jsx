@@ -4,7 +4,7 @@ import supabase from "../../../base-camp/supabaseClient";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import LoadingIcon from "../../components/LoadingIcon";
-import { FoodCategory, FoodHeader, FoodTitleH1 } from "./styled";
+import { FoodCategory, FoodHeader, FoodTitleH1 } from "./detail.styled";
 
 const DetailPageHeader = ({ recipeId }) => {
   const [recipeInfo, setRecipeInfo] = useState(null);

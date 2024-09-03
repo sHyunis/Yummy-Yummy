@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import supabase from "../../../base-camp/supabaseClient";
 import LoadingIcon from "../../components/LoadingIcon";
-import { Introduction, StRecipeContentSection, WriteDiv, WriteImg, WriteImgDiv, WriteNickName } from "./styled";
+import { Introduction, StRecipeContentSection, WriteDiv, WriteImg, WriteImgDiv, WriteNickName } from "./detail.styled";
 
 const CookWriter = ({ recipeId }) => {
   const [cookWriter, setCookWriter] = useState([]);
