@@ -11,7 +11,7 @@ const Wrap = styled.div`
 
 const SearchbarWrap = styled.div`
   position: relative;
-  margin: 0 auto;
+  margin: 0 auto 50px;
 `;
 
 const Searchbar = styled.input`

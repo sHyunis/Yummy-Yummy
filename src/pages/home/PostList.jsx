@@ -3,35 +3,23 @@ import styled from "styled-components";
 import Post from "./Post";
 import supabase from "../../../base-camp/supabaseClient";
 import { throttle } from "lodash";
-// import loadingIcon from "../../../public/images/loading.png";
 import LoadingIcon from "../../components/LoadingIcon";
 
-const Wrap = styled.div`
-  margin-top: 7rem;
+const PostListStyled = styled.ul`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  column-gap: 2.4rem;
-  row-gap: 3rem;
-  margin-bottom: 3rem;
+  column-gap: var(--spacing-lg);
+  row-gap: 34px;
+  > li {
+    overflow: hidden;
+  }
 `;
-
-// const LoadingWrapper = styled.div`
-//   display: flex;
-//   justify-content: center;
-// `;
-
-// const Loading = styled.img`
-//   display: ${(props) => props.$visibility};
-//   height: 3rem;
-//   width: 3rem;
-// `;
 
 const PostList = ({ keyword }) => {
   const countPost = parseInt((document.documentElement.scrollHeight - 450) / 385);
   const [postList, setPostList] = useState([]);
   const [postLimit, setPostLimit] = useState(countPost * 4 + 4);
-  // const [loadingVisibility, setLoadingVisibility] = useState("none");
   const [loadingVisibility, setLoadingVisibility] = useState(false);
   const [allPostLength, setAllPostLength] = useState(0);
 
@@ -40,7 +28,6 @@ const PostList = ({ keyword }) => {
     const fetchData = async (limit) => {
       console.log("postLimit", postLimit);
       console.log("allPostLength", allPostLength);
-      // keyword || postLimit - 8 > allPostLength ? setLoadingVisibility("none") : setLoadingVisibility("block");
       keyword || postLimit - 8 > allPostLength ? setLoadingVisibility(false) : setLoadingVisibility(true);
       try {
         let response;
@@ -64,7 +51,6 @@ const PostList = ({ keyword }) => {
       } catch (error) {
         console.log(error);
       } finally {
-        // setLoadingVisibility("none");
         setLoadingVisibility(false);
       }
     };
@@ -87,20 +73,13 @@ const PostList = ({ keyword }) => {
 
   return (
     <>
-      <Wrap>
+      <PostListStyled>
         {postList.map((post) => (
-          <Post
-            key={post.RECIPE_ID}
-            id={post.RECIPE_ID}
-            img={post.RECIPE_IMG}
-            title={post.RECIPE_TITLE}
-            description={post.RECIPE_DESCR}
-          />
+          <li key={post.RECIPE_ID}>
+            <Post id={post.RECIPE_ID} img={post.RECIPE_IMG} title={post.RECIPE_TITLE} description={post.RECIPE_DESCR} />
+          </li>
         ))}
-      </Wrap>
-      {/* <LoadingWrapper>
-        <Loading src={loadingIcon} $visibility={loadingVisibility} />
-      </LoadingWrapper> */}
+      </PostListStyled>
       <LoadingIcon isLoading={loadingVisibility} />
     </>
   );

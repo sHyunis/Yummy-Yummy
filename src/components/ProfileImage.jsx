@@ -47,8 +47,10 @@ const ProfileImage = ({ src, width }) => {
   };
 
   useEffect(() => {
-    checkProfileImage();
-  }, []);
+    if (!profileImage) {
+      checkProfileImage();
+    }
+  }, [profileImage]);
 
   return (
     <ProfileImageWrap width={width}>
