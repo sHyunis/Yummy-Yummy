@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { WriteContext } from "../../../contexts/WriteContext";
 
 const InputStyled = styled.textarea`
-  padding: 10px 15px;
+  padding: 8px 16px;
+  font-size: 1.4rem;
+  font-family: var(--font-family);
+  border: 1px solid var(--gray3-color);
   border-radius: var(--border-radius);
-  border: none;
-  box-shadow: inset 0 0 3px rgb(0, 0, 0, 0.3);
   width: 100%;
   height: 100%;
   resize: none;
