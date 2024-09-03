@@ -1,10 +1,30 @@
-import styled from "styled-components";
 import { useEffect, useState } from "react";
-import supabase from "../../../base-camp/supabaseClient";
+import supabase from "../../../supabaseClient";
 import Button from "../../components/Button";
 import Swal from "sweetalert2";
 import CommentWrite from "./CommentWrite";
 import LoadingIcon from "../../components/LoadingIcon";
+
+import {
+  ButtonDiv,
+  CommentDiv,
+  CommentsMainDiv,
+  CommentWriteNickName,
+  CommentWriteNickNameDiv,
+  PageButton,
+  PaginationDiv,
+  RepliesCommentDiv,
+  RepliesWriteContent,
+  RepliesWriteDiv,
+  RepliesWriteImg,
+  RepliesWriteImgDiv,
+  RepliesWriteNickName,
+  ReplyDiv,
+  StyledH2,
+  WriteContent,
+  WriteImg,
+  WriteImgDiv
+} from "./detail.styled";
 
 const Comments = ({ recipeId }) => {
   const [comments, setComments] = useState({ comments: [], replies: [] });
@@ -86,8 +106,6 @@ const Comments = ({ recipeId }) => {
   const totalPages = Math.ceil(comments.comments.length / commentsPerPage);
 
   const handleUpdateComment = (comment) => {
-    console.log("Updating comment:", comment); // 콘솔 로그 추가
-
     setEditingComment(comment);
     setReplyToComment(null);
   };
@@ -99,63 +117,127 @@ const Comments = ({ recipeId }) => {
   };
 
   const handleUpdateReply = (reply) => {
-    console.log("Updating reply:", reply); // 콘솔 로그 추가
     setEditingComment(reply);
     setReplyToComment(null);
   };
   const handleDeleteReply = async (replyId) => {
-    const confirmDelete = window.confirm("정말로 대댓글을 삭제하시겠습니까?");
-    if (!confirmDelete) return;
-
-    try {
-      // 대댓글 삭제
-      const { error: deleteReplyError } = await supabase.from("recipe_cmt_cmt").delete().eq("CMT_CMT_ID", replyId);
-
-      if (deleteReplyError) {
-        throw deleteReplyError;
+    // 사용자에게 삭제 확인 알림을 띄움
+    Swal.fire({
+      title: "대댓글을 삭제 하시겠습니까?",
+      text: "이 작업은 되돌릴 수 없습니다!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+      customClass: {
+        popup: "no-global-styles"
       }
+    }).then(async (result) => {
+      // '삭제' 버튼을 눌렀을 때
+      if (result.isConfirmed) {
+        try {
+          // 대댓글 삭제
+          const { error: deleteReplyError } = await supabase.from("recipe_cmt_cmt").delete().eq("CMT_CMT_ID", replyId);
 
-      // 상태 업데이트
-      setComments((prevComments) => ({
-        comments: prevComments.comments,
-        replies: prevComments.replies.filter((reply) => reply.CMT_CMT_ID !== replyId)
-      }));
+          if (deleteReplyError) {
+            throw deleteReplyError;
+          }
 
-      Swal.fire("대댓글이 삭제되었습니다.");
-    } catch (error) {
-      console.error("대댓글 삭제 오류:", error);
-    }
+          // 상태 업데이트
+          setComments((prevComments) => ({
+            comments: prevComments.comments,
+            replies: prevComments.replies.filter((reply) => reply.CMT_CMT_ID !== replyId)
+          }));
+
+          // 삭제 완료 알림
+          Swal.fire({
+            title: "삭제됨!",
+            text: "대댓글이 삭제 되었습니다.",
+            icon: "success",
+            customClass: {
+              popup: "no-global-styles"
+            }
+          });
+        } catch (error) {
+          console.error("대댓글 삭제 오류:", error);
+          // 오류 발생 알림
+          Swal.fire({
+            title: "오류 발생!",
+            text: "대댓글 삭제 중 문제가 발생했습니다.",
+            icon: "error",
+            customClass: {
+              popup: "no-global-styles"
+            }
+          });
+        }
+      } else {
+        return;
+      }
+    });
   };
 
   const handleDeleteComment = async (commentId) => {
-    const confirmDelete = window.confirm("정말로 댓글을 삭제하시겠습니까?");
-    if (!confirmDelete) return;
-
-    try {
-      // 1. 댓글에 달린 모든 대댓글 삭제
-      const { error: deleteRepliesError } = await supabase.from("recipe_cmt_cmt").delete().eq("CMT_ID", commentId);
-
-      if (deleteRepliesError) {
-        throw deleteRepliesError;
+    Swal.fire({
+      title: "댓글을 삭제 하시겠습니까?",
+      text: "이 작업은 되돌릴 수 없습니다!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+      customClass: {
+        popup: "no-global-styles"
       }
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        // '삭제' 버튼을 클릭했을 때
+        try {
+          // 1. 댓글에 달린 모든 대댓글 삭제
+          const { error: deleteRepliesError } = await supabase.from("recipe_cmt_cmt").delete().eq("CMT_ID", commentId); // CMT_ID와 일치하는 대댓글 삭제
 
-      // 2. 댓글 삭제
-      const { error: deleteCommentError } = await supabase.from("recipe_cmt").delete().eq("CMT_ID", commentId);
+          if (deleteRepliesError) {
+            throw deleteRepliesError; // 오류가 발생하면 throw
+          }
 
-      if (deleteCommentError) {
-        throw deleteCommentError;
+          // 2. 댓글 삭제
+          const { error: deleteCommentError } = await supabase.from("recipe_cmt").delete().eq("CMT_ID", commentId); // CMT_ID와 일치하는 댓글 삭제
+
+          if (deleteCommentError) {
+            throw deleteCommentError; // 오류가 발생하면 throw
+          }
+
+          // 상태 업데이트 (삭제된 댓글과 대댓글을 제외)
+          setComments((prevComments) => ({
+            comments: prevComments.comments.filter((comment) => comment.CMT_ID !== commentId),
+            replies: prevComments.replies.filter((reply) => reply.recipe_cmt.CMT_ID !== commentId)
+          }));
+
+          // 삭제 완료 메시지
+          Swal.fire({
+            title: "삭제 완료!",
+            text: "댓글이 삭제되었습니다.",
+            icon: "success",
+            customClass: {
+              popup: "no-global-styles"
+            }
+          });
+        } catch (error) {
+          console.error("댓글 삭제 오류:", error);
+          // 오류 발생 시 알림 표시
+          Swal.fire({
+            title: "오류 발생!",
+            text: "댓글 삭제 중 문제가 발생했습니다.",
+            icon: "error",
+            customClass: {
+              popup: "no-global-styles"
+            }
+          });
+        }
       }
-
-      // 상태 업데이트
-      setComments((prevComments) => ({
-        comments: prevComments.comments.filter((comment) => comment.CMT_ID !== commentId),
-        replies: prevComments.replies.filter((reply) => reply.recipe_cmt.CMT_ID !== commentId)
-      }));
-
-      Swal.fire("댓글이 삭제되었습니다.");
-    } catch (error) {
-      console.error("댓글 삭제 오류:", error);
-    }
+    });
   };
 
   const handleAddComment = (parentCommentId) => {
@@ -168,10 +250,10 @@ const Comments = ({ recipeId }) => {
       <div key={comment.CMT_ID}>
         <CommentDiv>
           <WriteImgDiv>
-            <WriteImg src={comment.user_info.USER_IMG_URL} alt="댓글작성자" />
+            <WriteImg src={comment.user_info.USER_IMG_URL} width="100px" height="94px" alt="댓글작성자" />
           </WriteImgDiv>
-          <WriteDiv>
-            <WriteNickName>
+          <CommentWriteNickNameDiv>
+            <CommentWriteNickName>
               {comment.user_info.NICKNAME}
               <ButtonDiv>
                 {comment.USER_ID === userId && (
@@ -182,14 +264,22 @@ const Comments = ({ recipeId }) => {
                 )}
                 {userId && <Button onClick={() => handleAddComment(comment.CMT_ID)}>댓글</Button>}
               </ButtonDiv>
-            </WriteNickName>
+            </CommentWriteNickName>
             <WriteContent>{comment.CMT_CONT}</WriteContent>
-          </WriteDiv>
+          </CommentWriteNickNameDiv>
         </CommentDiv>
 
         {/* 댓글 아래 대댓글 입력 */}
         {replyToComment === comment.CMT_ID && (
           <CommentWrite recipeId={recipeId} onCommentAdded={handleCommentAdded} parentCommentId={replyToComment} />
+        )}
+        {editingComment?.CMT_ID === comment.CMT_ID && (
+          <CommentWrite
+            recipeId={recipeId}
+            onCommentAdded={handleCommentAdded}
+            initialComment={editingComment}
+            parentCommentId={null}
+          />
         )}
 
         {(replies || [])
@@ -235,7 +325,7 @@ const Comments = ({ recipeId }) => {
 
   return (
     <CommentsMainDiv>
-      <StyledH2>댓글</StyledH2>
+      <StyledH2 align="left">댓글</StyledH2>
 
       {currentComments.length > 0 ? (
         <>
@@ -258,158 +348,5 @@ const Comments = ({ recipeId }) => {
     </CommentsMainDiv>
   );
 };
-
-const RepliesWriteImg = styled.img`
-  width: 100px;
-  height: 94px;
-  border-radius: 50%;
-`;
-
-const RepliesWriteDiv = styled.div`
-  padding: 10px 20px;
-  border-radius: 5px;
-  background-color: #fff;
-  width: 800px;
-  min-width: 500px;
-
-  height: auto;
-`;
-
-const RepliesCommentDiv = styled.div`
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  width: 1000px;
-  height: auto;
-  min-height: 100px;
-  justify-content: center;
-  border-radius: 30px;
-  background-color: #f6eed7;
-`;
-
-const RepliesWriteImgDiv = styled.div`
-  padding: 10px;
-  width: auto;
-  height: auto;
-  text-align: center;
-  border-radius: 50%;
-`;
-
-const RepliesWriteNickName = styled.div`
-  display: flex;
-  text-align: left;
-  font-size: 20px;
-  font-weight: bold;
-  padding: 5px;
-  width: auto;
-  height: auto;
-`;
-
-const RepliesWriteContent = styled.div`
-  font-size: 16px;
-  margin-top: 5px;
-`;
-const ReplyDiv = styled.div`
-  margin-left: 120px;
-  margin-bottom: 12px;
-  display: grid;
-  width: 1000px;
-  height: auto;
-  min-height: 100px;
-  justify-content: center;
-  border-radius: 30px;
-  background-color: #f6eed7;
-`;
-
-const PageButton = styled.button`
-  background-color: ${({ $isActive }) => ($isActive ? `var(--yellow-color)` : `var(--gray4-color)`)};
-  border: 1px solid #ddd;
-  color: ${({ $isActive }) => ($isActive ? `var(--gray4-color)` : `var(--gray1-color)`)};
-  padding: 10px 20px;
-  margin: 0 5px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  &:hover {
-    background-color: ${({ $isActive }) => ($isActive ? `var(--yellow-hover-color)` : "#ddd")};
-  }
-`;
-
-const ButtonDiv = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-left: 10px;
-`;
-
-const PaginationDiv = styled.div`
-  margin-left: 60px;
-  margin-top: 20px;
-  text-align: center;
-`;
-
-const WriteDiv = styled.div`
-  padding: 10px 20px;
-  border-radius: 5px;
-  background-color: #fff;
-  width: 900px;
-  min-width: 500px;
-
-  height: auto;
-`;
-
-const WriteNickName = styled.div`
-  display: flex;
-  text-align: left;
-  font-size: 20px;
-  font-weight: bold;
-  padding: 5px;
-  width: auto;
-  height: auto;
-`;
-
-const WriteContent = styled.div`
-  font-size: 16px;
-  margin-top: 5px;
-`;
-
-const WriteImg = styled.img`
-  width: 100px;
-  height: 94px;
-  border-radius: 50%;
-`;
-
-const CommentsMainDiv = styled.main`
-  width: var(--container-width);
-  justify-content: left;
-`;
-const WriteImgDiv = styled.div`
-  padding: 10px;
-  width: auto;
-  height: auto;
-  text-align: center;
-  border-radius: 50%;
-`;
-const CommentDiv = styled.div`
-  margin-left: 60px;
-  margin-bottom: 12px;
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  width: auto;
-  min-width: 700px;
-  height: auto;
-  min-height: 100px;
-  justify-content: center;
-  border-radius: 30px;
-  background-color: #f6eed7;
-`;
-
-const StyledH2 = styled.h2`
-  font-size: 30px;
-  font-weight: bold;
-  text-align: left;
-  margin-bottom: 10px;
-  margin-left: 60px;
-  margin-top: 10px;
-`;
 
 export default Comments;

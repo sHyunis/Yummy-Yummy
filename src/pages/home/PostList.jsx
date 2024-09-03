@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Post from "./Post";
-import supabase from "../../../base-camp/supabaseClient";
+import supabase from "../../../supabaseClient";
 import { throttle } from "lodash";
 import LoadingIcon from "../../components/LoadingIcon";
 import Button from "../../components/Button";
@@ -111,6 +111,7 @@ const PostList = ({ keyword }) => {
           </li>
         ))}
       </PostListStyled>
+
       <LoadingIcon isLoading={loadingVisibility} />
     </>
   );
