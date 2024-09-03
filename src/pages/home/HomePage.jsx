@@ -28,17 +28,31 @@ const SearchICon = styled.div`
   color: var(--yellow-color);
 `;
 
+const ListContainer = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  background-color: var(--beige-color);
+  padding-top: 20px;
+`;
 const HomePage = () => {
   const [inputValue, setInputValue] = useState("");
 
   return (
-    <div className="container">
-      <SearchbarWrap>
-        <Input placeholder="검색어를 입력하세요." value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
-        <SearchICon className="material-symbols-rounded">search</SearchICon>
-      </SearchbarWrap>
-      <PostList keyword={inputValue} />
-    </div>
+    <>
+      <div className="container">
+        <SearchbarWrap>
+          <Input
+            placeholder="검색어를 입력하세요."
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <SearchICon className="material-symbols-rounded">search</SearchICon>
+        </SearchbarWrap>
+      </div>
+      <ListContainer>
+        <PostList keyword={inputValue} />
+      </ListContainer>
+    </>
   );
 };
 

@@ -31,7 +31,12 @@ const SignUpPage = () => {
   useEffect(() => {
     setSuccess("");
     setError("");
+    setPassword("");
+    setConfirmPassword("");
+    setEmail("");
+    setNickname("");
   }, []);
+
   return (
     <>
       <Container className="container">

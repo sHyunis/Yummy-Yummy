@@ -30,7 +30,9 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => {
-      setSession(session ? session.session : null);
+      if (event === "INITIAL_SESSION") {
+        setSession(session ? session.session : null);
+      }
     });
 
     // 초기 로그인 확인
