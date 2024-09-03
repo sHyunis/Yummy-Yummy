@@ -90,12 +90,17 @@ const MyPageLeft = () => {
       data: { user }
     } = await supabase.auth.getUser();
 
-    const { data } = await supabase.from("user_info").select("INTRODUCTION").eq("id", user.id).single();
+    const { data: nicknameData } = await supabase.from("user_info").select("NICKNAME").eq("id", user.id).single();
+    const { data: introductionData } = await supabase
+      .from("user_info")
+      .select("INTRODUCTION")
+      .eq("id", user.id)
+      .single();
 
     if (user) {
       setEmail(user.email);
-      setNickname(user.user_metadata.NICKNAME);
-      setIntroduction(data.INTRODUCTION);
+      setNickname(nicknameData.NICKNAME);
+      setIntroduction(introductionData.INTRODUCTION);
     }
   };
 
