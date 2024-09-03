@@ -1,10 +1,29 @@
-import styled from "styled-components";
-import LodingIcon from "./lodingIcon";
 import { useEffect, useState } from "react";
 import supabase from "../../../base-camp/supabaseClient";
 import Button from "../../components/Button";
 import Swal from "sweetalert2";
 import CommentWrite from "./CommentWrite";
+import LoadingIcon from "../../components/LoadingIcon";
+import {
+  ButtonDiv,
+  CommentDiv,
+  CommentsMainDiv,
+  CommentWriteNickName,
+  CommentWriteNickNameDiv,
+  PageButton,
+  PaginationDiv,
+  RepliesCommentDiv,
+  RepliesWriteContent,
+  RepliesWriteDiv,
+  RepliesWriteImg,
+  RepliesWriteImgDiv,
+  RepliesWriteNickName,
+  ReplyDiv,
+  StyledH2,
+  WriteContent,
+  WriteImg,
+  WriteImgDiv
+} from "./detail.styled";
 
 const Comments = ({ recipeId }) => {
   const [comments, setComments] = useState({ comments: [], replies: [] });
@@ -86,8 +105,6 @@ const Comments = ({ recipeId }) => {
   const totalPages = Math.ceil(comments.comments.length / commentsPerPage);
 
   const handleUpdateComment = (comment) => {
-    console.log("Updating comment:", comment); // 콘솔 로그 추가
-
     setEditingComment(comment);
     setReplyToComment(null);
   };
@@ -99,7 +116,6 @@ const Comments = ({ recipeId }) => {
   };
 
   const handleUpdateReply = (reply) => {
-    console.log("Updating reply:", reply); // 콘솔 로그 추가
     setEditingComment(reply);
     setReplyToComment(null);
   };
@@ -160,6 +176,7 @@ const Comments = ({ recipeId }) => {
 
   const handleAddComment = (parentCommentId) => {
     setReplyToComment(parentCommentId);
+    setEditingComment(null);
   };
 
   const renderComments = (comments, replies) => {
@@ -167,10 +184,10 @@ const Comments = ({ recipeId }) => {
       <div key={comment.CMT_ID}>
         <CommentDiv>
           <WriteImgDiv>
-            <WriteImg src={comment.user_info.USER_IMG_URL} alt="댓글작성자" />
+            <WriteImg src={comment.user_info.USER_IMG_URL} width="100px" height="94px" alt="댓글작성자" />
           </WriteImgDiv>
-          <WriteDiv>
-            <WriteNickName>
+          <CommentWriteNickNameDiv>
+            <CommentWriteNickName>
               {comment.user_info.NICKNAME}
               <ButtonDiv>
                 {comment.USER_ID === userId && (
@@ -181,18 +198,24 @@ const Comments = ({ recipeId }) => {
                 )}
                 {userId && <Button onClick={() => handleAddComment(comment.CMT_ID)}>댓글</Button>}
               </ButtonDiv>
-            </WriteNickName>
+            </CommentWriteNickName>
             <WriteContent>{comment.CMT_CONT}</WriteContent>
-          </WriteDiv>
+          </CommentWriteNickNameDiv>
         </CommentDiv>
-        {(editingComment?.CMT_ID === comment.CMT_ID || replyToComment === comment.CMT_ID) && (
+
+        {/* 댓글 아래 대댓글 입력 */}
+        {replyToComment === comment.CMT_ID && (
+          <CommentWrite recipeId={recipeId} onCommentAdded={handleCommentAdded} parentCommentId={replyToComment} />
+        )}
+        {editingComment?.CMT_ID === comment.CMT_ID && (
           <CommentWrite
             recipeId={recipeId}
             onCommentAdded={handleCommentAdded}
             initialComment={editingComment}
-            parentCommentId={replyToComment === comment.CMT_ID ? comment.CMT_ID : null}
+            parentCommentId={null}
           />
         )}
+
         {(replies || [])
           .filter((reply) => reply.recipe_cmt.CMT_ID === comment.CMT_ID)
           .map((reply) => (
@@ -216,12 +239,14 @@ const Comments = ({ recipeId }) => {
                   <RepliesWriteContent>{reply.CMT_CONT}</RepliesWriteContent>
                 </RepliesWriteDiv>
               </RepliesCommentDiv>
-              {(editingComment?.CMT_CMT_ID === reply.CMT_CMT_ID || replyToComment === reply.recipe_cmt.CMT_ID) && (
+
+              {/* 대댓글 수정*/}
+              {editingComment?.CMT_CMT_ID === reply.CMT_CMT_ID && (
                 <CommentWrite
                   recipeId={recipeId}
                   onCommentAdded={handleCommentAdded}
                   initialComment={editingComment}
-                  parentCommentId={replyToComment === reply.recipe_cmt.CMT_ID ? reply.recipe_cmt.CMT_ID : null}
+                  parentCommentId={reply.recipe_cmt.CMT_ID}
                 />
               )}
             </ReplyDiv>
@@ -230,13 +255,11 @@ const Comments = ({ recipeId }) => {
     ));
   };
 
-  if (loading) {
-    return <LodingIcon />;
-  }
+  if (loading) return <LoadingIcon isLoading={loading} />;
 
   return (
     <CommentsMainDiv>
-      <StyledH2>댓글</StyledH2>
+      <StyledH2 align="left">댓글</StyledH2>
 
       {currentComments.length > 0 ? (
         <>
@@ -259,158 +282,5 @@ const Comments = ({ recipeId }) => {
     </CommentsMainDiv>
   );
 };
-
-const RepliesWriteImg = styled.img`
-  width: 100px;
-  height: 94px;
-  border-radius: 50%;
-`;
-
-const RepliesWriteDiv = styled.div`
-  padding: 10px 20px;
-  border-radius: 5px;
-  background-color: #fff;
-  width: 800px;
-  min-width: 500px;
-
-  height: auto;
-`;
-
-const RepliesCommentDiv = styled.div`
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  width: 1000px;
-  height: auto;
-  min-height: 100px;
-  justify-content: center;
-  border-radius: 30px;
-  background-color: #f6eed7;
-`;
-
-const RepliesWriteImgDiv = styled.div`
-  padding: 10px;
-  width: auto;
-  height: auto;
-  text-align: center;
-  border-radius: 50%;
-`;
-
-const RepliesWriteNickName = styled.div`
-  display: flex;
-  text-align: left;
-  font-size: 20px;
-  font-weight: bold;
-  padding: 5px;
-  width: auto;
-  height: auto;
-`;
-
-const RepliesWriteContent = styled.div`
-  font-size: 16px;
-  margin-top: 5px;
-`;
-const ReplyDiv = styled.div`
-  margin-left: 120px;
-  margin-bottom: 12px;
-  display: grid;
-  width: 1000px;
-  height: auto;
-  min-height: 100px;
-  justify-content: center;
-  border-radius: 30px;
-  background-color: #f6eed7;
-`;
-
-const PageButton = styled.button`
-  background-color: ${({ $isActive }) => ($isActive ? `var(--yellow-color)` : `var(--gray4-color)`)};
-  border: 1px solid #ddd;
-  color: ${({ $isActive }) => ($isActive ? `var(--gray4-color)` : `var(--gray1-color)`)};
-  padding: 10px 20px;
-  margin: 0 5px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  &:hover {
-    background-color: ${({ $isActive }) => ($isActive ? `var(--yellow-hover-color)` : "#ddd")};
-  }
-`;
-
-const ButtonDiv = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-left: 10px;
-`;
-
-const PaginationDiv = styled.div`
-  margin-left: 60px;
-  margin-top: 20px;
-  text-align: center;
-`;
-
-const WriteDiv = styled.div`
-  padding: 10px 20px;
-  border-radius: 5px;
-  background-color: #fff;
-  width: 900px;
-  min-width: 500px;
-
-  height: auto;
-`;
-
-const WriteNickName = styled.div`
-  display: flex;
-  text-align: left;
-  font-size: 20px;
-  font-weight: bold;
-  padding: 5px;
-  width: auto;
-  height: auto;
-`;
-
-const WriteContent = styled.div`
-  font-size: 16px;
-  margin-top: 5px;
-`;
-
-const WriteImg = styled.img`
-  width: 100px;
-  height: 94px;
-  border-radius: 50%;
-`;
-
-const CommentsMainDiv = styled.main`
-  width: var(--container-width);
-  justify-content: left;
-`;
-const WriteImgDiv = styled.div`
-  padding: 10px;
-  width: auto;
-  height: auto;
-  text-align: center;
-  border-radius: 50%;
-`;
-const CommentDiv = styled.div`
-  margin-left: 60px;
-  margin-bottom: 12px;
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  width: auto;
-  min-width: 700px;
-  height: auto;
-  min-height: 100px;
-  justify-content: center;
-  border-radius: 30px;
-  background-color: #f6eed7;
-`;
-
-const StyledH2 = styled.h2`
-  font-size: 30px;
-  font-weight: bold;
-  text-align: left;
-  margin-bottom: 10px;
-  margin-left: 60px;
-  margin-top: 10px;
-`;
 
 export default Comments;

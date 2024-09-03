@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import searchIcon from "../../../public/images/search.svg";
 import PostList from "./PostList";
 import { useState } from "react";
 
@@ -12,7 +11,7 @@ const Wrap = styled.div`
 
 const SearchbarWrap = styled.div`
   position: relative;
-  margin: 0 auto;
+  margin: 0 auto 50px;
 `;
 
 const Searchbar = styled.input`
@@ -23,10 +22,11 @@ const Searchbar = styled.input`
   border-radius: 24px;
 `;
 
-const SearchImg = styled.img`
+const SearchICon = styled.div`
   position: absolute;
   right: 1.2rem;
-  top: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const HomePage = () => {
@@ -40,7 +40,7 @@ const HomePage = () => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <SearchImg src={searchIcon} alt="" />
+        <SearchICon className="material-symbols-rounded">search</SearchICon>
       </SearchbarWrap>
       <PostList keyword={inputValue} />
     </Wrap>

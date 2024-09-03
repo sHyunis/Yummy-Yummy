@@ -28,11 +28,11 @@ const InputStyled = styled.input`
 const InputHint = styled.div`
   padding: 0 16px;
   font-size: 1.4rem;
-  color: ${(props) => props.color ? props.color : "rgba(0, 0, 0, 0.5)"};
+  color: ${(props) => (props.color ? props.color : "rgba(0, 0, 0, 0.5)")};
 `;
 
 const Input = React.forwardRef(
-  ({ type = "text", name, value, placeholder, hint, hintColor, onChange, className }, ref) => {
+  ({ type = "text", name, value, placeholder, accept, hint, hintColor, onChange, className }, ref) => {
     return (
       <InputWrap className={className}>
         <InputStyled
@@ -41,13 +41,13 @@ const Input = React.forwardRef(
           value={value}
           ref={ref}
           placeholder={placeholder}
+          accept={accept}
           onChange={onChange}
-          
         />
         {hint !== "" ? <InputHint color={hintColor}>{hint}</InputHint> : null}
       </InputWrap>
     );
-  },
+  }
 );
 
 Input.displayName = "Input";

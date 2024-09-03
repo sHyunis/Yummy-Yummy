@@ -1,28 +1,28 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const PostCardStyled = styled.div`
+const CardStyled = styled.div`
   display: flex;
   flex-direction: column;
   cursor: pointer;
 `;
 
-const PostImage = styled.img`
+const Image = styled.img`
   width: 100%;
   aspect-ratio: 1/1;
   background-color: var(--gray4-color);
   border-radius: var(--border-radius);
+  object-fit: cover;
 `;
 
-const PostContentWrap = styled.div`
+const ContentWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
   margin-top: 16px;
 `;
 
-const PostTitle = styled.h2`
+const Title = styled.h2`
   font-size: 1.8rem;
   font-weight: 700;
   text-align: center;
@@ -32,7 +32,7 @@ const PostTitle = styled.h2`
   word-break: break-all;
 `;
 
-const PostDescription = styled.p`
+const Description = styled.p`
   color: var(--gray2-color);
   font-size: 1.4rem;
   text-overflow: ellipsis;
@@ -43,19 +43,16 @@ const PostDescription = styled.p`
   -webkit-box-orient: vertical;
 `;
 
-const PostCard = ({ post }) => {
-  const { RECIPE_ID, RECIPE_IMG, RECIPE_TITLE, RECIPE_DESCR } = post;
-  const navigate = useNavigate();
-
+const Card = ({ src, title, description, onClick }) => {
   return (
-    <PostCardStyled onClick={() => navigate(`/detail/${RECIPE_ID}`)}>
-      <PostImage src={RECIPE_IMG} />
-      <PostContentWrap>
-        <PostTitle>{RECIPE_TITLE}</PostTitle>
-        <PostDescription>{RECIPE_DESCR}</PostDescription>
-      </PostContentWrap>
-    </PostCardStyled>
+    <CardStyled onClick={onClick}>
+      <Image src={src} />
+      <ContentWrap>
+        <Title>{title}</Title>
+        <Description>{description}</Description>
+      </ContentWrap>
+    </CardStyled>
   );
 };
 
-export default PostCard;
+export default Card;

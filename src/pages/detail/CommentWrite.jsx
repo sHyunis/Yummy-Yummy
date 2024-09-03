@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import supabase from "../../../base-camp/supabaseClient";
 import Swal from "sweetalert2";
+import { CommentWriteDiv, CommentTextarea, Button, Form } from "./detail.styled";
 
 const CommentWrite = ({ recipeId, onCommentAdded, initialComment, parentCommentId }) => {
   const [comment, setComment] = useState(initialComment ? initialComment.CMT_CONT : "");
@@ -86,44 +86,5 @@ const CommentWrite = ({ recipeId, onCommentAdded, initialComment, parentCommentI
     </CommentWriteDiv>
   );
 };
-
-const Form = styled.form`
-  display: flex;
-  align-items: center;
-`;
-
-const CommentTextarea = styled.textarea`
-  width: 880px;
-  height: auto;
-  padding: 10px;
-  min-height: 160px;
-  resize: none;
-  white-space: normal;
-  overflow-wrap: break-word;
-  box-sizing: border-box;
-  background-color: var(--beige-color);
-  border: 1px solid var(--gray2-color);
-  border-radius: 30px;
-  font-size: 20px;
-  margin-bottom: 15px;
-`;
-
-const Button = styled.button`
-  width: 150px;
-  height: 155px;
-  text-align: center;
-  margin-left: 25px;
-  font-size: 20px;
-  background-color: var(--green-color);
-  border-radius: 30px;
-  color: var(--beige-color);
-  cursor: pointer;
-  border: none;
-`;
-
-const CommentWriteDiv = styled.div`
-  margin-left: 60px;
-  margin-bottom: 20px;
-`;
 
 export default CommentWrite;

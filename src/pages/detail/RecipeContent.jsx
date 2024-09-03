@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import supabase from "../../../base-camp/supabaseClient";
-import LodingIcon from "./lodingIcon";
+import LoadingIcon from "../../components/LoadingIcon";
+import {
+  IngredientCard,
+  IngredientDiv,
+  LineDiv,
+  RecipeFlowPTag,
+  StIngredientDiv,
+  StRecipeContentSection,
+  StyledH2
+} from "./detail.styled";
 
 const RecipeContent = ({ recipeId }) => {
   const [recipeIngredient, setRecipeIngredient] = useState([]);
@@ -38,7 +46,7 @@ const RecipeContent = ({ recipeId }) => {
     fetchData();
   }, [recipeId]);
 
-  if (loading) return <LodingIcon />;
+  if (loading) return <LoadingIcon isLoading={loading} />;
 
   return (
     <StRecipeContentSection>
@@ -74,47 +82,4 @@ const RecipeContent = ({ recipeId }) => {
     </StRecipeContentSection>
   );
 };
-const RecipeFlowPTag = styled.p`
-  margin-bottom: 10px;
-`;
-const StyledH2 = styled.h2`
-  font-size: 30px;
-  font-weight: bold;
-  text-align: center;
-`;
-
-const StIngredientDiv = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: auto;
-`;
-
-const LineDiv = styled.div`
-  padding: 5px;
-  border-bottom: 2px solid var(--yellow-color);
-  margin-bottom: 20px;
-`;
-
-const IngredientDiv = styled.div`
-  padding: 10px;
-  text-align: left;
-`;
-
-const StRecipeContentSection = styled.div`
-  width: var(--container-width);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  align-items: start;
-`;
-
-const IngredientCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  border: 1px solid #ccc;
-  margin: 5px;
-  border-radius: 5px;
-`;
-
 export default RecipeContent;
