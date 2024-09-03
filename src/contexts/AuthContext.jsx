@@ -14,15 +14,14 @@ export const AuthProvider = ({ children }) => {
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [signIn, setSignIn] = useState(false);
+  const [session, setSession] = useState(null);
 
   const navigate = useNavigate();
 
   // user 로그인 상태 확인
   const checkSignIn = async () => {
     const { data: session } = await supabase.auth.getSession();
-    const isSignIn = !!session?.session;
-    setSignIn(isSignIn);
+    setSession(session);
 
     // 로그인 상태확인 후 초기화
     setSuccess("");
@@ -30,8 +29,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // 로그인 확인
+    const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => setSession(session));
+    // 초기 로그인 확인
     checkSignIn();
+
+    return () => {
+      subscription.unsubscribe();
+    }; // 사용하지 않을 때 메모리 효율적 처리 (클린업함수)
   }, []);
 
   // user 회원가입
@@ -88,7 +92,7 @@ export const AuthProvider = ({ children }) => {
   // user 로그아웃
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    setSignIn(false); // 로그아웃 후 로그인 상태 초기화
+
     navigate("/"); // 홈으로 이동
   };
 
@@ -148,7 +152,7 @@ export const AuthProvider = ({ children }) => {
         handleSignUp,
         handleSignIn,
         handleLogout,
-        signIn,
+        session,
         checkSignIn,
         signInWithKakao,
         signInWithGithub,
