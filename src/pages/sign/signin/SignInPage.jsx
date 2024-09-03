@@ -18,6 +18,8 @@ const SignInPage = () => {
   useEffect(() => {
     setError("");
     setSuccess("");
+    setPassword("");
+    setEmail();
   }, []);
   return (
     <Container>

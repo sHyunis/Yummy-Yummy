@@ -108,7 +108,7 @@ const PostList = ({ keyword }) => {
   }, [postLimit, keyword, ascending, category]);
 
   return (
-    <>
+    <div className="container">
       <SortButtonWrap>
         <SelectBox
           onChange={(e) => {
@@ -153,7 +153,7 @@ const PostList = ({ keyword }) => {
       </PostListStyled>
 
       <LoadingIcon isLoading={loadingVisibility} />
-    </>
+    </div>
   );
 };
 

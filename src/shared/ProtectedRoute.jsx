@@ -9,13 +9,15 @@ const ProtectedRoute = ({ element }) => {
   const [message, setMessage] = useState(false);
   const [redirect, setRedirect] = useState(false);
   // session(로그인) 상태이면 해당 element로 이동 session 상태가 아니면 sign-in 페이지로 이동
+
   useEffect(() => {
+    console.log(session);
     if (!session) {
       // 사용자가 로그인하지 않았으면 메세지 표시
       setMessage(true);
       const timer = setTimeout(() => {
         setRedirect(true);
-      }, 3000); // 3초 후 로그인페이지 이동
+      }, 2000); // 2초 후 로그인페이지 이동
 
       return () => clearTimeout(timer); // 타이머를 정리
     } else {
