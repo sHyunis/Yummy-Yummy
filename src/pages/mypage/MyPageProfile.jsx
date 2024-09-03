@@ -17,11 +17,15 @@ const ProfileImageWrap = styled.div`
     width: calc(100% - 100px - var(--spacing-lg));
   }
 `;
-const TextareaWrap = styled.div`
+const InputWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing);
   padding-top: var(--spacing-lg);
 `;
 
 const MyPageProfile = () => {
+  const [nickname, setNickname] = useState("");
   const [introduction, setIntroduction] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [imageFile, setImageFile] = useState("");
@@ -32,7 +36,20 @@ const MyPageProfile = () => {
     return fileName.split(".").pop();
   }
 
-  // 기존 유저 소개글
+  // 기존 닉네임
+  const userNickname = async () => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    const { data } = await supabase.from("user_info").select("NICKNAME").eq("id", user.id).single();
+
+    if (user && data) {
+      setNickname(data.NICKNAME);
+    }
+  };
+
+  // 기존 소개글
   const userIntroduction = async () => {
     const {
       data: { user }
@@ -46,6 +63,7 @@ const MyPageProfile = () => {
   };
 
   useEffect(() => {
+    userNickname();
     userIntroduction();
   }, []);
 
@@ -63,6 +81,12 @@ const MyPageProfile = () => {
       // 파일정보 imageFile에 저장
       setImageFile(file);
     }
+  };
+
+  // 닉네임 수정
+  const handleChangeNickname = (e) => {
+    const { value } = e.target;
+    setNickname(value);
   };
 
   // 소개글 수정
@@ -99,6 +123,18 @@ const MyPageProfile = () => {
       }
     }
 
+    // 닉네임 supabase에 업데이트
+    if (nickname) {
+      const { error: nicknameError } = await supabase
+        .from("user_info")
+        .update({ NICKNAME: nickname })
+        .eq("id", user.id);
+
+      if (nicknameError) {
+        console.error("Error:", nicknameError);
+      }
+    }
+
     // 소개글 supabase에 업데이트
     if (introduction) {
       const { error: introductionError } = await supabase
@@ -129,9 +165,10 @@ const MyPageProfile = () => {
           onChange={handleChangeImageUrl}
         />
       </ProfileImageWrap>
-      <TextareaWrap>
+      <InputWrap>
+        <Input value={nickname} placeholder="닉네임을 입력해주세요." onChange={handleChangeNickname} />
         <Textarea value={introduction} placeholder="소개글을 입력해주세요." onChange={handleChangeIntroduction} />
-      </TextareaWrap>
+      </InputWrap>
       <ButtonGroup>
         <Button height="50px" onClick={handleSaveProfile}>
           확인
