@@ -94,7 +94,7 @@ const MyPageLeft = () => {
 
     if (user) {
       setEmail(user.email);
-      setNickname(user.user_metadata.nickname);
+      setNickname(user.user_metadata.NICKNAME);
       setIntroduction(data.INTRODUCTION);
     }
   };
