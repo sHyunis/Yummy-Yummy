@@ -153,6 +153,64 @@ useEffect, navigate, Router를 사용하여 로그인 한 사용자와 로그인
   - 댓글에 대댓글 가능
   - 댓글 작성자만 수정/삭제 버튼 활성화
   - 로그인한 사람만 대댓글 버튼 활성화
+```
+const handleDeleteReply = async (replyId) => {
+  // 사용자에게 삭제 확인 알림을 띄움
+  Swal.fire({
+    title: "대댓글을 삭제 하시겠습니까?",
+    text: "이 작업은 되돌릴 수 없습니다!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "삭제",
+    cancelButtonText: "취소",
+    customClass: {
+      popup: "no-global-styles"
+    }
+  }).then(async (result) => {
+    // 삭제 버튼을 눌렀을 때
+    if (result.isConfirmed) {
+      try {
+        // 대댓글 삭제
+        const { error: deleteReplyError } = await supabase.from("recipe_cmt_cmt").delete().eq("CMT_CMT_ID", replyId);
+
+        if (deleteReplyError) {
+          throw deleteReplyError;
+        }
+
+        // 상태 업데이트
+        setComments((prevComments) => ({
+          comments: prevComments.comments,
+          replies: prevComments.replies.filter((reply) => reply.CMT_CMT_ID !== replyId)
+        }));
+
+        // 삭제 완료 알림
+        Swal.fire({
+          title: "삭제됨!",
+          text: "대댓글이 삭제 되었습니다.",
+          icon: "success",
+          customClass: {
+            popup: "no-global-styles"
+          }
+        });
+      } catch (error) {
+        console.error("대댓글 삭제 오류:", error);
+        // 오류 발생 알림
+        Swal.fire({
+          title: "오류 발생!",
+          text: "대댓글 삭제 중 문제가 발생했습니다.",
+          icon: "error",
+          customClass: {
+            popup: "no-global-styles"
+          }
+        });
+      }
+    }
+  });
+};
+```
+댓글과 대댓글 삭제를 할때 사용자에게 삭제 확인을 받는 알림을 띄워주고 삭제 또는 취소를 할 수 있도록 해주고 삭제를 하면 UI를 갱신해줘서 이용하기 편하게 해줬습니다.
 
 #### 프로필 수정
 - **프로필 정보 관리:** 사용자가 프로필 이미지, 닉네임, 이메일, 소개글을 확인하고 수정할 수 있도록 구현했습니다.
