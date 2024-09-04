@@ -28,6 +28,7 @@ const ProtectedRoute = ({ element }) => {
       setMessage(false);
       setRedirect(false);
     }
+    setIsLoading(false);
   }, [session]);
 
   if (redirect) {

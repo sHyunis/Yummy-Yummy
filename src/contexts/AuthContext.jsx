@@ -1,4 +1,3 @@
-// AuthContext.js
 import React, { createContext, useState, useContext, useEffect } from "react";
 import supabase from "../../supabaseClient";
 import { useNavigate } from "react-router-dom";
@@ -55,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     // 회원가입
-    const { data, error } = await supabase.auth.signUp({
+    const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -66,14 +65,27 @@ export const AuthProvider = ({ children }) => {
       }
     });
 
-    if (error) {
-      setError("회원가입 실패: " + error.message);
+    if (signUpError) {
+      setError("회원가입 실패: " + signUpError.message);
       setSuccess("");
       return;
-    } else {
-      setError("");
-      setSuccess("회원가입 성공!");
+    }
+
+    // 자동 로그인
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (signInError) {
+      setError("자동 로그인 실패: " + signInError.message);
+      setSuccess("회원가입 성공! 로그인 페이지로 이동해주세요.");
       navigate("/sign-in");
+    } else {
+      await checkSignIn(); // 세션 정보 갱신
+      setError("");
+      setSuccess("회원가입 및 자동 로그인 성공!");
+      navigate("/"); // 홈으로 이동
     }
   };
 
@@ -88,9 +100,9 @@ export const AuthProvider = ({ children }) => {
       setError("로그인 실패: " + error.message);
       setSuccess("");
     } else {
+      await checkSignIn();
       setSuccess("로그인 성공!");
       setError("");
-      await checkSignIn();
       navigate("/");
     }
   };
@@ -117,7 +129,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Gibhub로 로그인
+  // Github로 로그인
   const signInWithGithub = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github"
@@ -130,7 +142,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  //
+  // Google로 로그인
   const signInWithGoogle = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google"
