@@ -72,6 +72,9 @@ export const ButtonDiv = styled.div`
   gap: 8px;
   align-items: center;
   margin-left: 10px;
+  position: absolute;
+  right: 5%;
+  bottom: 7%;
 `;
 export const PaginationDiv = styled.div`
   margin-left: 60px;
@@ -109,6 +112,7 @@ export const CommentDiv = styled.div`
   justify-content: center;
   border-radius: 30px;
   background-color: #f6eed7;
+  position: relative;
 `;
 export const StyledH2 = styled.h2`
   font-size: 30px;
