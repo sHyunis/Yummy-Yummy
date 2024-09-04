@@ -191,12 +191,11 @@ export const WriteProvider = ({ children }) => {
     const file = fileInputRef.current.files[0];
     const fileName = `${Date.now()}_${file.name}`;
 
-    await supabase.storage
+    const { data, error } = await supabase.storage
       .from("foodimg") // 버킷 이름 변경
-      .upload(`${new Date().getTime()}-${fileName}`, file);
+      .upload(`images/${fileName}`, file);
 
-    const uploadedImageUrl = supabase.storage.from("foodimg").getPublicUrl(`${new Date().getTime()}-${fileName}`)
-      .data.publicUrl;
+    const uploadedImageUrl = supabase.storage.from("foodimg").getPublicUrl(`images/${fileName}`).data.publicUrl;
 
     if (path === "edit") {
       const updateRecipeCont = recipeContGroups.map((cont, index) => ({
