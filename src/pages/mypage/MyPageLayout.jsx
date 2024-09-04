@@ -9,13 +9,19 @@ const MyPageLayoutContainer = styled.div`
   gap: 50px;
   padding-left: 0 !important;
 `;
+const MyPageContainer = styled.div`
+  width: 100%;
+  background-color: var(--beige-color);
+`;
 
 const MyPageLayout = ({ children }) => {
   return (
-    <MyPageLayoutContainer className="container">
-      <MyPageLeft />
-      <MyPageRight>{children}</MyPageRight>
-    </MyPageLayoutContainer>
+    <MyPageContainer>
+      <MyPageLayoutContainer className="container">
+        <MyPageLeft />
+        <MyPageRight>{children}</MyPageRight>
+      </MyPageLayoutContainer>
+    </MyPageContainer>
   );
 };
 

@@ -22,24 +22,32 @@ const Title = styled.p`
   padding-bottom: 30px;
   padding-left: 60px;
   border-bottom: 5px solid var(--yellow-color);
+  padding-top: 30px;
 `;
 
+const WriteContainer = styled.div`
+  width: 100%;
+  min-height: 95vh;
+  background-color: var(--beige-color);
+`;
 const EditPage = () => {
   return (
     <WriteProvider>
-      <MainContainer>
-        <Title>나만의 레시피 수정하기</Title>
-        <Content>
-          <RecipeInfo />
-        </Content>
-        <Content>
-          <Ingredients />
-          <RecipeCont />
-        </Content>
-        <Content>
-          <SaveBox />
-        </Content>
-      </MainContainer>
+      <WriteContainer>
+        <MainContainer>
+          <Title>나만의 레시피 수정하기</Title>
+          <Content>
+            <RecipeInfo />
+          </Content>
+          <Content>
+            <Ingredients />
+            <RecipeCont />
+          </Content>
+          <Content>
+            <SaveBox />
+          </Content>
+        </MainContainer>
+      </WriteContainer>
     </WriteProvider>
   );
 };

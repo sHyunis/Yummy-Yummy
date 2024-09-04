@@ -41,8 +41,8 @@ const NavLink = styled(Link)`
 const Contents = styled.main`
   position: relative;
   flex: 1 0 auto;
-  padding: 50px 0;
-  ${(props) => (props.$isMyPage ? "display:flex;" : "")};
+  /* padding: 50px 0; */
+  ${(props) => (props.$isMyPage ? "display:flex;" : "")}
 `;
 
 const LogoutButton = styled.button`
@@ -62,6 +62,8 @@ const FooterStyled = styled.footer`
   font-size: 1.2rem;
   text-align: center;
   border-top: 1px solid var(--gray3-color);
+  background-color: var(--green-color);
+  color: white;
 `;
 
 export const Header = () => {

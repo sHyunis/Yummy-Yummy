@@ -115,8 +115,8 @@ export const StyledH2 = styled.h2`
   font-weight: bold;
   text-align: ${(props) => props.align || "center"};
   margin-bottom: ${(props) => (props.align === "left" ? "10px" : "0")};
-  margin-left: ${(props) => (props.align === "left" ? "60px" : "0")};   
-  margin-top: ${(props) => (props.align === "left" ? "10px" : "0")};  
+  margin-left: ${(props) => (props.align === "left" ? "60px" : "0")};
+  margin-top: ${(props) => (props.align === "left" ? "10px" : "0")};
 `;
 export const WriteNickName = styled.p`
   text-align: left;
@@ -139,7 +139,6 @@ export const Introduction = styled.p`
   padding: 10px;
 `;
 
-
 export const WriteImg = styled.img`
   width: ${(props) => props.width || "100px"};
   height: ${(props) => props.height || "94px"};
@@ -161,10 +160,13 @@ export const StDetailFootImage = styled.img`
   max-width: auto;
   height: 400px;
   object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 1rem;
 `;
 
 export const StDetailFootText = styled.p`
   font-family: var(--font-family);
+  font-weight: 500;
   margin-top: 16px;
   color: #333;
   font-size: 16px;
@@ -185,9 +187,9 @@ export const FoodCategory = styled.p`
   margin-top: 15px;
   margin-bottom: 10px;
   flex-shrink: 0;
-  border-radius: 30px;
-  background-color: #d9d9d9;
-  color: rgba(0, 0, 0, 0.7);
+  border-radius: var(--border-radius);
+  background-color: var(--green-color);
+  color: white;
   text-align: center;
   font-family: Inter;
   font-size: 20px;
@@ -205,15 +207,15 @@ export const FoodTitleH1 = styled.h1`
   font-family: Inter;
   font-size: 56px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
   line-height: normal;
   width: var(--container-width);
+  margin: 20px;
 `;
 
 export const RecipeFlowPTag = styled.p`
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 `;
-
 
 export const StIngredientDiv = styled.div`
   display: grid;
@@ -244,7 +246,7 @@ export const IngredientCard = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--green-color);
   margin: 5px;
   border-radius: 5px;
 `;
@@ -256,7 +258,6 @@ export const Form = styled.form`
 export const CommentTextarea = styled.textarea`
   width: 880px;
   height: auto;
-  padding: 10px;
   min-height: 160px;
   resize: none;
   white-space: normal;
@@ -264,28 +265,28 @@ export const CommentTextarea = styled.textarea`
   box-sizing: border-box;
   background-color: var(--beige-color);
   border: 1px solid var(--gray2-color);
-  border-radius: 30px;
+  border-radius: var(--border-radius);
   font-size: 20px;
-  margin-bottom: 15px;
-
+  text-indent: 1rem;
+  padding: 1rem;
 `;
 
 export const Button = styled.button`
   width: 150px;
-  height: 155px;
+  height: 160px;
   text-align: center;
   margin-left: 25px;
   font-size: 20px;
   background-color: var(--green-color);
-  border-radius: 30px;
+  border-radius: var(--border-radius);
   color: var(--beige-color);
   cursor: pointer;
   border: none;
 `;
 
 export const CommentWriteDiv = styled.div`
-align-items: center;
-text-align: center;
+  align-items: center;
+  text-align: center;
   margin-left: 60px;
   margin-bottom: 20px;
 `;
@@ -301,11 +302,12 @@ export const CommentWriteNickNameDiv = styled.div`
 
 export const Container = styled.div`
   width: var(--container-width);
-  background-color: var(--gray4-color);
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom: 2px solid var(--green-color);
+  padding-bottom: 30px;
 `;
 
 export const DivisionLineDiv = styled.div`
@@ -315,4 +317,9 @@ export const DivisionLineDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const DetailContainer = styled.div`
+  width: 100%;
+  background-color: var(--beige-color);
 `;

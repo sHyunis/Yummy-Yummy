@@ -48,7 +48,7 @@ const SignInPage = () => {
           <Button height="40px" onClick={handleSignIn}>
             로그인
           </Button>
-          <LinkButton to="/sign-up" height="40px" color="beige">
+          <LinkButton to="/sign-up" height="40px" color="yellow">
             회원가입
           </LinkButton>
         </ButtonBox>
@@ -62,11 +62,16 @@ const SignInPage = () => {
 };
 
 const Container = styled.div`
-  margin: 0 auto;
+  width: 100%;
+  min-height: 85vh;
+  margin: 0px auto;
+  padding-top: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: var(--beige-color);
+  gap: 40px;
 `;
 
 const LoginWrap = styled.div`
