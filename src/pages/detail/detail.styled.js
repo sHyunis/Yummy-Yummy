@@ -12,6 +12,7 @@ export const RepliesWriteDiv = styled.div`
   width: 800px;
   min-width: 500px;
   height: auto;
+  position: relative;
 `;
 export const RepliesCommentDiv = styled.div`
   display: grid;
@@ -74,7 +75,7 @@ export const ButtonDiv = styled.div`
   margin-left: 10px;
   position: absolute;
   right: 5%;
-  bottom: 7%;
+  bottom: 10%;
 `;
 export const PaginationDiv = styled.div`
   margin-left: 60px;
@@ -293,6 +294,7 @@ export const CommentWriteDiv = styled.div`
   text-align: center;
   margin-left: 60px;
   margin-bottom: 20px;
+  position: relative;
 `;
 
 export const CommentWriteNickNameDiv = styled.div`
