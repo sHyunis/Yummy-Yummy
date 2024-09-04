@@ -128,6 +128,20 @@ useEffect, navigate, Router를 사용하여 로그인 한 사용자와 로그인
 - 검색창에 키워드를 입력하면 게시물 제목에 그 키워드가 포함된 것만 화면에 불러옴
 - 게시물을 최신 등록순과 예전 등록순으로 정렬
 - 카테고리별로 게시물을 필터링
+```
+try {
+      let response;
+      if (keyword) {
+        response = await supabase
+        .from("recipe_info")
+        .select("*")
+        .order("created_at", { ascending: ascending });
+
+        const filteredData = response.data.filter((post) =>
+          post.RECIPE_TITLE.replace(/\s/gi, "").includes(keyword.replace(/\s/gi, ""))
+        );
+```
+검색창에 input값이 존재하면 테이블에서 가져온 데이터 중 게시물 제목 필드에 input값이 포함된 것만 filter 메서드로 받아냄
 
 #### 레시피 상세정보
 - 카테고리
