@@ -82,6 +82,26 @@
 ---
 
 ## 🗂️ 기능 설명
+#### 메인 페이지
+- 등록된 게시물 불러오기(페이지 맨 밑으로 스크롤시 다음 게시물을 불러옴)
+- 검색창에 키워드를 입력하면 게시물 제목에 그 키워드가 포함된 것만 화면에 불러옴
+- 게시물을 최신 등록순과 예전 등록순으로 정렬
+- 카테고리별로 게시물을 필터링
+``` javascript
+try {
+      let response;
+      if (keyword) {
+        response = await supabase
+        .from("recipe_info")
+        .select("*")
+        .order("created_at", { ascending: ascending });
+
+        const filteredData = response.data.filter((post) =>
+          post.RECIPE_TITLE.replace(/\s/gi, "").includes(keyword.replace(/\s/gi, ""))
+        );
+```
+검색창에 input값이 존재하면 테이블에서 가져온 데이터 중 게시물 제목 필드에 input값이 포함된 것만 filter 메서드로 받아냄
+
 #### 로그인
 - OAuth2 소셜로그인 (Kakao, Google, Github)
 - 일반 이메일 계정 로그인 (간편 회원가입 후)
@@ -99,7 +119,7 @@
 #### 로그인 한 사용자와 하지 않은 사용자의 페이지 접근성 관리
 - (로그인 한 사용자) 모든 페이지 접근가능
 - (하지 않은 사용자) 마이페이지, 레시피 작성 페이지 접근 불가능 => 로그인 페이지로 이동
-```
+``` javascript
 useEffect(() => {
     if (!session) {
       // 사용자가 로그인하지 않았으면 메세지 표시
@@ -123,120 +143,6 @@ useEffect(() => {
 ```
 useEffect, navigate, Router를 사용하여 로그인 한 사용자와 로그인 하지 않은 사용자가 접속할 수 있는 페이지를 구별
 
-#### 메인 페이지
-- 등록된 게시물 불러오기(페이지 맨 밑으로 스크롤시 다음 게시물을 불러옴)
-- 검색창에 키워드를 입력하면 게시물 제목에 그 키워드가 포함된 것만 화면에 불러옴
-- 게시물을 최신 등록순과 예전 등록순으로 정렬
-- 카테고리별로 게시물을 필터링
-```
-try {
-      let response;
-      if (keyword) {
-        response = await supabase
-        .from("recipe_info")
-        .select("*")
-        .order("created_at", { ascending: ascending });
-
-        const filteredData = response.data.filter((post) =>
-          post.RECIPE_TITLE.replace(/\s/gi, "").includes(keyword.replace(/\s/gi, ""))
-        );
-```
-검색창에 input값이 존재하면 테이블에서 가져온 데이터 중 게시물 제목 필드에 input값이 포함된 것만 filter 메서드로 받아냄
-
-#### 레시피 상세정보
-- 카테고리
-  - 한식 , 양식 , 중식 , 일식 , 디저트 , 퓨전 확인 가능
-- 음식 메인 사진
-  - 음식 사진을 확인 할 수 있음
-- 간단한 레시피 소개
-  - 간단한 레시피 소개글 확인 가능
-- 레시피 수정 버튼
-  - 해당 레시피를 작성한 작성자만 수정버튼이 활성화 되고 수정 버튼 클릭시 수정페이지로 이동
-- 재료 정보 확인
-  - 재료 정보를 확인 할 수 있음
-- 레시피 순서 확인
-  - 음식 만드는 레시피를 확인 할 수 있음
-- 작성자 정보
-  - 작성자의 프로필 이미지 확인 가능
-  - 작성자 닉네임 확인 가능
-  - 작성자 소개글 확인 가능
-- 댓글
-  - 최신순(작성일순) 으로 댓글 확인 가능
-  - 로그인시 댓글 작성 가능
-  - 작성한 댓글 수정 / 삭제 가능
-  - 댓글에 대댓글 가능
-  - 댓글 작성자만 수정/삭제 버튼 활성화
-  - 로그인한 사람만 대댓글 버튼 활성화
-```
-const handleDeleteReply = async (replyId) => {
-  // 사용자에게 삭제 확인 알림을 띄움
-  Swal.fire({
-    title: "대댓글을 삭제 하시겠습니까?",
-    text: "이 작업은 되돌릴 수 없습니다!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "삭제",
-    cancelButtonText: "취소",
-    customClass: {
-      popup: "no-global-styles"
-    }
-  }).then(async (result) => {
-    // 삭제 버튼을 눌렀을 때
-    if (result.isConfirmed) {
-      try {
-        // 대댓글 삭제
-        const { error: deleteReplyError } = await supabase.from("recipe_cmt_cmt").delete().eq("CMT_CMT_ID", replyId);
-
-        if (deleteReplyError) {
-          throw deleteReplyError;
-        }
-
-        // 상태 업데이트
-        setComments((prevComments) => ({
-          comments: prevComments.comments,
-          replies: prevComments.replies.filter((reply) => reply.CMT_CMT_ID !== replyId)
-        }));
-
-        // 삭제 완료 알림
-        Swal.fire({
-          title: "삭제됨!",
-          text: "대댓글이 삭제 되었습니다.",
-          icon: "success",
-          customClass: {
-            popup: "no-global-styles"
-          }
-        });
-      } catch (error) {
-        console.error("대댓글 삭제 오류:", error);
-        // 오류 발생 알림
-        Swal.fire({
-          title: "오류 발생!",
-          text: "대댓글 삭제 중 문제가 발생했습니다.",
-          icon: "error",
-          customClass: {
-            popup: "no-global-styles"
-          }
-        });
-      }
-    }
-  });
-};
-```
-댓글과 대댓글 삭제를 할때 사용자에게 삭제 확인을 받는 알림을 띄워주고 삭제 또는 취소를 할 수 있도록 해주고 삭제를 하면 UI를 갱신해줘서 이용하기 편하게 해줬습니다.
-
-#### 프로필 수정
-- **프로필 정보 관리:** 사용자가 프로필 이미지, 닉네임, 이메일, 소개글을 확인하고 수정할 수 있도록 구현했습니다.
-- **이미지 미리보기:** 프로필 이미지 업로드 시, 실시간 미리보기 기능을 통해 사용자 경험을 향상시켰습니다.
-- **프로필 이미지 편집:** Storage API를 활용하여 이미지 업로드 및 다운로드 URL을 처리하고, 이를 통해 프로필 이미지 수정 기능을 구현했습니다.
-
-#### 내가 작성한 게시글, 내가 작성한 댓글 페이지
-- **사용자 콘텐츠 필터링:** Authentication에서 제공되는 uid를 활용해 사용자가 작성한 게시글, 댓글 및 대댓글만을 필터링하여 최신순으로 제공하는 기능을 구현했습니다.
-- **무한 스크롤:** react-intersection-observer를 사용해 무한 스크롤 기능을 구현하고, useCallback을 이용해 렌더링을 최적화하여 성능을 개선했습니다. 이를 통해 사용자에게 끊김 없는 탐색 경험을 제공합니다.
-- **게시글로 이동:** 클릭 시 해당 게시글 또는 댓글이 포함된 게시글로 즉시 이동할 수 있는 기능을 구현하여 편의성을 높였습니다.
-
-
 #### 게시글 작성 페이지
 - 사용자가 입력한 값 저장
 - supabase 테이블 3개 연결 (레시피 정보 테이블의 ID 값으로 연결함)
@@ -249,7 +155,7 @@ const handleDeleteReply = async (replyId) => {
 - 작성 페이지와 사용자 입력값을 받는 부분은 동일하게 처리
 - 저장 버튼 누르면 id와 연결된 재료, 순서 모두 삭제하고 입력값을 새로 insert<br/>
   (사용자가 추가하거나 삭제한 행을 추척하기 어려움) 
-```
+``` javascript
 const saveRecipe = async () => {
     // 정보 비었는지 검사
     const validateInfoInput = (obj) => {
@@ -365,6 +271,127 @@ const saveRecipe = async () => {
       console.error("저장 중 오류 발생:", err.message);
     }
   };
+```
+
+#### 레시피 상세정보
+- 카테고리
+  - 한식 , 양식 , 중식 , 일식 , 디저트 , 퓨전 확인 가능
+- 음식 메인 사진
+  - 음식 사진을 확인 할 수 있음
+- 간단한 레시피 소개
+  - 간단한 레시피 소개글 확인 가능
+- 레시피 수정 버튼
+  - 해당 레시피를 작성한 작성자만 수정버튼이 활성화 되고 수정 버튼 클릭시 수정페이지로 이동
+- 재료 정보 확인
+  - 재료 정보를 확인 할 수 있음
+- 레시피 순서 확인
+  - 음식 만드는 레시피를 확인 할 수 있음
+- 작성자 정보
+  - 작성자의 프로필 이미지 확인 가능
+  - 작성자 닉네임 확인 가능
+  - 작성자 소개글 확인 가능
+- 댓글
+  - 최신순(작성일순) 으로 댓글 확인 가능
+  - 로그인시 댓글 작성 가능
+  - 작성한 댓글 수정 / 삭제 가능
+  - 댓글에 대댓글 가능
+  - 댓글 작성자만 수정/삭제 버튼 활성화
+  - 로그인한 사람만 대댓글 버튼 활성화
+``` javascript
+const handleDeleteReply = async (replyId) => {
+  // 사용자에게 삭제 확인 알림을 띄움
+  Swal.fire({
+    title: "대댓글을 삭제 하시겠습니까?",
+    text: "이 작업은 되돌릴 수 없습니다!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "삭제",
+    cancelButtonText: "취소",
+    customClass: {
+      popup: "no-global-styles"
+    }
+  }).then(async (result) => {
+    // 삭제 버튼을 눌렀을 때
+    if (result.isConfirmed) {
+      try {
+        // 대댓글 삭제
+        const { error: deleteReplyError } = await supabase.from("recipe_cmt_cmt").delete().eq("CMT_CMT_ID", replyId);
+
+        if (deleteReplyError) {
+          throw deleteReplyError;
+        }
+
+        // 상태 업데이트
+        setComments((prevComments) => ({
+          comments: prevComments.comments,
+          replies: prevComments.replies.filter((reply) => reply.CMT_CMT_ID !== replyId)
+        }));
+
+        // 삭제 완료 알림
+        Swal.fire({
+          title: "삭제됨!",
+          text: "대댓글이 삭제 되었습니다.",
+          icon: "success",
+          customClass: {
+            popup: "no-global-styles"
+          }
+        });
+      } catch (error) {
+        console.error("대댓글 삭제 오류:", error);
+        // 오류 발생 알림
+        Swal.fire({
+          title: "오류 발생!",
+          text: "대댓글 삭제 중 문제가 발생했습니다.",
+          icon: "error",
+          customClass: {
+            popup: "no-global-styles"
+          }
+        });
+      }
+    }
+  });
+};
+```
+댓글과 대댓글 삭제를 할때 사용자에게 삭제 확인을 받는 알림을 띄워주고 삭제 또는 취소를 할 수 있도록 해주고 삭제를 하면 UI를 갱신해줘서 이용하기 편하게 해줬습니다.
+
+#### 프로필 수정
+- **프로필 정보 관리:** 사용자가 프로필 이미지, 닉네임, 이메일, 소개글을 확인하고 수정할 수 있도록 구현했습니다.
+- **이미지 미리보기:** 프로필 이미지 업로드 시, 실시간 미리보기 기능을 통해 사용자 경험을 향상시켰습니다.
+- **프로필 이미지 편집:** Storage API를 활용하여 이미지 업로드 및 다운로드 URL을 처리하고, 이를 통해 프로필 이미지 수정 기능을 구현했습니다.
+
+#### 내가 작성한 게시글, 내가 작성한 댓글 페이지
+- **사용자 콘텐츠 필터링:** Authentication에서 제공되는 uid를 활용해 사용자가 작성한 게시글, 댓글 및 대댓글만을 필터링하여 최신순으로 제공하는 기능을 구현했습니다.
+- **게시글로 이동:** 클릭 시 해당 게시글 또는 댓글이 포함된 게시글로 즉시 이동할 수 있는 기능을 구현하여 편의성을 높였습니다.
+- **무한 스크롤:** react-intersection-observer를 사용해 무한 스크롤 기능을 구현하고, useCallback을 이용해 렌더링을 최적화하여 성능을 개선했습니다. 이를 통해 사용자에게 끊김 없는 탐색 경험을 제공합니다.
+``` javascript
+// useCallback을 이용해 렌더링을 최적화
+const loadMoreCommentList = useCallback(async () => {
+    if (isLoading || !isHasMore) return; // 로딩 중, 더 이상 로딩할 데이터가 없으면 종료
+
+    setIsLoading(true); // 로딩 시작
+    const newPosts = await getCommentList(page); // 새로운 댓글 가져옴
+    setCommentList((prevPosts) => [...prevPosts, ...newPosts]);
+    setIsLoading(false); // 로딩 완료
+    setPage((prevPage) => prevPage + 1); // 페이지 번호 증가
+}, [isLoading, isHasMore, page]);
+
+useEffect(() => {
+    loadMoreCommentList(); // 처음 렌더링 로드
+}, []);
+
+// react-intersection-observer를 사용한 무한 스크롤
+const { ref, inView } = useInView({
+    threshold: 0,
+});
+
+useEffect(() => {
+    // 무한 스크롤 가시성 감지
+    if (inView && !isLoading) {
+        loadMoreCommentList();
+    }
+}, [inView, isLoading, loadMoreCommentList]);
 ```
 
 ---
