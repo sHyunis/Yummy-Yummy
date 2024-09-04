@@ -13,7 +13,6 @@ const ProtectedRoute = ({ element }) => {
   // session(로그인) 상태이면 해당 element로 이동 session 상태가 아니면 sign-in 페이지로 이동
 
   useEffect(() => {
-    console.log(session);
     if (!session) {
       // 사용자가 로그인하지 않았으면 메세지 표시
       setMessage(true);
