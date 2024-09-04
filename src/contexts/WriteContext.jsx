@@ -188,16 +188,26 @@ export const WriteProvider = ({ children }) => {
       return;
     }
 
-    const file = fileInputRef.current.files[0];
-    const fileName = `${Date.now()}_${file.name}`;
-
-    const { data, error } = await supabase.storage
-      .from("foodimg") // 버킷 이름 변경
-      .upload(`images/${fileName}`, file);
-
-    const uploadedImageUrl = supabase.storage.from("foodimg").getPublicUrl(`images/${fileName}`).data.publicUrl;
-
     if (path === "edit") {
+      let uploadedImageUrl = recipeInfo.RECIPE_IMG; // 기존 이미지 URL로 초기화
+
+      // 이미지가 변경된 경우에만 새 이미지를 업로드
+      if (fileInputRef.current.files.length > 0) {
+        const file = fileInputRef.current.files[0];
+        const fileName = `${Date.now()}_${file.name}`;
+
+        const { data, error } = await supabase.storage
+          .from("foodimg") // 버킷 이름 변경
+          .upload(`images/${fileName}`, file);
+
+        if (error) {
+          console.error("이미지 업로드 중 오류 발생:", error.message);
+          return; // 이미지 업로드 실패 시, 더 이상 진행하지 않도록 종료
+        }
+
+        uploadedImageUrl = supabase.storage.from("foodimg").getPublicUrl(`images/${fileName}`).data.publicUrl;
+      }
+
       const updateRecipeCont = recipeContGroups.map((cont, index) => ({
         ...cont,
         RECIPE_STEP: index + 1,
@@ -213,54 +223,65 @@ export const WriteProvider = ({ children }) => {
         .from("recipe_info")
         .upsert([{ ...recipeInfo, RECIPE_IMG: uploadedImageUrl }])
         .eq("RECIPE_ID", editId);
+
       await supabase.from("recipe_ingredient").delete().eq("RECIPE_ID", editId);
       await supabase.from("recipe_ingredient").insert(updateIng);
       await supabase.from("recipe_flow").delete().eq("RECIPE_ID", editId);
       await supabase.from("recipe_flow").insert(updateRecipeCont);
+
       navigate(`/detail/${editId}`);
 
       return;
-    }
+    } else {
+      try {
+        // 사용자 id 가져오기
+        const user = await supabase.auth.getUser();
+        const id = user.data.user.id;
 
-    try {
-      // 사용자 id 가져오기
-      const user = await supabase.auth.getUser();
-      const id = user.data.user.id;
+        const file = fileInputRef.current.files[0];
+        const fileName = `${Date.now()}_${file.name}`;
 
-      // recipe_info 테이블에 레시피 정보 삽입
-      const { data } = await supabase
-        .from("recipe_info")
-        .insert([{ ...recipeInfo, RECIPE_IMG: uploadedImageUrl, USER_ID: id }])
-        .select();
+        const { data: imgData, error } = await supabase.storage
+          .from("foodimg") // 버킷 이름 변경
+          .upload(`images/${fileName}`, file);
 
-      const recipeId = data[0].RECIPE_ID;
+        const uploadedImageUrl = supabase.storage.from("foodimg").getPublicUrl(`images/${fileName}`).data.publicUrl;
 
-      // ingInfo 배열 안에서 모든 재료 객체 RECIPE_ID 변경
-      const updatedIngInfo = ingredientGroups.map((ingredient) => ({
-        ...ingredient,
-        RECIPE_ID: recipeId
-      }));
+        // recipe_info 테이블에 레시피 정보 삽입
+        const { data: recipeData } = await supabase
+          .from("recipe_info")
+          .insert([{ ...recipeInfo, RECIPE_IMG: uploadedImageUrl, USER_ID: id }])
+          .select();
 
-      const updateRecipeCont = recipeContGroups.map((cont, index) => ({
-        ...cont,
-        RECIPE_ID: recipeId,
-        RECIPE_STEP: index + 1
-      }));
+        const recipeId = recipeData[0].RECIPE_ID;
 
-      // recipe_ingredient 테이블에 재료 정보 삽입
-      await supabase.from("recipe_ingredient").insert(updatedIngInfo);
-      await supabase.from("recipe_flow").insert(updateRecipeCont);
+        // ingInfo 배열 안에서 모든 재료 객체 RECIPE_ID 변경
+        const updatedIngInfo = ingredientGroups.map((ingredient) => ({
+          ...ingredient,
+          RECIPE_ID: recipeId
+        }));
 
-      // 상태 초기화
-      setRecipeInfo(initRecipeInfo);
-      setIngredientGroups(initIngInfo);
-      setRecipeContGroups(initRecipeCont);
+        const updateRecipeCont = recipeContGroups.map((cont, index) => ({
+          ...cont,
+          RECIPE_ID: recipeId,
+          RECIPE_STEP: index + 1
+        }));
 
-      console.log("저장 성공!");
+        // recipe_ingredient 테이블에 재료 정보 삽입
+        await supabase.from("recipe_ingredient").insert(updatedIngInfo);
+        await supabase.from("recipe_flow").insert(updateRecipeCont);
 
-      navigate(`/detail/${recipeId}`);
-    } catch (err) {
-      console.error("저장 중 오류 발생:", err.message);
+        // 상태 초기화
+        setRecipeInfo(initRecipeInfo);
+        setIngredientGroups(initIngInfo);
+        setRecipeContGroups(initRecipeCont);
+
+        console.log("저장 성공!");
+
+        navigate(`/detail/${recipeId}`);
+      } catch (err) {
+        console.error("저장 중 오류 발생:", err.message);
+      }
     }
   };
 
