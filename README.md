@@ -267,6 +267,7 @@ const saveRecipe = async () => {
       return arr.some((value) => value.RECIPE_STEP.length === 0 || value.RECIPE_CONT.length === 0);
     };
 
+    // 한 칸이라도 비어있는 경우 alert 띄우고 동작 그만
     if (validateInfoInput(recipeInfo) || validateIngInput(ingredientGroups) || validateContInput(recipeContGroups)) {
       Swal.fire({
         title: "빈칸 발견!",
@@ -279,15 +280,19 @@ const saveRecipe = async () => {
       return;
     }
 
+    // supabase 스토리지로 보내기 위해 파일 이름 설정
     const file = fileInputRef.current.files[0];
     const fileName = `${Date.now()}_${file.name}`;
 
+    // 스토리지로 보내기
     const { data, error } = await supabase.storage
-      .from("foodimg") // 버킷 이름 변경
+      .from("foodimg")
       .upload(`images/${fileName}`, file);
 
+    // 방금 보낸 이미지 URL 바로 받아오기
     const uploadedImageUrl = supabase.storage.from("foodimg").getPublicUrl(`images/${fileName}`).data.publicUrl;
 
+    // 만약, 이 페이지가 수정 페이지라면 이렇게 동작
     if (path === "edit") {
       const updateRecipeCont = recipeContGroups.map((cont, index) => ({
         ...cont,
@@ -300,19 +305,25 @@ const saveRecipe = async () => {
         RECIPE_ID: editId
       }));
 
+      // 수정한 정보 upsert
       await supabase
         .from("recipe_info")
         .upsert([{ ...recipeInfo, RECIPE_IMG: uploadedImageUrl }])
         .eq("RECIPE_ID", editId);
+
+      // RECIPE_ID로 연결된 재료, 순서 모두 삭제하고 다시 insert
       await supabase.from("recipe_ingredient").delete().eq("RECIPE_ID", editId);
       await supabase.from("recipe_ingredient").insert(updateIng);
       await supabase.from("recipe_flow").delete().eq("RECIPE_ID", editId);
       await supabase.from("recipe_flow").insert(updateRecipeCont);
+
+      // 완료되면 상세 페이지로 이동하고 동작 종료
       navigate(`/detail/${editId}`);
 
       return;
     }
 
+    // 작성 페이지일때 동작 하는 부분
     try {
       // 사용자 id 가져오기
       const user = await supabase.auth.getUser();
