@@ -88,9 +88,9 @@ export const AuthProvider = ({ children }) => {
       setError("로그인 실패: " + error.message);
       setSuccess("");
     } else {
+      await checkSignIn();
       setSuccess("로그인 성공!");
       setError("");
-      await checkSignIn();
       navigate("/");
     }
   };
