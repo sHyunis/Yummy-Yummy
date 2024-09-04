@@ -234,11 +234,8 @@ const handleDeleteReply = async (replyId) => {
 - value값과 연결하여 불러온 데이터를 입력창에 추가
 - 작성 페이지와 사용자 입력값을 받는 부분은 동일하게 처리
 - 저장 버튼 누르면 id와 연결된 재료, 순서 모두 삭제하고 입력값을 새로 insert<br/>
-  (사용자가 추가하거나 삭제한 행을 추척하기 어려움)
-<details>
-  <summary> 저장 버튼 코드 </summary>
-  
-```javascript
+  (사용자가 추가하거나 삭제한 행을 추척하기 어려움) 
+```
 const saveRecipe = async () => {
     // 정보 비었는지 검사
     const validateInfoInput = (obj) => {
@@ -343,7 +340,7 @@ const saveRecipe = async () => {
       console.error("저장 중 오류 발생:", err.message);
     }
   };
-``` </details>
+```
 
 ---
 
