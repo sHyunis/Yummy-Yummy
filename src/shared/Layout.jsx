@@ -43,6 +43,7 @@ const Contents = styled.main`
   flex: 1 0 auto;
   /* padding: 50px 0; */
   ${(props) => (props.$isMyPage ? "display:flex;" : "")}
+  background-color: var(--beige-color);
 `;
 
 const LogoutButton = styled.button`

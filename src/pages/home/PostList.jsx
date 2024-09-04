@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Post from "./Post";
 import supabase from "../../../supabaseClient";
-import { throttle } from "lodash";
 import LoadingIcon from "../../components/LoadingIcon";
 import Button from "../../components/Button";
 
@@ -48,41 +47,85 @@ const Option = styled.option`
   cursor: pointer;
 `;
 
+const NoPostText = styled.h2`
+  margin-top: 10rem;
+  font-size: 3rem;
+  font-weight: 600;
+  text-align: center;
+`;
+
 const PostList = ({ keyword }) => {
-  const countPost = parseInt((document.documentElement.scrollHeight - 450) / 385);
   const [postList, setPostList] = useState([]);
-  const [postLimit, setPostLimit] = useState(countPost * 4 + 4);
   const [loadingVisibility, setLoadingVisibility] = useState(false);
-  const [allPostLength, setAllPostLength] = useState(0);
   const [ascending, setAscending] = useState(false);
   const [category, setCategory] = useState("");
+  const [page, setPage] = useState(1);
+  const observerRef = useRef(null);
+  const [existPost, setExistPost] = useState(true);
+
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (loadingVisibility) return;
+      if (observerRef.current) observerRef.current.disconnect();
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            setPage((prevPage) => prevPage + 1);
+          }
+        },
+        { threshold: 1.0 }
+      );
+      if (node) observerRef.current.observe(node);
+    },
+    [loadingVisibility]
+  );
 
   useEffect(() => {
-    keyword && setPostLimit(countPost * 4 + 4);
-    const fetchData = async (limit) => {
-      keyword || postLimit - 8 > allPostLength ? setLoadingVisibility(false) : setLoadingVisibility(true);
+    if (!keyword) {
+      setPostList([]);
+      setPage(1);
+    }
+  }, [keyword]);
+
+  useEffect(() => {
+    if (page * 4 - 4 > postList.length && !keyword) return;
+    const fetchData = async () => {
+      keyword ? setLoadingVisibility(false) : setLoadingVisibility(true);
       try {
         let response;
         if (keyword) {
-          response = await supabase.from("recipe_info").select("*").order("created_at", { ascending: ascending });
-
-          const filteredData = response.data.filter((post) =>
-            post.RECIPE_TITLE.replace(/\s/gi, "").includes(keyword.replace(/\s/gi, ""))
-          );
-          setPostList(filteredData);
-        } else {
           response = category
             ? await supabase
                 .from("recipe_info")
                 .select("*")
                 .eq("RECIPE_CTG", category)
                 .order("created_at", { ascending: ascending })
-                .limit(limit)
-            : await supabase.from("recipe_info").select("*").order("created_at", { ascending: ascending }).limit(limit);
+            : await supabase.from("recipe_info").select("*").order("created_at", { ascending: ascending });
 
-          setPostList(response.data);
+          const filteredData = response.data.filter((post) =>
+            post.RECIPE_TITLE.replace(/\s/gi, "").includes(keyword.replace(/\s/gi, ""))
+          );
+          setPostList(filteredData);
+        } else {
+          const from = (page - 1) * 4;
+          const to = page * 4 - 1;
+
+          response = category
+            ? await supabase
+                .from("recipe_info")
+                .select("*")
+                .eq("RECIPE_CTG", category)
+                .order("created_at", { ascending: ascending })
+                .range(from, to)
+            : await supabase
+                .from("recipe_info")
+                .select("*")
+                .order("created_at", { ascending: ascending })
+                .range(from, to);
+
+          setPostList((prevPosts) => [...prevPosts, ...response.data]);
+          setExistPost(response.data.length > 0 ? true : false);
         }
-        setAllPostLength(response.data.length);
       } catch (error) {
         console.log(error);
       } finally {
@@ -90,28 +133,16 @@ const PostList = ({ keyword }) => {
       }
     };
 
-    const handleScroll = throttle(() => {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = document.documentElement.scrollTop;
-      const clientHeight = document.documentElement.clientHeight;
-      if (scrollTop + clientHeight >= scrollHeight - 1) {
-        setPostLimit((prev) => prev + 8);
-      }
-    }, 300);
-
-    fetchData(postLimit);
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [postLimit, keyword, ascending, category]);
+    fetchData();
+  }, [keyword, ascending, category, page]);
 
   return (
     <div className="container">
       <SortButtonWrap>
         <SelectBox
           onChange={(e) => {
-            setPostLimit(parseInt((document.documentElement.clientHeight - 450) / 385) * 4 + 4);
+            setPage(1);
+            setPostList([]);
             setCategory(e.target.value);
           }}
         >
@@ -126,7 +157,8 @@ const PostList = ({ keyword }) => {
         <Button
           height="40px"
           onClick={() => {
-            setPostLimit(parseInt((document.documentElement.clientHeight - 450) / 385) * 4 + 4);
+            setPage(1);
+            setPostList([]);
             setAscending((prev) => !prev);
           }}
         >
@@ -143,13 +175,22 @@ const PostList = ({ keyword }) => {
           )}
         </Button>
       </SortButtonWrap>
-      <PostListStyled>
-        {postList.map((post) => (
-          <li key={post.RECIPE_ID}>
-            <Post id={post.RECIPE_ID} img={post.RECIPE_IMG} title={post.RECIPE_TITLE} description={post.RECIPE_DESCR} />
-          </li>
-        ))}
-      </PostListStyled>
+      {existPost ? (
+        <PostListStyled>
+          {postList.map((post, index) => (
+            <li key={index} ref={index === postList.length - 1 ? lastPostElementRef : null}>
+              <Post
+                id={post.RECIPE_ID}
+                img={post.RECIPE_IMG}
+                title={post.RECIPE_TITLE}
+                description={post.RECIPE_DESCR}
+              />
+            </li>
+          ))}
+        </PostListStyled>
+      ) : (
+        <NoPostText>조건에 맞는 게시물이 없습니다!</NoPostText>
+      )}
 
       <LoadingIcon isLoading={loadingVisibility} />
     </div>
