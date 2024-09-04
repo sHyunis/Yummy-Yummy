@@ -235,6 +235,116 @@ const handleDeleteReply = async (replyId) => {
 - 작성 페이지와 사용자 입력값을 받는 부분은 동일하게 처리
 - 저장 버튼 누르면 id와 연결된 재료, 순서 모두 삭제하고 입력값을 새로 insert<br/>
   (사용자가 추가하거나 삭제한 행을 추척하기 어려움)
+  <details>
+  <summary> 저장 버튼 코드 </summary>
+
+```javascript
+const saveRecipe = async () => {
+    // 정보 비었는지 검사
+    const validateInfoInput = (obj) => {
+      const isTrue = Object.values(obj).some((value) => !value);
+      return isTrue;
+    };
+
+    // 재료 비었는지 검사
+    const validateIngInput = (arr) => {
+      return arr.some((value) => value.ING_NAME.length === 0 || value.ING_VOL.length === 0);
+    };
+
+    // 순서 비었는지 검사
+    const validateContInput = (arr) => {
+      return arr.some((value) => value.RECIPE_STEP.length === 0 || value.RECIPE_CONT.length === 0);
+    };
+
+    if (validateInfoInput(recipeInfo) || validateIngInput(ingredientGroups) || validateContInput(recipeContGroups)) {
+      Swal.fire({
+        title: "빈칸 발견!",
+        html: "입력 되지 않은 정보가 있습니다.<br/> 모든 칸을 채워 레시피를 완성해주세요 :)",
+        icon: "error",
+        customClass: {
+          popup: "no-global-styles"
+        }
+      });
+      return;
+    }
+
+    const file = fileInputRef.current.files[0];
+    const fileName = `${Date.now()}_${file.name}`;
+
+    const { data, error } = await supabase.storage
+      .from("foodimg") // 버킷 이름 변경
+      .upload(`images/${fileName}`, file);
+
+    const uploadedImageUrl = supabase.storage.from("foodimg").getPublicUrl(`images/${fileName}`).data.publicUrl;
+
+    if (path === "edit") {
+      const updateRecipeCont = recipeContGroups.map((cont, index) => ({
+        ...cont,
+        RECIPE_STEP: index + 1,
+        RECIPE_ID: editId
+      }));
+
+      const updateIng = ingredientGroups.map((ing) => ({
+        ...ing,
+        RECIPE_ID: editId
+      }));
+
+      await supabase
+        .from("recipe_info")
+        .upsert([{ ...recipeInfo, RECIPE_IMG: uploadedImageUrl }])
+        .eq("RECIPE_ID", editId);
+      await supabase.from("recipe_ingredient").delete().eq("RECIPE_ID", editId);
+      await supabase.from("recipe_ingredient").insert(updateIng);
+      await supabase.from("recipe_flow").delete().eq("RECIPE_ID", editId);
+      await supabase.from("recipe_flow").insert(updateRecipeCont);
+      navigate(`/detail/${editId}`);
+
+      return;
+    }
+
+    try {
+      // 사용자 id 가져오기
+      const user = await supabase.auth.getUser();
+      const id = user.data.user.id;
+
+      // recipe_info 테이블에 레시피 정보 삽입
+      const { data } = await supabase
+        .from("recipe_info")
+        .insert([{ ...recipeInfo, RECIPE_IMG: uploadedImageUrl, USER_ID: id }])
+        .select();
+
+      const recipeId = data[0].RECIPE_ID;
+
+      // ingInfo 배열 안에서 모든 재료 객체 RECIPE_ID 변경
+      const updatedIngInfo = ingredientGroups.map((ingredient) => ({
+        ...ingredient,
+        RECIPE_ID: recipeId
+      }));
+
+      const updateRecipeCont = recipeContGroups.map((cont, index) => ({
+        ...cont,
+        RECIPE_ID: recipeId,
+        RECIPE_STEP: index + 1
+      }));
+
+      // recipe_ingredient 테이블에 재료 정보 삽입
+      await supabase.from("recipe_ingredient").insert(updatedIngInfo);
+      await supabase.from("recipe_flow").insert(updateRecipeCont);
+
+      // 상태 초기화
+      setRecipeInfo(initRecipeInfo);
+      setIngredientGroups(initIngInfo);
+      setRecipeContGroups(initRecipeCont);
+
+      console.log("저장 성공!");
+
+      navigate(`/detail/${recipeId}`);
+    } catch (err) {
+      console.error("저장 중 오류 발생:", err.message);
+    }
+  };
+```
+</details>
 
 ---
 
