@@ -96,6 +96,33 @@
 - (로그인 시) 게시글 작성과, 로그아웃, 마이페이지 메뉴
 - (로그아웃 시) 로그인, 회원가입 메뉴
 
+#### 로그인 한 사용자와 하지 않은 사용자의 페이지 접근성 관리
+- (로그인 한 사용자) 모든 페이지 접근가능
+- (하지 않은 사용자) 마이페이지, 레시피 작성 페이지 접근 불가능 => 로그인 페이지로 이동
+```
+useEffect(() => {
+    if (!session) {
+      // 사용자가 로그인하지 않았으면 메세지 표시
+      setMessage(true);
+      setIsLoading(true);
+      const timer = setTimeout(() => {
+        setRedirect(true);
+        setIsLoading(false);
+      }, 2000); // 2초 후 로그인페이지 이동
+      return () => clearTimeout(timer); // 타이머를 정리
+    } else {
+      // 로그인 했으면 메세지 표기 x 이동 x
+      setMessage(false);
+      setRedirect(false);
+    }
+    setIsLoading(false);
+  }, [session]);
+  if (redirect) {
+    return <Navigate to="/sign-in" />; // 로그인 페이지로 이동
+  }
+```
+useEffect, navigate, Router를 사용하여 로그인 한 사용자와 로그인 하지 않은 사용자가 접속할 수 있는 페이지를 구별
+
 #### 메인 페이지
 - 등록된 게시물 불러오기(페이지 맨 밑으로 스크롤시 다음 게시물을 불러옴)
 - 검색창에 키워드를 입력하면 게시물 제목에 그 키워드가 포함된 것만 화면에 불러옴
