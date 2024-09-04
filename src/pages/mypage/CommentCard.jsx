@@ -9,7 +9,7 @@ const CommentCardStyled = styled.div`
   align-items: center;
   padding: 16px 24px;
   gap: 24px;
-  background-color: var(--beige-color);
+  background-color: #fff;
   border-radius: var(--border-radius);
   cursor: pointer;
 `;

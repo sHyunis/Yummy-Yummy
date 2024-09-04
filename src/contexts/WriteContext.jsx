@@ -188,6 +188,15 @@ export const WriteProvider = ({ children }) => {
       return;
     }
 
+    const file = fileInputRef.current.files[0];
+    const fileName = `${Date.now()}_${file.name}`;
+
+    const { data, error } = await supabase.storage
+      .from("foodimg") // 버킷 이름 변경
+      .upload(`images/${fileName}`, file);
+
+    const uploadedImageUrl = supabase.storage.from("foodimg").getPublicUrl(`images/${fileName}`).data.publicUrl;
+
     if (path === "edit") {
       const updateRecipeCont = recipeContGroups.map((cont, index) => ({
         ...cont,
@@ -200,7 +209,10 @@ export const WriteProvider = ({ children }) => {
         RECIPE_ID: editId
       }));
 
-      await supabase.from("recipe_info").upsert([recipeInfo]).eq("RECIPE_ID", editId);
+      await supabase
+        .from("recipe_info")
+        .upsert([{ ...recipeInfo, RECIPE_IMG: uploadedImageUrl }])
+        .eq("RECIPE_ID", editId);
       await supabase.from("recipe_ingredient").delete().eq("RECIPE_ID", editId);
       await supabase.from("recipe_ingredient").insert(updateIng);
       await supabase.from("recipe_flow").delete().eq("RECIPE_ID", editId);
@@ -218,7 +230,7 @@ export const WriteProvider = ({ children }) => {
       // recipe_info 테이블에 레시피 정보 삽입
       const { data } = await supabase
         .from("recipe_info")
-        .insert([{ ...recipeInfo, USER_ID: id }])
+        .insert([{ ...recipeInfo, RECIPE_IMG: uploadedImageUrl, USER_ID: id }])
         .select();
 
       const recipeId = data[0].RECIPE_ID;
