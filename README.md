@@ -152,14 +152,49 @@
 - 문제발생 : 개별 작업 진행 중 supabase Table명칭과 Column명 통일성을 부여하기 위해 변경 => 지정해 둔 table에 연결이 끊김
 - 해결방법 : Table명, Column명을 하나씩 변경해보며 명칭변경으로 인한 문제인 지 API키 문제인 지 파악 후 명칭변경으로 인한 문제인 점을 확인.
  SQL 문을 입력해 연결이 되어있었던 Table명과 Column명을 변경
+```
+CREATE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+    INSERT INTO public.user_info (id, email, nickname)
+    VALUES (NEW.id, NEW.email, NEW.raw_user_meta_data->>'nickname');
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+-- 새 트리거 생성
+CREATE TRIGGER on_auth_user_created
+AFTER INSERT ON auth.users
+FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+```
 
 #### 프로필 수정 시 비밀번호 확인 기능 삭제
 - 문제 발생 : 마이페이지에서 프로필을 수정하기 전에 비밀번호를 확인하도록 설정했으나, 로그인된 상태에서만 마이페이지에 접근할 수 있도록 변경한 후, 비밀번호를 확인하는 과정에서 로그인되지 않은 사용자로 인식되어 로그아웃되는 문제가 발생함.
 - 해결 방법 : 현재 Supabase 환경에서는 비밀번호 확인 기능을 구현하기 어렵다고 판단되어, 해당 기능을 삭제하기로 결정.
+``` jsx
+const { error } = await supabase.auth.signInWithPassword({
+      email: user.email, // 현재 로그인된 사용자의 이메일을 사용
+      password
+    });
+
+    if (error) {
+      setPasswordErrorText("비밀번호가 일치하지 않습니다.");
+      setIsPasswordConfirm(false);
+    } else {
+      setPasswordErrorText("");
+      setIsPasswordConfirm(true);
+    }
+  };
+```
 
 #### sweetalert CSS 오류
 - 문제 발생 : CSS reset, GlobalStyle 적용 후 sweetalert 팝업의 고유 스타일이 무시되고 크기, 아이콘 등이 이상하게 출력되는 현상이 발생함.
 - 해결 방법 : sweetalert 옵션으로 팝업에 class 부여하고, 전역 스타일링에서 영향받고 있는 font-size를 기본값으로 설정. alert import 할 때 고유 css도 함께 import 하여 해결.
+``` jsx
+import "./reset.css";
+import "sweetalert2/dist/sweetalert2.min.css";
+import { createRoot } from "react-dom/client";
+import App from "./App.jsx";
+```
 
 ---
 
