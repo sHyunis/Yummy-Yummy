@@ -38,7 +38,7 @@ const SignUpPage = () => {
   }, []);
 
   return (
-    <>
+    <Wrapper>
       <Container className="container">
         <LogoBox>
           <Logo />
@@ -100,13 +100,18 @@ const SignUpPage = () => {
         </SignUp>
         <SocialSign />
       </Container>
-    </>
+    </Wrapper>
   );
 };
+const Wrapper = styled.div`
+  width: 100%;
+  background-color: var(--beige-color);
+`;
 
 const Container = styled.div`
   max-width: calc(400px + var(--gutter) * 2) !important;
   margin: 0 auto;
+  min-height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -115,11 +120,12 @@ const Container = styled.div`
 
 const SignUp = styled.div`
   width: 100%;
-  background-color: var(--gray4-color);
+  background-color: inherit;
   display: flex;
   flex-direction: column;
   text-align: center;
   padding: var(--spacing-lg);
+  border: 2px solid var();
   border-radius: var(--border-radius);
 `;
 

@@ -24,22 +24,31 @@ const Title = styled.p`
   border-bottom: 5px solid var(--yellow-color);
 `;
 
+const WriteContainer = styled.div`
+  width: 100%;
+  min-height: 95vh;
+  padding: 20px;
+  background-color: var(--beige-color);
+`;
+
 const WritePage = () => {
   return (
     <WriteProvider>
-      <MainContainer>
-        <Title>나만의 레시피 등록하기</Title>
-        <Content>
-          <RecipeInfo />
-        </Content>
-        <Content>
-          <Ingredients />
-          <RecipeCont />
-        </Content>
-        <Content>
-          <SaveBox />
-        </Content>
-      </MainContainer>
+      <WriteContainer>
+        <MainContainer>
+          <Title>나만의 레시피 등록하기</Title>
+          <Content>
+            <RecipeInfo />
+          </Content>
+          <Content>
+            <Ingredients />
+            <RecipeCont />
+          </Content>
+          <Content>
+            <SaveBox />
+          </Content>
+        </MainContainer>
+      </WriteContainer>
     </WriteProvider>
   );
 };

@@ -7,6 +7,8 @@ const Button = ({ to, onClick, children, height, fontsize, color }) => {
     switch (color) {
       case "beige":
         return "var(--beige-color)";
+      case "yellow":
+        return "var(--yellow-color)";
       default:
         return "var(--green-color)";
     }

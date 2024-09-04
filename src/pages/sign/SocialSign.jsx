@@ -44,7 +44,8 @@ const SocialWrap = styled.div`
   width: 200px;
   display: flex;
   justify-content: space-around;
-  margin-top: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 30px;
 `;
 const SocialLogoBox = styled.div`
   width: 40px;

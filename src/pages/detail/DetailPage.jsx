@@ -5,7 +5,7 @@ import CookWriter from "./CookWriter";
 import Comments from "./Comments";
 import CommentWrite from "./CommentWrite";
 import { useParams } from "react-router-dom";
-import { Container, DivisionLineDiv } from "./detail.styled";
+import { Container, DetailContainer, DivisionLineDiv } from "./detail.styled";
 
 const DetailPage = () => {
   const params = useParams();
@@ -17,7 +17,7 @@ const DetailPage = () => {
   };
 
   return (
-    <>
+    <DetailContainer>
       <Container>
         <DetailPageHeader recipeId={recipeId} />
       </Container>
@@ -41,7 +41,7 @@ const DetailPage = () => {
       <Container>
         <CommentWrite recipeId={recipeId} onCommentAdded={handleCommentAdded} />
       </Container>
-    </>
+    </DetailContainer>
   );
 };
 

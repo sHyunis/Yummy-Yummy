@@ -136,7 +136,7 @@ a{
 .container {
     width: 100%;
     max-width: calc(var(--container-width) + var(--gutter) * 2);
-    padding: 0 var(--gutter);
+    padding: 30px var(--gutter);
     margin: 0 auto;
     
 }
